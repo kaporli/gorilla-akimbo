@@ -1,57 +1,86 @@
-[size=5][b]Gorilla Arms let V dual-wield SMGs and shotguns.[/b][/size]
+[size=5][b]Gorilla Arms let V dual-wield SMGs and shotguns, with their own one-handed reload animations.[/b][/size]
 
-Patch 2.5 added dual-wielding through the [b]Double Trouble[/b] perk (Cool), limited to pistols and revolvers. This mod extends it: while [b]Gorilla Arms[/b] are equipped, their reinforced grip actuators steady heavier guns one-handed, so SMGs and shotguns can be paired too. Without Gorilla Arms, everything stays vanilla.
+Patch 2.5 added dual-wielding through the [b]Double Trouble[/b] perk, limited to pistols and power revolvers. While [b]Gorilla Arms[/b] are equipped, their reinforced grip actuators steady heavier guns one-handed, so SMGs and shotguns can be paired too.
+
+[b]New in 2.0.0:[/b] dual-wielded SMGs and shotguns no longer borrow the game's two-handed reloads. Each gun has its own arm animation, reloads on its own timing, and plays its own reload sounds. Needs [url=https://www.nexusmods.com/cyberpunk2077/mods/4198]ArchiveXL[/url] now.
+
+[i]Formerly Gorilla Grip. Updating by hand from 1.0.0: delete the old [font=Courier New]r6/scripts/GorillaGrip[/font] and [font=Courier New]r6/tweaks/GorillaGrip[/font] folders first.[/i]
+
+[size=4][b]Before and after[/b][/size]
+[b]Two SMGs.[/b] Before (1.0.1): the right gun plays its two-handed reload across the screen, and the left gun doesn't animate at all. After (2.0.0): each gun tips up while its magazine drops, goes down out of view, and comes back up once its own reload is done.
+[img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/gifs30/smg-reload-before.gif[/img]
+[img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/gifs30/smg-reload-after.gif[/img]
+
+[b]Two Carnage shotguns.[/b] Before: the right shotgun swings up through the middle of the screen. After: only the empty gun goes down and loads its shells one at a time, while the other stays up and ready to fire.
+[img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/gifs30/shotgun-reload-before.gif[/img]
+[img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/gifs30/shotgun-reload-carnage-pair.gif[/img]
+
+[b]The dual-wield ammo counter.[/b] Before: two long weapon icons push the left gun's count out of the HUD. After: both counts show, at the game's own icon sizes.
+[img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/hud-before.png[/img]
+[img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/hud-after.png[/img]
+
+[b]Mixed pairs[/b] work too, each gun with its own reload: a magazine Pozhar next to a shell-fed Carnage, and a pistol next to an SMG.
+[img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/gifs30/shotgun-reload-mixed.gif[/img]
+[img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/gifs30/reload-mix-pistol-smg.gif[/img]
+
+More pairs (Crusher, Zhuo, Tactician, Igla, Palica, Satara, Testera) are on [url=https://github.com/kaporli/gorilla-akimbo/tree/main/research/gifs30]GitHub[/url].
 
 [size=4][b]Features[/b][/size]
 [list]
-[*]With Gorilla Arms equipped and Double Trouble unlocked, SMGs and shotguns (including double-barrel shotguns and modded weapons of those types) can be dual-wielded.
-[*]Without Gorilla Arms, only pistols and revolvers can be dual-wielded, as in vanilla. Removing Gorilla Arms unequips the off-hand SMG or shotgun.
-[*]Fits the game's UI:
+[*][b]Dual-wield SMGs and shotguns[/b] with Gorilla Arms and Double Trouble, including double-barrel shotguns and modded weapons of those types. Without Gorilla Arms, only pistols and revolvers can, as in vanilla. Removing Gorilla Arms unequips the off-hand SMG or shotgun.[/*]
+[*][b]Custom one-handed reload animations[/b] for every dual-wielded SMG and shotgun, built from the game's own pistol dual-wield reload. The gun tips up while the magazine drops (half the pistol's lift, so long guns stay on their side), goes down out of view with the muzzle tipped down, and stays there until its ammo is in. It then rises the way the pistol's empty reload does: muzzle up, a small overshoot, then it settles. Shell-by-shell shotguns go straight down, since they have no magazine. Male and female V each get their own clips.[/*]
+[*][b]Each hand reloads on its own.[/b] Only the gun that needs ammo goes down; the other stays up and can keep firing. In 1.0.1 the left gun didn't animate at all and the right gun's reload moved both arms.[/*]
+[*][b]Reload timing from each gun's live stats[/b], including perks and weapon mods, so any pair (SMG + SMG, shotgun + shotgun, SMG + shotgun, pistol + SMG) times itself. The rise starts when that gun's ammo is in, so the magazine never floats into the gun on the way up.[/*]
+[*][b]Shell-by-shell reloads like vanilla.[/b] The gun stays down for the whole reload while shells land one at a time on the ammo counter, at the same times a single shotgun's reload would load them. Firing mid-reload keeps the shells already loaded.[/*]
+[*][b]Each gun's own reload sounds, for both guns.[/b] Mag out, mag in, handle pull, shell in and so on, taken from each weapon's two-handed reload and timed to its reload. Two guns reloading together overlap. In 1.0.1 the left gun's reload had no animation, and so no sound.[/*]
+[*][b]Ammo counter fixed for two long guns.[/b] The left gun's count is no longer cut off; the icons keep the game's sizes.[/*]
+[*][b]Fits the game's UI:[/b] Double Trouble's weapon box reads [i]"Only affects Power Pistols and Power Revolvers; equipping Gorilla Arms extends this to SMGs and Shotguns"[/i], and Gorilla Arms get the tooltip line [i]"Reinforced grip actuators steady SMGs and shotguns one-handed: with Double Trouble, they can be dual-wielded."[/i][/*]
+[*]No new perk and nothing written to your save. Single-wielded SMGs and shotguns keep their vanilla animations.[/*]
+[/list][size=4][b]How it differs from other dual-wield mods[/b][/size]
+[url=https://www.nexusmods.com/cyberpunk2077/mods/35632]Dual Wield Anything[/url] and [url=https://www.nexusmods.com/cyberpunk2077/mods/35626]Expanded Dual Wielding[/url] open dual-wielding to more weapon types, and Expanded Dual Wielding adds control options such as firing each gun on its own button. Both reuse the game's existing animations for those weapons, and both pages say the result looks janky or that reloads may look unusual.
+
+Gorilla Akimbo covers fewer weapons (SMGs and shotguns, tied to Gorilla Arms) and makes them look right:
 [list]
-[*]Double Trouble's weapon box reads [i]"Only affects Power Pistols and Power Revolvers; equipping Gorilla Arms extends this to SMGs and Shotguns"[/i].
-[*]Gorilla Arms get a tooltip line: [i]"Reinforced grip actuators steady SMGs and shotguns one-handed: with Double Trouble, they can be dual-wielded."[/i]
-[/list]
-[*]No new perk, no save data, no animation replacement. It reuses the game's own dual-wield system.
-[/list]
+[*]Its own one-handed arm animations for reloads, instead of the two-handed ones.[/*]
+[*]Each hand reloads on its own, so one gun can reload while the other fires.[/*]
+[*]Reload timing per gun from its live stats, shell-by-shell loading like vanilla, and each gun's own reload sounds.[/*]
+[*]The dual-wield ammo counter fix.[/*]
+[/list]Use one dual-wield mod at a time: they all change which weapons can be paired.
 
-[size=4][b]Requirements[/b][/size]
+[size=4][b][color=#e5be37]Limitations[/color][/b][/size]
 [list]
-[*]Cyberpunk 2077 [b]2.5[/b]
-[*][url=https://www.nexusmods.com/cyberpunk2077/mods/2380]RED4ext[/url]
-[*][url=https://www.nexusmods.com/cyberpunk2077/mods/1511]redscript[/url]
-[*][url=https://www.nexusmods.com/cyberpunk2077/mods/4197]TweakXL[/url]
-[*][url=https://www.nexusmods.com/cyberpunk2077/mods/7780]Codeware[/url]
-[/list]
-
-[size=4][b]Installation[/b][/size]
-Install with Mod Organizer 2 or Vortex, or extract the archive into the Cyberpunk 2077 game folder. The files go to:
-[code]r6/scripts/GorillaAkimbo/GorillaAkimbo.reds
-r6/tweaks/GorillaAkimbo/GorillaAkimbo.yaml[/code]
-Updating from 1.0.0 by hand: delete the old [i]r6/scripts/GorillaGrip[/i] and [i]r6/tweaks/GorillaGrip[/i] folders first.
-
-[size=4][b]Uninstallation[/b][/size]
-Unpair any dual-wielded SMGs or shotguns first, then remove the two files. Nothing is written to your save.
-
-[size=4][b]Known limitations[/b][/size]
+[*][color=#e5be37][b]Firing animations (recoil, shotgun pumping) are still the game's pistol dual-wield ones.[/b][/color][/*]
+[*][color=#e5be37][b]While dual-wielding, only the right gun's reload can be cut short by firing, unless the right gun is empty. The base game does the same with pistols.[/b][/color][/*]
+[*][color=#e5be37][b]Long shotguns (Zhuo, Tactician) swing toward the middle of the screen at the top of the tip-up and the rise.[/b][/color][/*]
+[*][color=#e5be37][b]Weapons without reload sounds of their own in the game files (the Guillotine, modded weapons) use another gun of their type.[/b][/color][/*]
+[*][color=#e5be37][b]Female V's clips are built and load in the game, but haven't been played on a female character yet.[/b][/color][/*]
+[*][color=#e5be37][b]Double Trouble's own bonuses (recoil, spread, Heywood Hurricane) follow the game's rules.[/b][/color][/*]
+[*][color=#e5be37][b]Photo mode's weapon poses hold a single gun, so dual-wielding only shows in gameplay.[/b][/color][/*]
+[/list][size=4][b]Requirements[/b][/size]
 [list]
-[*]SMGs and shotguns use the game's pistol dual-wield animations, so some reloads and hand poses look unusual.
-[*]Double Trouble's own bonuses (recoil, spread, Heywood Hurricane) follow the game's rules; this mod only changes which weapons can be paired.
-[*]Photo mode's weapon poses hold a single gun, so dual-wielding only shows in gameplay.
-[*]Other mods that change which weapons can be dual-wielded (for example Expanded Dual Wielding or Dual Wield Anything) do the same job in a different way. Use one of them.
-[/list]
+[*]Cyberpunk 2077 [b]2.5[/b][/*]
+[*][url=https://www.nexusmods.com/cyberpunk2077/mods/2380]RED4ext[/url], [url=https://www.nexusmods.com/cyberpunk2077/mods/1511]redscript[/url], [url=https://www.nexusmods.com/cyberpunk2077/mods/4197]TweakXL[/url], [url=https://www.nexusmods.com/cyberpunk2077/mods/7780]Codeware[/url], [url=https://www.nexusmods.com/cyberpunk2077/mods/4198]ArchiveXL[/url][/*]
+[/list][size=4][b]Installation[/b][/size]
+Install with Mod Organizer 2 or Vortex, or extract into the game folder. The files go to:
+[code]archive/pc/mod/GorillaAkimbo.archive
+archive/pc/mod/GorillaAkimbo.archive.xl
+r6/scripts/GorillaAkimbo/GorillaAkimbo.reds
+r6/scripts/GorillaAkimbo/GorillaAkimboSounds.reds
+r6/tweaks/GorillaAkimbo/GorillaAkimbo.yaml[/code][size=4][b]Uninstallation[/b][/size]
+Unpair any dual-wielded SMGs or shotguns first, then remove the files above. Nothing is written to your save.
 
 [size=4][b]How it works[/b][/size]
 [list]
-[*]At load, a Codeware ScriptableTweak goes through all weapon and item records: it adds the game's DualWield tag to every SMG and shotgun and adds the tooltip line to Gorilla Arms.
-[*]A wrap of gameItemData.CanDualWield keeps those weapon types dual-wieldable only while an item of type Cyb_StrongArms is equipped in the arms cyberware slot.
-[*]A wrap of the perk tooltip adds the Gorilla Arms clause to Double Trouble's weapon box.
-[*]Texts are registered through Codeware's localization system (English).
-[/list]
-
-[size=4][b]Credits[/b][/size]
+[*][b]Dual-wielding:[/b] at load, a [url=https://www.nexusmods.com/cyberpunk2077/mods/7780]Codeware[/url] [font=Courier New]ScriptableTweak[/font] adds the game's [font=Courier New]DualWield[/font] tag to every SMG and shotgun record, and the tooltip line to Gorilla Arms. A wrap of [font=Courier New]gameItemData.CanDualWield[/font] keeps those weapons dual-wieldable only while a [font=Courier New]Cyb_StrongArms[/font] item is in the arms cyberware slot.[/*]
+[*][b]Arm animations:[/b] [font=Courier New]GorillaAkimbo.archive[/font] holds the reload clips for each hand, for male and female V, and [font=Courier New]GorillaAkimbo.archive.xl[/font] adds them to the player's arm animation sets through [url=https://www.nexusmods.com/cyberpunk2077/mods/4198]ArchiveXL[/url], for every SMG and shotgun model, per hand. The clips are generated from the game's Lexington dual-wield sets; the scripts are on GitHub.[/*]
+[*][b]Independent hands:[/b] the game animates each hand on its own only when the right hand holds a one-handed weapon. While two guns are held, SMGs and shotguns report the one-handed item type to the animation graph; held alone, they report their own again.[/*]
+[*][b]Timing:[/b] a wrap of the reload state reads the gun's reload stats, plays the arm clip at the speed that makes the rise start when the ammo lands, and keeps the reload going until the rise is done. Shell-by-shell shotguns run the game's passes as one reload, loading each shell when the game would.[/*]
+[*][b]Sounds:[/b] each weapon's reload sound events, taken from its two-handed reload clips and keyed by its audio name, play at the clip times scaled by the gun's reload time, as the game would play them.[/*]
+[*][b]Ammo counter:[/b] the HUD slot for the counter is as wide as its HUD entry size; a wrap of the weapon roster's [font=Courier New]OnInitialize[/font] makes it wider to the left. The counter is anchored to the right, so nothing else moves.[/*]
+[*]Texts are registered through [url=https://www.nexusmods.com/cyberpunk2077/mods/7780]Codeware[/url]'s localization system (English).[/*]
+[/list][size=4][b]Credits[/b][/size]
 [list]
-[*]Inspired by Rebecca in [i]Cyberpunk: Edgerunners[/i] (Studio Trigger / CD PROJEKT RED). The reference still is theirs.
-[*]psiberx for Codeware and TweakXL, jac3km4 for redscript, WopsS for RED4ext.
-[/list]
-
-Source code: [url=https://github.com/kaporli/gorilla-akimbo]github.com/kaporli/gorilla-akimbo[/url]
+[*]Inspired by Rebecca in [i]Cyberpunk: Edgerunners[/i] (Studio Trigger / CD PROJEKT RED). The reference still is theirs.[/*]
+[*]psiberx for [url=https://www.nexusmods.com/cyberpunk2077/mods/7780]Codeware[/url], [url=https://www.nexusmods.com/cyberpunk2077/mods/4197]TweakXL[/url] and [url=https://www.nexusmods.com/cyberpunk2077/mods/4198]ArchiveXL[/url], jac3km4 for [url=https://www.nexusmods.com/cyberpunk2077/mods/1511]redscript[/url], WopsS for [url=https://www.nexusmods.com/cyberpunk2077/mods/2380]RED4ext[/url], and the WolvenKit team for [url=https://github.com/WolvenKit/WolvenKit]WolvenKit[/url], used to build the animations.[/*]
+[/list][size=4][b]Source[/b][/size]
+[url=https://github.com/kaporli/gorilla-akimbo]github.com/kaporli/gorilla-akimbo[/url] (MIT)
