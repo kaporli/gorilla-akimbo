@@ -30,12 +30,6 @@ Left: without custom animations, the game's two-handed reloads. Right: Gorilla A
 |---|---|
 | ![Pozhar and Crusher, without custom animations](research/showcase/before-mag-shotgun-pair.gif) | ![Pozhar and Crusher, Gorilla Akimbo](research/showcase/after-mag-shotgun-pair.gif) |
 
-**Pistol + SMG** (Lexington + Saratoga). The pistol keeps its vanilla reload.
-
-| Without custom animations | Gorilla Akimbo |
-|---|---|
-| ![Lexington and Saratoga, without custom animations](research/showcase/before-pistol-smg.gif) | ![Lexington and Saratoga, Gorilla Akimbo](research/showcase/after-pistol-smg.gif) |
-
 ## Features
 
 - **Dual-wield SMGs and shotguns** with Gorilla Arms and Double Trouble, including double-barrels and modded weapons of those types. Removing Gorilla Arms unequips the off-hand SMG or shotgun.
