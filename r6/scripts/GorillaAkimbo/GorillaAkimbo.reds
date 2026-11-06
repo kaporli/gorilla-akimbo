@@ -134,6 +134,11 @@ public abstract class GorillaAkimboReload {
   }
 
   public static func HoldEnd() -> Float {
+    return 3.5;
+  }
+
+  // Highest clip speed asked of the animation graph: very high speeds have crashed its speed node.
+  public static func MaxSpeed() -> Float {
     return 8.0;
   }
 
@@ -161,13 +166,13 @@ public abstract class GorillaAkimboReload {
       rate = ClampF((GorillaAkimboReload.OpenEnd() - magOut) / GorillaAkimboReload.MagFall(), 0.6, 1.4);
     }
     // Short reloads play the opening faster, so the gun is down well before the ammo lands.
-    rate = MaxF(rate, opening / MaxF(0.75 * duration, 0.05));
+    rate = MinF(MaxF(rate, opening / MaxF(0.75 * duration, 0.05)), GorillaAkimboReload.MaxSpeed());
     let openingReal = opening / rate;
     if time < openingReal {
       return rate;
     }
     if time < duration {
-      return (GorillaAkimboReload.HoldEnd() - opening) / MaxF(duration - openingReal, 0.05);
+      return MinF((GorillaAkimboReload.HoldEnd() - opening) / MaxF(duration - openingReal, 0.05), GorillaAkimboReload.MaxSpeed());
     }
     return 1.0;
   }

@@ -27,7 +27,7 @@ FADE_F = 8         # frames over which the tip-up fades in
 PLAIN_F = 12       # plain variant (_02 clips, shell-by-shell guns): frames to go straight down, no tip-up
 OPEN_F = 36        # the tip-up is stretched over this many frames (1.2 s, GorillaAkimboReload.OpenEnd) so the magazine
                    # has time to fall before the drop; the script picks the playback speed per gun
-PRE_F = 240        # clip frames before the rise: the drop ends by frame 45 (GorillaAkimboReload.DropEnd),
+PRE_F = 105        # clip frames before the rise (3.5 s, GorillaAkimboReload.HoldEnd): the drop ends by frame 45 (DropEnd),
                    # then a hold the script fast-forwards so the rise starts when the gun's ammo lands
 SUFFIX = '' if SIDE == 'right' else '_l'
 S, s = ('Right', 'right') if SIDE == 'right' else ('Left', 'left')

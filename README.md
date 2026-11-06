@@ -2,7 +2,7 @@
 
 Gorilla Arms let V dual-wield SMGs and shotguns, with their own one-handed reload animations.
 
-The **Double Trouble** perk only pairs pistols and revolvers. With **Gorilla Arms** equipped, SMGs and shotguns can be paired too. Without them, everything stays vanilla.
+The **Double Trouble** perk only pairs pistols and revolvers. **Equip Gorilla Arms** and SMGs and shotguns can be paired too. Without them, everything stays vanilla.
 
 ## How it differs from other dual-wield mods
 
@@ -42,6 +42,7 @@ Left: without custom animations, the game's two-handed reloads. Right: Gorilla A
 
 ## Limitations
 
+- The animations are in active development and will be refined further.
 - Firing animations are still the game's.
 - Only the right gun's reload can be cut short by firing, unless the right gun is empty. Vanilla pistols work the same way.
 - Long shotguns (Zhuo, Tactician) swing toward the middle of the screen during the reload.
@@ -66,11 +67,11 @@ r6/scripts/GorillaAkimbo/GorillaAkimboSounds.reds
 r6/tweaks/GorillaAkimbo/GorillaAkimbo.yaml
 ```
 
-Updating from Gorilla Grip by hand: delete the old `r6/scripts/GorillaGrip` and `r6/tweaks/GorillaGrip` folders.
+Updating from Gorilla Grip by hand: **delete the old** `r6/scripts/GorillaGrip` and `r6/tweaks/GorillaGrip` folders.
 
 ## Uninstallation
 
-Unpair any dual-wielded SMGs or shotguns, then remove the files above.
+**Unpair any dual-wielded SMGs or shotguns**, then remove the files above.
 
 ## Building
 
