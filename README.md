@@ -51,12 +51,21 @@ The **Double Trouble** perk only pairs pistols and power revolvers. **Equip Gori
 
 Set it up in game with [Mod Settings](https://www.nexusmods.com/cyberpunk2077/mods/4885). Without it, the defaults apply.
 
-![Gorilla Akimbo settings](screenshots/settings.jpg)
-
 - **Weapons:** which SMGs and shotguns Gorilla Arms let you pair.
+
+  ![The Weapons settings](screenshots/setting-weapons.png)
+
 - **Firing:** how one fire button uses both guns: as in vanilla, both at once, or taking turns.
+
+  ![The Firing setting](screenshots/setting-firing.png)
+
 - **Remove Double Trouble's damage penalty:** both guns keep their full damage (Double Trouble normally cuts it by 37.5%).
+
+  ![The damage penalty setting](screenshots/setting-damage.png)
+
 - **Shell-by-shell shotgun reload:** one shell at a time as in vanilla, or every shell in the time of one.
+
+  ![The shell reload setting](screenshots/setting-shell-reload.png)
 
 ## Limitations
 
