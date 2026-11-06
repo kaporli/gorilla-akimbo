@@ -12,8 +12,6 @@ The **Double Trouble** perk only pairs pistols and revolvers. With **Gorilla Arm
 - Independent reloads per hand: one gun reloads while the other keeps firing.
 - Reload timing per gun, shell-by-shell loading like vanilla, and each gun's own reload sounds.
 
-Use one dual-wield mod at a time.
-
 ## Comparison
 
 Left: without custom animations, the game's two-handed reloads. Right: Gorilla Akimbo's custom animations. A few shots, then a reload.
