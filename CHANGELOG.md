@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.2 (2026-11-06)
+
+- Fix: Heywood Hurricane (Double Trouble level 2) stopped after one shot with a pair of Carnages. Each Carnage shot briefly staggers V, which ended it; it now keeps firing both guns for its full duration. Other pairs are unchanged.
+
 ## 2.1.1 (2026-11-06)
 
 - Double Trouble's weapon box now says Gorilla Arms extend "this effect" to SMGs and Shotguns.

@@ -702,6 +702,46 @@ protected final func OnEnter(stateContext: ref<StateContext>, scriptInterface: r
   }
 }
 
+// Heywood Hurricane (Double Trouble 2) ends as soon as a gun is not ready. A Carnage shot stuns V for a moment (the
+// game's own recoil, also single-wielded), which stopped Hurricane after the first shot of a Carnage pair. A stun
+// right after V's own shot is ignored here; the other conditions still end Hurricane.
+@wrapMethod(DefaultTransition)
+protected final const func CanBeInValentinosFrenzy(const stateContext: ref<StateContext>, const scriptInterface: ref<StateGameScriptInterface>) -> Bool {
+  if wrappedMethod(stateContext, scriptInterface) {
+    return true;
+  }
+  let shootState = scriptInterface.localBlackboard.GetInt(GetAllBlackboardDefs().PlayerStateMachine.ShootState);
+  if shootState != EnumInt(gamePSMShootStates.ValentinosFrenzyRightOnly) && shootState != EnumInt(gamePSMShootStates.ValentinosFrenzy) {
+    return false;
+  }
+  if !StatusEffectSystem.ObjectHasStatusEffect(scriptInterface.executionOwner, t"BaseStatusEffect.HeavyStun") {
+    return false;
+  }
+  let system = GorillaAkimboReloadSystem.Get(scriptInterface.GetGame());
+  if EngineTime.ToFloat(GameInstance.GetSimTime(scriptInterface.GetGame())) - MaxF(system.m_lastShotRight, system.m_lastShotLeft) > 0.5 {
+    return false;
+  }
+  // The game's other conditions, without the weapons' ready check.
+  if DefaultTransition.IsAimingAtFriendly(scriptInterface) || this.IsSafeStateForced(stateContext, scriptInterface) {
+    return false;
+  }
+  if scriptInterface.localBlackboard.GetInt(GetAllBlackboardDefs().PlayerStateMachine.Vision) == 1 {
+    return false;
+  }
+  if stateContext.IsStateMachineActive(n"CombatGadget") || stateContext.IsStateMachineActive(n"LocomotionSwimming") || stateContext.IsStateMachineActive(n"Vehicle")
+    || stateContext.IsStateMachineActive(n"CarriedObject") || stateContext.IsStateMachineActive(n"Consumable")
+    || stateContext.GetBoolParameter(n"UnequipToGadgetOrConsumable", true) || stateContext.IsStateMachineActive(n"LocomotionTakedown") {
+    return false;
+  }
+  if !DefaultTransition.HasRightWeaponEquipped(scriptInterface, true) || !DefaultTransition.HasLeftWeaponEquipped(scriptInterface, true) {
+    return false;
+  }
+  if DefaultTransition.IsRightHandChangingEquipState(stateContext) || DefaultTransition.IsLeftHandChangingEquipState(stateContext) {
+    return false;
+  }
+  return !(DefaultTransition.RightWeaponHasNoAmmoOrIsReloading(scriptInterface) && DefaultTransition.LeftWeaponHasNoAmmoOrIsReloading(scriptInterface));
+}
+
 // A full-auto gun keeps firing each cycle while the trigger is held, whichever gun has the turn; in Alternate it only
 // fires on its turn, so the turn can pass while the trigger stays down.
 @wrapMethod(FullAutoDecisions)
