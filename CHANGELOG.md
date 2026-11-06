@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.1 (2026-11-06)
+
+- Fixed a crash when a dual-wielded SMG or shotgun reloads, most often when both guns reload at once. The reload animations pointed at fallback poses of other clips.
+
 ## 2.0.0 (2026-11-06)
 
 Dual-wielded SMGs and shotguns get their own reload animations, timing and sounds. Needs [ArchiveXL](https://www.nexusmods.com/cyberpunk2077/mods/4198) now.

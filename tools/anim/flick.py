@@ -171,7 +171,9 @@ for name, (src, n) in CLIPS.items():
     ex = dict(tmpl['extras'])
     # No sounds in the arm clips: the script plays each weapon's own reload sounds.
     ex['animEvents'] = [e for e in ex.get('animEvents') or [] if e.get('type') != 'Sound']
-    ex['fallbackFrameIndices'] = list(range(int(drop_end) + 2, int(drop_end) + 14))
+    # Fallback frame indices point into the set's table of fallback poses, which is the vanilla one: keep the
+    # slots of the vanilla clip this one replaces. Other slots belong to other clips and crash the game when sampled.
+    ex['fallbackFrameIndices'] = list(src_g.anim(name)['extras'].get('fallbackFrameIndices') or [])
     ex['optimizationHints'] = dict(ex.get('optimizationHints', {}), preferSIMD=True)
     a['samplers'], a['channels'], a['extras'] = samplers, channels, ex
     print(name, n, 'frames from', src + SUFFIX)
