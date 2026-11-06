@@ -24,22 +24,6 @@ The **Double Trouble** perk only pairs pistols and power revolvers. **Equip Gori
 
 <sub>The animations are in active development and will be refined further.</sub>
 
-## Settings
-
-Everything can be set in game with [Mod Settings](https://www.nexusmods.com/cyberpunk2077/mods/4885): which weapons can be paired, how the guns fire, Double Trouble's damage penalty, shell reloads and the Body scaling.
-
-![Gorilla Akimbo settings: weapons and firing](screenshots/settings-weapons-firing.jpg)
-
-![Gorilla Akimbo settings: reload and Body scaling](screenshots/settings-reload-body.jpg)
-
-**Body scaling.** Every Body point gives dual-wielded SMGs and shotguns less recoil, a higher fire rate and faster reloads, shown in the Gorilla Arms' Body Attuned block like the game's attribute bonuses.
-
-![Body Attuned block on the Gorilla Arms tooltip](screenshots/body-scaling-tooltip.png)
-
-**Independent firing.** The left mouse button fires the left gun, the right mouse button the right gun. Aiming moves to its own key, mouse button 4 by default, rebindable in Key Bindings with [Unified Keybinds](https://www.nexusmods.com/cyberpunk2077/mods/37156).
-
-![Aim key in Key Bindings](screenshots/key-binding-aim.png)
-
 ## Features
 
 - **Dual-wield SMGs and shotguns** with Gorilla Arms and Double Trouble, including double-barrels and modded weapons of those types. Removing Gorilla Arms unequips the off-hand SMG or shotgun.
@@ -48,12 +32,32 @@ Everything can be set in game with [Mod Settings](https://www.nexusmods.com/cybe
 - **Reload timing calculated from each gun's stats**, including perks and weapon mods, so mixed pairs work.
 - **Shell-by-shell reloads like vanilla.** Shells load one at a time; firing mid-reload keeps them.
 - **Each gun's own reload sounds**, for both guns.
-- **Independent firing** (setting): each mouse button fires one gun (each trigger on a controller), and aiming moves to its own rebindable key. A gun's own button also cuts its shell-by-shell reload short.
-- **Body scaling:** -2% recoil, +2% fire rate and +3% reload speed per Body point for dual-wielded SMGs and shotguns, shown on the Gorilla Arms tooltip. Adjustable or off in the settings.
-- **More settings:** pair SMGs, magazine shotguns, shell-by-shell shotguns and double-barrels or not; fire both guns at once or alternate them; remove Double Trouble's 37.5% damage penalty; load all shells at once.
 - **Ammo counter fix:** with two long guns, the left gun's count is no longer cut off.
-- **Fits the game's UI:** the **Double Trouble** weapon box and the **Gorilla Arms** tooltip mention the extension, and the tooltip shows the Body scaling.
+- **Fits the game's UI:** the **Double Trouble** weapon box and the **Gorilla Arms** tooltip mention the extension.
 - No new perk, nothing in your save. Single-wielded SMGs and shotguns are unchanged.
+
+## Settings
+
+Set it up in game with [Mod Settings](https://www.nexusmods.com/cyberpunk2077/mods/4885). Without it, the defaults apply.
+
+![Gorilla Akimbo settings](screenshots/settings.jpg)
+
+- **Weapons:** which SMGs and shotguns Gorilla Arms let you pair.
+- **Firing:** how one fire button uses both guns: as in vanilla, both at once, or taking turns.
+- **Remove Double Trouble's damage penalty:** both guns keep their full damage (Double Trouble normally cuts it by 37.5%).
+- **Shell-by-shell shotgun reload:** one shell at a time as in vanilla, or every shell in the time of one.
+
+## Independent firing
+
+Turn it on in the settings and each mouse button fires one gun: the left button the left gun, the right button the right gun (each trigger on a controller). Aiming moves to its own key, mouse button 4 by default, rebindable in Key Bindings with [Unified Keybinds](https://www.nexusmods.com/cyberpunk2077/mods/37156). A gun's own button also cuts its shell-by-shell reload short.
+
+![The Independent firing setting and its aim key in Key Bindings](screenshots/independent-firing.png)
+
+## Body scaling
+
+Every Body point gives dual-wielded SMGs and shotguns -2% recoil, +2% fire rate and +3% reload speed, shown in the Gorilla Arms' Body Attuned block like the game's attribute bonuses. Each can be changed or turned off in the settings.
+
+![The Body scaling settings and the Body Attuned block on the Gorilla Arms tooltip](screenshots/body-scaling.png)
 
 ## Limitations
 
