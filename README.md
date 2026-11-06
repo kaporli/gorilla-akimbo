@@ -37,7 +37,7 @@ More pairs (Crusher, Zhuo, Tactician, Igla, Palica, Satara, Testera) are in [res
 
 - **Dual-wield SMGs and shotguns** with Gorilla Arms and Double Trouble, including double-barrel shotguns and modded weapons of those types. Without Gorilla Arms, only pistols and revolvers can be dual-wielded, as in vanilla. Removing Gorilla Arms unequips the off-hand SMG or shotgun.
 - **Custom one-handed reload animations** for every dual-wielded SMG and shotgun, built from the game's own pistol dual-wield reload:
-  - The gun tips up while the magazine drops (half the pistol's lift, so long guns stay on their side), then goes down out of view with the muzzle tipped down.
+  - The gun tips up (half the pistol's lift, so long guns stay on their side) and holds there until its own magazine has fallen out, timed per gun from its own reload animation, then goes down out of view with the muzzle tipped down.
   - It stays out of view until its ammo is in, then rises the way the pistol's empty reload does: muzzle up, a small overshoot, then it settles.
   - Shell-by-shell shotguns (Carnage, Tactician) skip the tip-up and go straight down, since they have no magazine.
   - Male and female V each get their own clips, made from the game's male and female sets.

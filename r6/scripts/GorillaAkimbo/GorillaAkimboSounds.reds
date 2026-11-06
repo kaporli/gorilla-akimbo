@@ -114,4 +114,47 @@ public abstract class GorillaAkimboSounds {
         break;
     }
   }
+
+  // Clip seconds into the reload at which the magazine (or the spent shells) leaves the gun.
+  public static func MagOut(audio: CName, empty: Bool) -> Float {
+    switch audio {
+      case n"wea_set_borg4a":
+        return empty ? 0.900 : 0.933;
+      case n"wea_set_carnage":
+        return empty ? 0.367 : 0.500;
+      case n"wea_set_crusher":
+        return empty ? 0.300 : 0.300;
+      case n"wea_set_dian":
+        return empty ? 0.367 : 0.333;
+      case n"wea_set_igla":
+        return empty ? 0.167 : 0.133;
+      case n"wea_set_palica":
+        return empty ? 0.133 : 0.100;
+      case n"wea_set_pozhar":
+        return empty ? 0.633 : 0.633;
+      case n"wea_set_pulsar":
+        return empty ? 0.433 : 0.433;
+      case n"wea_set_saratoga":
+        return empty ? 0.467 : 0.300;
+      case n"wea_set_satara":
+        return empty ? 0.100 : 0.100;
+      case n"wea_set_senkoh":
+        return empty ? 0.333 : 0.433;
+      case n"wea_set_senkoh_prototype":
+        return empty ? 0.333 : 0.433;
+      case n"wea_set_shingen":
+        return empty ? 0.667 : 0.633;
+      case n"wea_set_tactician":
+        return empty ? 0.033 : 0.500;
+      case n"wea_set_testera":
+        return empty ? 0.267 : 0.267;
+      case n"wea_set_warden":
+        return empty ? 0.767 : 0.800;
+      case n"wea_set_warden_suppressor":
+        return empty ? 0.767 : 0.800;
+      case n"wea_set_zhuo":
+        return empty ? 0.567 : 0.567;
+    }
+    return 0.5;
+  }
 }

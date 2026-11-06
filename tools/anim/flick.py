@@ -25,7 +25,9 @@ FWD_M = 0.12       # metres it moves forward on the way down, so the stock stays
 SMOOTH = 2.5       # gaussian sigma in frames for the pistol path
 FADE_F = 8         # frames over which the tip-up fades in
 PLAIN_F = 12       # plain variant (_02 clips, shell-by-shell guns): frames to go straight down, no tip-up
-PRE_F = 180        # clip frames before the rise: tip-up and drop end by frame 30 (GorillaAkimboReload.TipUpLength),
+TOP_F = 60         # the gun holds at the top of the tip-up until here (2.0 s), so a late magazine has time to fall;
+                   # the script fast-forwards the part of the hold a gun doesn't need (GorillaAkimboReload.TopEnd)
+PRE_F = 240        # clip frames before the rise: the drop ends by frame 69 (GorillaAkimboReload.DropEnd),
                    # then a hold the script fast-forwards so the rise starts when the gun's ammo lands
 SUFFIX = '' if SIDE == 'right' else '_l'
 S, s = ('Right', 'right') if SIDE == 'right' else ('Left', 'left')
@@ -114,7 +116,7 @@ for name, (src, n) in CLIPS.items():
     rise[-1] = (g0, IDENT)
     n = PRE_F + nr
     rise_f0 = PRE_F
-    drop_end = LIFT_F + DROP_S * FPS
+    drop_end = TOP_F + DROP_S * FPS
     # Gun offset per output frame: (gun position, rotation relative to rest).
     offs = []
     for f in range(n):
@@ -124,8 +126,10 @@ for name, (src, n) in CLIPS.items():
             offs.append(((g0 + (drop[0] - g0) * u), slerp(IDENT, drop[1], u)))
         elif f <= LIFT_F:
             offs.append(lift[f])
+        elif f <= TOP_F:
+            offs.append(lift[LIFT_F])
         elif f <= drop_end:
-            u = ease((f - LIFT_F) / (drop_end - LIFT_F))
+            u = ease((f - TOP_F) / (drop_end - TOP_F))
             a = lift[LIFT_F]
             offs.append((a[0] + (drop[0] - a[0]) * u, slerp(a[1], drop[1], u)))
         elif f < rise_f0:

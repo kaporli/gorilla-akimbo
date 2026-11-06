@@ -80,6 +80,23 @@ for a in sorted(table):
               f'        Deref(times) = empty ? {arr(emp, 0)} : {arr(reload, 0)};',
               f'        Deref(names) = empty ? {arr(emp, 1)} : {arr(reload, 1)};',
               '        break;']
-lines += ['    }', '  }', '}', '']
+lines += ['    }', '  }', '']
+
+
+def mag_out(lst):
+    # When the magazine (or a double-barrel's shells) leaves the gun: its first mag-out, eject or open sound.
+    for key in ('mag_out', 'eject', 'open'):
+        for t, n in lst:
+            if key in n:
+                return t
+    return 0.5
+
+
+lines += ['  // Clip seconds into the reload at which the magazine (or the spent shells) leaves the gun.',
+          '  public static func MagOut(audio: CName, empty: Bool) -> Float {', '    switch audio {']
+for a in sorted(table):
+    reload, emp = table[a]
+    lines += [f'      case n"{a}":', f'        return empty ? {mag_out(emp):.3f} : {mag_out(reload):.3f};']
+lines += ['    }', '    return 0.5;', '  }', '}', '']
 open(OUT, 'w', encoding='utf-8', newline='\n').write('\n'.join(lines))
 print(len(table), 'audio names ->', OUT)

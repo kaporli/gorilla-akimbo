@@ -123,31 +123,82 @@ public class GorillaAkimboReloadSystem extends ScriptableSystem {
 }
 
 public abstract class GorillaAkimboReload {
-  // Arm clip layout, in clip seconds: tip-up and drop, then a hold up to the rise, then the rise.
-  public static func TipUpLength() -> Float {
-    return 1.0;
+  // Arm clip layout, in clip seconds. Magazine guns: tip-up until LiftEnd, held at the top until TopEnd, down out of
+  // view by DropEnd, held there until HoldEnd, then the rise. Shell-by-shell guns (_02 clips): down by PlainDrop.
+  public static func LiftEnd() -> Float {
+    return 0.667;
+  }
+
+  public static func TopEnd() -> Float {
+    return 2.0;
+  }
+
+  public static func DropEnd() -> Float {
+    return 2.3;
   }
 
   public static func HoldEnd() -> Float {
-    return 6.0;
+    return 8.0;
+  }
+
+  public static func PlainDrop() -> Float {
+    return 0.4;
   }
 
   public static func RiseLength() -> Float {
     return 1.1;
   }
 
-  // Clip speed at a time into the reload. The tip-up plays at normal speed (faster when the reload is
-  // short), the hold is fast-forwarded so the rise starts when the ammo lands, and the rise plays at
-  // normal speed. The gun's own reload animation (magazine in) runs at the same speed, so it is done by then.
-  public static func Speed(time: Float, duration: Float) -> Float {
-    let tipUp = MinF(GorillaAkimboReload.TipUpLength(), 0.6 * duration);
-    if time < tipUp {
-      return GorillaAkimboReload.TipUpLength() / tipUp;
+  // Seconds the magazine takes to fall clear after it leaves the gun.
+  public static func MagFall() -> Float {
+    return 0.45;
+  }
+
+  // Clip speed at a time into the reload. The gun stays up until its magazine (out at magWait into the reload, from
+  // its own reload animation) has fallen, the rest of the top hold is skipped, the out-of-view hold is fast-forwarded
+  // so the rise starts when the ammo lands, and the rise plays at normal speed. Short reloads play the opening faster.
+  public static func Speed(time: Float, duration: Float, magWait: Float, shells: Bool) -> Float {
+    if shells {
+      let plain = GorillaAkimboReload.PlainDrop();
+      let plainReal = MinF(plain, 0.6 * duration);
+      if time < plainReal {
+        return plain / plainReal;
+      }
+      if time < duration {
+        return (GorillaAkimboReload.HoldEnd() - plain) / MaxF(duration - plainReal, 0.05);
+      }
+      return 1.0;
+    }
+    let top = ClampF(magWait, GorillaAkimboReload.LiftEnd(), GorillaAkimboReload.TopEnd());
+    let drop = GorillaAkimboReload.DropEnd() - GorillaAkimboReload.TopEnd();
+    let opening = top + drop;
+    let k = opening / MinF(opening, 0.75 * duration);
+    let skip = 0.06;
+    let liftReal = top / k;
+    let dropStart = liftReal + skip;
+    let dropReal = dropStart + drop / k;
+    if time < liftReal {
+      return k;
+    }
+    if time < dropStart {
+      return (GorillaAkimboReload.TopEnd() - top) / skip;
+    }
+    if time < dropReal {
+      return k;
     }
     if time < duration {
-      return (GorillaAkimboReload.HoldEnd() - GorillaAkimboReload.TipUpLength()) / MaxF(duration - tipUp, 0.05);
+      return (GorillaAkimboReload.HoldEnd() - GorillaAkimboReload.DropEnd()) / MaxF(duration - dropReal, 0.05);
     }
     return 1.0;
+  }
+
+  // The weapon's audio name, or a gun of its type when the game files have no reload sounds for it.
+  public static func Audio(record: ref<WeaponItem_Record>, kind: Int32) -> CName {
+    let audio = record.AudioName();
+    if !GorillaAkimboSounds.Has(audio) {
+      audio = GorillaAkimboSounds.Fallback(audio, record.ItemType().Type(), kind == GorillaAkimboReload.Shells());
+    }
+    return audio;
   }
 
   // Takes off the changes of an earlier reload, then sets them up again when the weapon is a dual-wielded
@@ -233,10 +284,7 @@ public abstract class GorillaAkimboReload {
                             passLengths: array<Float>, times: script_ref<array<Float>>, names: script_ref<array<CName>>) {
     ArrayClear(Deref(times));
     ArrayClear(Deref(names));
-    let audio = record.AudioName();
-    if !GorillaAkimboSounds.Has(audio) {
-      audio = GorillaAkimboSounds.Fallback(audio, record.ItemType().Type(), kind == GorillaAkimboReload.Shells());
-    }
+    let audio = GorillaAkimboReload.Audio(record, kind);
     let empty = weapon.IsMagazineEmpty();
     let n = ArraySize(passStarts);
     let i = 0;
@@ -296,6 +344,9 @@ private let m_gorillaSoundTimes: array<Float>;
 @addField(ReloadEvents)
 private let m_gorillaSoundNames: array<CName>;
 
+@addField(ReloadEvents)
+private let m_gorillaMagWait: Float;
+
 @wrapMethod(ReloadEvents)
 protected final func OnEnter(stateContext: ref<StateContext>, scriptInterface: ref<StateGameScriptInterface>) -> Void {
   let weapon = this.GetWeaponObject(scriptInterface);
@@ -311,6 +362,8 @@ protected final func OnEnter(stateContext: ref<StateContext>, scriptInterface: r
   }
   this.m_gorillaShells = kind == GorillaAkimboReload.Shells();
   if this.m_gorillaTimed {
+    this.m_gorillaMagWait = GorillaAkimboSounds.MagOut(GorillaAkimboReload.Audio(this.m_weaponRecord, kind), weapon.IsMagazineEmpty())
+      + GorillaAkimboReload.MagFall();
     let stats = scriptInterface.GetStatsSystem();
     let id = Cast<StatsObjectID>(weapon.GetEntityID());
     // The arm clips are one whole reload; a shell count would send the anim graph into its shell loop, which
@@ -319,7 +372,7 @@ protected final func OnEnter(stateContext: ref<StateContext>, scriptInterface: r
     this.m_animReloadData.loopDuration = stats.GetStatValue(id, gamedataStatType.ReloadTime);
     this.m_animReloadData.emptyDuration = stats.GetStatValue(id, gamedataStatType.EmptyReloadTime);
     let duration = weapon.IsMagazineEmpty() ? this.m_animReloadData.emptyDuration : this.m_animReloadData.loopDuration;
-    this.m_gorillaSpeed = GorillaAkimboReload.Speed(0.0, duration);
+    this.m_gorillaSpeed = GorillaAkimboReload.Speed(0.0, duration, this.m_gorillaMagWait, this.m_gorillaShells);
     this.m_animReloadSpeed.reloadSpeed = this.m_gorillaSpeed;
     this.m_animReloadSpeed.emptyReloadSpeed = this.m_gorillaSpeed;
     this.m_animReloadDataDirty = true;
@@ -350,7 +403,7 @@ protected final func OnUpdate(timeDelta: Float, stateContext: ref<StateContext>,
   if !duration.valid {
     return;
   }
-  let speed = GorillaAkimboReload.Speed(this.GetInStateTime(), duration.value);
+  let speed = GorillaAkimboReload.Speed(this.GetInStateTime(), duration.value, this.m_gorillaMagWait, this.m_gorillaShells);
   if AbsF(speed - this.m_gorillaSpeed) > 0.001 {
     this.m_gorillaSpeed = speed;
     this.m_animReloadSpeed.reloadSpeed = speed;
