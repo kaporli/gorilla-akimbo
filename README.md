@@ -6,54 +6,40 @@ Patch 2.5 added dual-wielding through the **Double Trouble** perk (Cool), limite
 
 Since 2.0.0, dual-wielded SMGs and shotguns no longer borrow the game's two-handed reloads. Each gun has its own arm animation, reloads on its own timing, and plays its own reload sounds.
 
-## Before and after
+## How it differs from other dual-wield mods
 
-Every clip: V shoots a few rounds from both guns, then reloads. Left column is 1.0.1, right column is 2.0.0, same spot, same weapons.
+[Dual Wield Anything](https://www.nexusmods.com/cyberpunk2077/mods/35632) and [Expanded Dual Wielding](https://www.nexusmods.com/cyberpunk2077/mods/35626) open dual-wielding to more weapon types, and Expanded Dual Wielding adds control options such as firing each gun on its own button. Both reuse the game's existing animations for those weapons, and both pages say the result looks janky or that reloads may look unusual.
 
-**Two SMGs** (Shingen + Saratoga). Before: the right gun plays its two-handed reload across the screen and the left gun doesn't animate. After: each gun tips up while its magazine drops, goes down out of view, and comes back up once its own reload is done.
+Gorilla Akimbo covers fewer weapons (SMGs and shotguns, tied to Gorilla Arms) and makes them look right:
 
-| Before (1.0.1) | After (2.0.0) |
+- Its own one-handed arm animations for reloads, instead of the two-handed ones.
+- Each hand reloads on its own, so one gun can reload while the other fires.
+- Reload timing per gun from its live stats, shell-by-shell loading like vanilla, and each gun's own reload sounds.
+- The dual-wield ammo counter fix.
+
+Use one dual-wield mod at a time: they all change which weapons can be paired.
+
+## Comparison
+
+The left clips show the game's own animations for dual-wielded SMGs and shotguns, as Gorilla Akimbo 1.0.1 used them; per their pages, the other dual-wield mods reuse the game's animations too. The right clips show Gorilla Akimbo 2.0.0. Same spot, same weapons, a few shots and then a reload.
+
+**One gun reloads, the other keeps firing** (Shingen + Pulsar). The Shingen runs dry first. Left: its two-handed reload swings through the middle of the screen. Right: only the Shingen goes down while the Pulsar keeps shooting.
+
+| Game animations (Gorilla Akimbo 1.0.1) | Gorilla Akimbo 2.0.0 |
 |---|---|
-| ![Shingen and Saratoga reloading, 1.0.1](research/showcase/before-smg-pair.gif) | ![Shingen and Saratoga reloading, 2.0.0](research/showcase/after-smg-pair.gif) |
+| ![Shingen running dry while the Pulsar keeps firing, game animations](research/showcase/before-smg-one-hand.gif) | ![Shingen running dry while the Pulsar keeps firing, Gorilla Akimbo 2.0.0](research/showcase/after-smg-one-hand.gif) |
 
-**One gun reloads, the other keeps firing** (Shingen + Pulsar). The Shingen runs dry first. Before: its two-handed reload swings through the middle of the screen. After: only the Shingen goes down while the Pulsar keeps shooting, then the Pulsar reloads on its own when it runs dry.
+**Magazine shotguns** (Pozhar + Crusher). Right: each gun tips up while its magazine slides out and falls, then goes down out of view and comes back up once its own reload is done.
 
-| Before (1.0.1) | After (2.0.0) |
+| Game animations (Gorilla Akimbo 1.0.1) | Gorilla Akimbo 2.0.0 |
 |---|---|
-| ![Shingen running dry while the Pulsar keeps firing, 1.0.1](research/showcase/before-smg-one-hand.gif) | ![Shingen running dry while the Pulsar keeps firing, 2.0.0](research/showcase/after-smg-one-hand.gif) |
+| ![Pozhar and Crusher reloading, game animations](research/showcase/before-mag-shotgun-pair.gif) | ![Pozhar and Crusher reloading, Gorilla Akimbo 2.0.0](research/showcase/after-mag-shotgun-pair.gif) |
 
-**Shell-fed shotguns** (Carnage + Tactician). After: both go down and load their shells one at a time; the ammo counter fills shell by shell.
+**Pistol + SMG** (Lexington + Saratoga). Right: the pistol keeps its vanilla reload, the SMG gets Gorilla Akimbo's.
 
-| Before (1.0.1) | After (2.0.0) |
+| Game animations (Gorilla Akimbo 1.0.1) | Gorilla Akimbo 2.0.0 |
 |---|---|
-| ![Carnage and Tactician reloading, 1.0.1](research/showcase/before-shell-pair.gif) | ![Carnage and Tactician reloading, 2.0.0](research/showcase/after-shell-pair.gif) |
-
-**Magazine shotguns** (Pozhar + Crusher). After: each gun tips up while its magazine slides out and falls, then goes down.
-
-| Before (1.0.1) | After (2.0.0) |
-|---|---|
-| ![Pozhar and Crusher reloading, 1.0.1](research/showcase/before-mag-shotgun-pair.gif) | ![Pozhar and Crusher reloading, 2.0.0](research/showcase/after-mag-shotgun-pair.gif) |
-| ![Zhuo and Pozhar reloading, 1.0.1](research/showcase/before-zhuo-pozhar.gif) | ![Zhuo and Pozhar reloading, 2.0.0](research/showcase/after-zhuo-pozhar.gif) |
-
-**Double-barrel shotguns** (Igla + Testera, Palica + Satara).
-
-| Before (1.0.1) | After (2.0.0) |
-|---|---|
-| ![Igla and Testera reloading, 1.0.1](research/showcase/before-double-pair.gif) | ![Igla and Testera reloading, 2.0.0](research/showcase/after-double-pair.gif) |
-| ![Palica and Satara reloading, 1.0.1](research/showcase/before-double-pair-2.gif) | ![Palica and Satara reloading, 2.0.0](research/showcase/after-double-pair-2.gif) |
-
-**Mixed pairs**, each gun with its own reload: a pistol + an SMG (the pistol keeps its vanilla reload), an SMG + a shotgun, and a magazine shotgun + a shell-fed one.
-
-| Before (1.0.1) | After (2.0.0) |
-|---|---|
-| ![Lexington and Saratoga reloading, 1.0.1](research/showcase/before-pistol-smg.gif) | ![Lexington and Saratoga reloading, 2.0.0](research/showcase/after-pistol-smg.gif) |
-| ![Saratoga and Carnage reloading, 1.0.1](research/showcase/before-smg-shotgun.gif) | ![Saratoga and Carnage reloading, 2.0.0](research/showcase/after-smg-shotgun.gif) |
-| ![Pozhar and Carnage reloading, 1.0.1](research/showcase/before-mag-shell.gif) | ![Pozhar and Carnage reloading, 2.0.0](research/showcase/after-mag-shell.gif) |
-
-**The dual-wield ammo counter** (Carnage + Tactician). Before: two long weapon icons push the left gun's count out of the HUD. After: both counts show, at the game's own icon sizes.
-
-![Ammo counter in 1.0.1, left count cut off](research/showcase/before-hud-long-shotguns.png)
-![Ammo counter in 2.0.0, both counts shown](research/showcase/after-hud-long-shotguns.png)
+| ![Lexington and Saratoga reloading, game animations](research/showcase/before-pistol-smg.gif) | ![Lexington and Saratoga reloading, Gorilla Akimbo 2.0.0](research/showcase/after-pistol-smg.gif) |
 
 ## Features
 
@@ -73,18 +59,15 @@ Every clip: V shoots a few rounds from both guns, then reloads. Left column is 1
   - Gorilla Arms get a tooltip line: *"Reinforced grip actuators steady SMGs and shotguns one-handed: with Double Trouble, they can be dual-wielded."*
 - No new perk and nothing written to your save. Single-wielded SMGs and shotguns keep their vanilla animations.
 
-## How it differs from other dual-wield mods
+## Limitations
 
-[Dual Wield Anything](https://www.nexusmods.com/cyberpunk2077/mods/35632) and [Expanded Dual Wielding](https://www.nexusmods.com/cyberpunk2077/mods/35626) open dual-wielding to more weapon types, and Expanded Dual Wielding adds control options such as firing each gun on its own button. Both reuse the game's existing animations for those weapons, and both pages say the result looks janky or that reloads may look unusual.
-
-Gorilla Akimbo covers fewer weapons (SMGs and shotguns, tied to Gorilla Arms) and makes them look right:
-
-- Its own one-handed arm animations for reloads, instead of the two-handed ones.
-- Each hand reloads on its own, so one gun can reload while the other fires.
-- Reload timing per gun from its live stats, shell-by-shell loading like vanilla, and each gun's own reload sounds.
-- The dual-wield ammo counter fix.
-
-Use one dual-wield mod at a time: they all change which weapons can be paired.
+- Firing animations (recoil, shotgun pumping) are still the game's pistol dual-wield ones.
+- While dual-wielding, only the right gun's reload can be cut short by firing, unless the right gun is empty. The base game does the same with pistols.
+- Long shotguns (Zhuo, Tactician) swing toward the middle of the screen at the top of the tip-up and the rise.
+- Weapons without reload sounds of their own in the game files (the Guillotine, modded weapons) use another gun of their type: Saratoga for SMGs, Carnage for shell-fed shotguns, Crusher for magazine shotguns, Igla for double-barrels.
+- Female V's clips are built and load in the game, but haven't been played on a female character yet.
+- Double Trouble's own bonuses (recoil, spread, Heywood Hurricane) follow the game's rules.
+- Photo mode's weapon poses hold a single gun, so dual-wielding only shows in gameplay.
 
 ## Requirements
 
@@ -112,16 +95,6 @@ Updating from 1.0.0 by hand: delete the old `r6/scripts/GorillaGrip` and `r6/twe
 ## Uninstallation
 
 Unpair any dual-wielded SMGs or shotguns first, then remove the files above. Nothing is written to your save.
-
-## Limitations
-
-- Firing animations (recoil, shotgun pumping) are still the game's pistol dual-wield ones.
-- While dual-wielding, only the right gun's reload can be cut short by firing, unless the right gun is empty. The base game does the same with pistols.
-- Long shotguns (Zhuo, Tactician) swing toward the middle of the screen at the top of the tip-up and the rise.
-- Weapons without reload sounds of their own in the game files (the Guillotine, modded weapons) use another gun of their type: Saratoga for SMGs, Carnage for shell-fed shotguns, Crusher for magazine shotguns, Igla for double-barrels.
-- Female V's clips are built and load in the game, but haven't been played on a female character yet.
-- Double Trouble's own bonuses (recoil, spread, Heywood Hurricane) follow the game's rules.
-- Photo mode's weapon poses hold a single gun, so dual-wielding only shows in gameplay.
 
 ## How it works
 

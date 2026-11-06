@@ -6,36 +6,31 @@ Patch 2.5 added dual-wielding through the [b]Double Trouble[/b] perk, limited to
 
 [i]Formerly Gorilla Grip. Updating by hand from 1.0.0: delete the old [font=Courier New]r6/scripts/GorillaGrip[/font] and [font=Courier New]r6/tweaks/GorillaGrip[/font] folders first.[/i]
 
-[size=4][b]Before and after[/b][/size]
-Every clip: V shoots a few rounds from both guns, then reloads. First 1.0.1, then 2.0.0, same spot, same weapons.
+[size=4][b]How it differs from other dual-wield mods[/b][/size]
+[url=https://www.nexusmods.com/cyberpunk2077/mods/35632]Dual Wield Anything[/url] and [url=https://www.nexusmods.com/cyberpunk2077/mods/35626]Expanded Dual Wielding[/url] open dual-wielding to more weapon types, and Expanded Dual Wielding adds control options such as firing each gun on its own button. Both reuse the game's existing animations for those weapons, and both pages say the result looks janky or that reloads may look unusual.
 
-[b]Two SMGs[/b] (Shingen + Saratoga). Before: the right gun plays its two-handed reload across the screen and the left gun doesn't animate. After: each gun tips up while its magazine drops, goes down out of view, and comes back up once its own reload is done.
-[img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/showcase/before-smg-pair.gif[/img]
-[img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/showcase/after-smg-pair.gif[/img]
+Gorilla Akimbo covers fewer weapons (SMGs and shotguns, tied to Gorilla Arms) and makes them look right:
+[list]
+[*]Its own one-handed arm animations for reloads, instead of the two-handed ones.[/*]
+[*]Each hand reloads on its own, so one gun can reload while the other fires.[/*]
+[*]Reload timing per gun from its live stats, shell-by-shell loading like vanilla, and each gun's own reload sounds.[/*]
+[*]The dual-wield ammo counter fix.[/*]
+[/list]Use one dual-wield mod at a time: they all change which weapons can be paired.
 
-[b]One gun reloads, the other keeps firing[/b] (Shingen + Pulsar). The Shingen runs dry first. Before: its two-handed reload swings through the middle of the screen. After: only the Shingen goes down while the Pulsar keeps shooting.
+[size=4][b]Comparison[/b][/size]
+The first clip of each pair shows the game's own animations for dual-wielded SMGs and shotguns, as Gorilla Akimbo 1.0.1 used them; per their pages, the other dual-wield mods reuse the game's animations too. The second shows Gorilla Akimbo 2.0.0. Same spot, same weapons, a few shots and then a reload.
+
+[b]One gun reloads, the other keeps firing[/b] (Shingen + Pulsar). The Shingen runs dry first. Game animations: its two-handed reload swings through the middle of the screen. Gorilla Akimbo: only the Shingen goes down while the Pulsar keeps shooting.
 [img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/showcase/before-smg-one-hand.gif[/img]
 [img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/showcase/after-smg-one-hand.gif[/img]
 
-[b]Shell-fed shotguns[/b] (Carnage + Tactician). After: both go down and load their shells one at a time; the ammo counter fills shell by shell.
-[img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/showcase/before-shell-pair.gif[/img]
-[img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/showcase/after-shell-pair.gif[/img]
-
-[b]Magazine shotguns[/b] (Pozhar + Crusher). After: each gun tips up while its magazine slides out and falls, then goes down.
+[b]Magazine shotguns[/b] (Pozhar + Crusher). Gorilla Akimbo: each gun tips up while its magazine slides out and falls, then goes down out of view and comes back up once its own reload is done.
 [img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/showcase/before-mag-shotgun-pair.gif[/img]
 [img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/showcase/after-mag-shotgun-pair.gif[/img]
 
-[b]Mixed pairs[/b], each gun with its own reload: a pistol + an SMG (the pistol keeps its vanilla reload), and a magazine shotgun + a shell-fed one.
+[b]Pistol + SMG[/b] (Lexington + Saratoga). Gorilla Akimbo: the pistol keeps its vanilla reload, the SMG gets Gorilla Akimbo's.
 [img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/showcase/before-pistol-smg.gif[/img]
 [img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/showcase/after-pistol-smg.gif[/img]
-[img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/showcase/before-mag-shell.gif[/img]
-[img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/showcase/after-mag-shell.gif[/img]
-
-[b]The dual-wield ammo counter.[/b] Before: two long weapon icons push the left gun's count out of the HUD. After: both counts show, at the game's own icon sizes.
-[img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/showcase/before-hud-long-shotguns.png[/img]
-[img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/showcase/after-hud-long-shotguns.png[/img]
-
-More comparisons (Zhuo, double-barrels, SMG + shotgun) are on [url=https://github.com/kaporli/gorilla-akimbo#before-and-after]GitHub[/url].
 
 [size=4][b]Features[/b][/size]
 [list]
@@ -48,18 +43,7 @@ More comparisons (Zhuo, double-barrels, SMG + shotgun) are on [url=https://githu
 [*][b]Ammo counter fixed for two long guns.[/b] The left gun's count is no longer cut off; the icons keep the game's sizes.[/*]
 [*][b]Fits the game's UI:[/b] Double Trouble's weapon box reads [i]"Only affects Power Pistols and Power Revolvers; equipping Gorilla Arms extends this to SMGs and Shotguns"[/i], and Gorilla Arms get the tooltip line [i]"Reinforced grip actuators steady SMGs and shotguns one-handed: with Double Trouble, they can be dual-wielded."[/i][/*]
 [*]No new perk and nothing written to your save. Single-wielded SMGs and shotguns keep their vanilla animations.[/*]
-[/list][size=4][b]How it differs from other dual-wield mods[/b][/size]
-[url=https://www.nexusmods.com/cyberpunk2077/mods/35632]Dual Wield Anything[/url] and [url=https://www.nexusmods.com/cyberpunk2077/mods/35626]Expanded Dual Wielding[/url] open dual-wielding to more weapon types, and Expanded Dual Wielding adds control options such as firing each gun on its own button. Both reuse the game's existing animations for those weapons, and both pages say the result looks janky or that reloads may look unusual.
-
-Gorilla Akimbo covers fewer weapons (SMGs and shotguns, tied to Gorilla Arms) and makes them look right:
-[list]
-[*]Its own one-handed arm animations for reloads, instead of the two-handed ones.[/*]
-[*]Each hand reloads on its own, so one gun can reload while the other fires.[/*]
-[*]Reload timing per gun from its live stats, shell-by-shell loading like vanilla, and each gun's own reload sounds.[/*]
-[*]The dual-wield ammo counter fix.[/*]
-[/list]Use one dual-wield mod at a time: they all change which weapons can be paired.
-
-[size=4][b][color=#e5be37]Limitations[/color][/b][/size]
+[/list][size=4][b][color=#e5be37]Limitations[/color][/b][/size]
 [list]
 [*][color=#e5be37][b]Firing animations (recoil, shotgun pumping) are still the game's pistol dual-wield ones.[/b][/color][/*]
 [*][color=#e5be37][b]While dual-wielding, only the right gun's reload can be cut short by firing, unless the right gun is empty. The base game does the same with pistols.[/b][/color][/*]
