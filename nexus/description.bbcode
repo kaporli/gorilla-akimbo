@@ -19,16 +19,18 @@ Patch 2.5 added dual-wielding through the [b]Double Trouble[/b] perk, limited to
 [img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/hud-before.png[/img]
 [img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/hud-after.png[/img]
 
-[b]Mixed pairs[/b] work too, each gun with its own reload: a magazine Pozhar next to a shell-fed Carnage, and a pistol next to an SMG.
-[img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/gifs30/shotgun-reload-mixed.gif[/img]
+[b]Magazine shotguns.[/b] Each gun tips up while its magazine slides out and falls, then goes down. Two Pozhars:
+[img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/gifs30/shotgun-reload-pozhar-pair.gif[/img]
+
+[b]Mixed pairs[/b] work too, each gun with its own reload. A pistol next to an SMG: the pistol does its own vanilla reload, the SMG does Gorilla Akimbo's.
 [img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/gifs30/reload-mix-pistol-smg.gif[/img]
 
-More pairs (Crusher, Zhuo, Tactician, Igla, Palica, Satara, Testera) are on [url=https://github.com/kaporli/gorilla-akimbo/tree/main/research/gifs30]GitHub[/url].
+More pairs (Pozhar + Carnage, Crusher, Zhuo, Tactician, Igla, Palica, Satara, Testera) are on [url=https://github.com/kaporli/gorilla-akimbo/tree/main/research/gifs30]GitHub[/url].
 
 [size=4][b]Features[/b][/size]
 [list]
 [*][b]Dual-wield SMGs and shotguns[/b] with Gorilla Arms and Double Trouble, including double-barrel shotguns and modded weapons of those types. Without Gorilla Arms, only pistols and revolvers can, as in vanilla. Removing Gorilla Arms unequips the off-hand SMG or shotgun.[/*]
-[*][b]Custom one-handed reload animations[/b] for every dual-wielded SMG and shotgun, built from the game's own pistol dual-wield reload. The gun tips up (half the pistol's lift, so long guns stay on their side) and holds there until its own magazine has fallen out, timed per gun from its own reload animation, goes down out of view with the muzzle tipped down, and stays there until its ammo is in. It then rises the way the pistol's empty reload does: muzzle up, a small overshoot, then it settles. Shell-by-shell shotguns go straight down, since they have no magazine. Male and female V each get their own clips.[/*]
+[*][b]Custom one-handed reload animations[/b] for every dual-wielded SMG and shotgun, built from the game's own pistol dual-wield reload. The gun tips up slowly (half the pistol's lift, so long guns stay on their side) while its magazine drops out, at a speed picked per gun from its own reload animation so the gun only goes down once the magazine has fallen clear, goes down out of view with the muzzle tipped down, and stays there until its ammo is in. It then rises the way the pistol's empty reload does: muzzle up, a small overshoot, then it settles. Shell-by-shell shotguns go straight down, since they have no magazine. Male and female V each get their own clips.[/*]
 [*][b]Each hand reloads on its own.[/b] Only the gun that needs ammo goes down; the other stays up and can keep firing. In 1.0.1 the left gun didn't animate at all and the right gun's reload moved both arms.[/*]
 [*][b]Reload timing from each gun's live stats[/b], including perks and weapon mods, so any pair (SMG + SMG, shotgun + shotgun, SMG + shotgun, pistol + SMG) times itself. The rise starts when that gun's ammo is in, so the magazine never floats into the gun on the way up.[/*]
 [*][b]Shell-by-shell reloads like vanilla.[/b] The gun stays down for the whole reload while shells land one at a time on the ammo counter, at the same times a single shotgun's reload would load them. Firing mid-reload keeps the shells already loaded.[/*]

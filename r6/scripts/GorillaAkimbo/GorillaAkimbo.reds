@@ -123,18 +123,14 @@ public class GorillaAkimboReloadSystem extends ScriptableSystem {
 }
 
 public abstract class GorillaAkimboReload {
-  // Arm clip layout, in clip seconds. Magazine guns: tip-up until LiftEnd, held at the top until TopEnd, down out of
-  // view by DropEnd, held there until HoldEnd, then the rise. Shell-by-shell guns (_02 clips): down by PlainDrop.
-  public static func LiftEnd() -> Float {
-    return 0.667;
-  }
-
-  public static func TopEnd() -> Float {
-    return 2.0;
+  // Arm clip layout, in clip seconds. Magazine guns: a slow tip-up until OpenEnd, down out of view by DropEnd, held
+  // there until HoldEnd, then the rise. Shell-by-shell guns (_02 clips): down by PlainDrop.
+  public static func OpenEnd() -> Float {
+    return 1.2;
   }
 
   public static func DropEnd() -> Float {
-    return 2.3;
+    return 1.5;
   }
 
   public static func HoldEnd() -> Float {
@@ -154,40 +150,24 @@ public abstract class GorillaAkimboReload {
     return 0.45;
   }
 
-  // Clip speed at a time into the reload. The gun stays up until its magazine (out at magWait into the reload, from
-  // its own reload animation) has fallen, the rest of the top hold is skipped, the out-of-view hold is fast-forwarded
-  // so the rise starts when the ammo lands, and the rise plays at normal speed. Short reloads play the opening faster.
-  public static func Speed(time: Float, duration: Float, magWait: Float, shells: Bool) -> Float {
-    if shells {
-      let plain = GorillaAkimboReload.PlainDrop();
-      let plainReal = MinF(plain, 0.6 * duration);
-      if time < plainReal {
-        return plain / plainReal;
-      }
-      if time < duration {
-        return (GorillaAkimboReload.HoldEnd() - plain) / MaxF(duration - plainReal, 0.05);
-      }
-      return 1.0;
+  // Clip speed at a time into the reload. The gun's own reload animation runs at the same speed as the arm clip, so
+  // its magazine leaves at clip time magOut whatever the speed. The opening (tip-up and drop) plays at one speed per
+  // gun, picked so the drop starts once that magazine has fallen clear; the speed changes only while the gun is out
+  // of view. The out-of-view hold is fast-forwarded so the rise starts when the ammo lands.
+  public static func Speed(time: Float, duration: Float, magOut: Float, shells: Bool) -> Float {
+    let opening = shells ? GorillaAkimboReload.PlainDrop() : GorillaAkimboReload.DropEnd();
+    let rate = 1.0;
+    if !shells {
+      rate = ClampF((GorillaAkimboReload.OpenEnd() - magOut) / GorillaAkimboReload.MagFall(), 0.6, 1.4);
     }
-    let top = ClampF(magWait, GorillaAkimboReload.LiftEnd(), GorillaAkimboReload.TopEnd());
-    let drop = GorillaAkimboReload.DropEnd() - GorillaAkimboReload.TopEnd();
-    let opening = top + drop;
-    let k = opening / MinF(opening, 0.75 * duration);
-    let skip = 0.06;
-    let liftReal = top / k;
-    let dropStart = liftReal + skip;
-    let dropReal = dropStart + drop / k;
-    if time < liftReal {
-      return k;
-    }
-    if time < dropStart {
-      return (GorillaAkimboReload.TopEnd() - top) / skip;
-    }
-    if time < dropReal {
-      return k;
+    // Short reloads play the opening faster, so the gun is down well before the ammo lands.
+    rate = MaxF(rate, opening / MaxF(0.75 * duration, 0.05));
+    let openingReal = opening / rate;
+    if time < openingReal {
+      return rate;
     }
     if time < duration {
-      return (GorillaAkimboReload.HoldEnd() - GorillaAkimboReload.DropEnd()) / MaxF(duration - dropReal, 0.05);
+      return (GorillaAkimboReload.HoldEnd() - opening) / MaxF(duration - openingReal, 0.05);
     }
     return 1.0;
   }
@@ -345,7 +325,7 @@ private let m_gorillaSoundTimes: array<Float>;
 private let m_gorillaSoundNames: array<CName>;
 
 @addField(ReloadEvents)
-private let m_gorillaMagWait: Float;
+private let m_gorillaMagOut: Float;
 
 @wrapMethod(ReloadEvents)
 protected final func OnEnter(stateContext: ref<StateContext>, scriptInterface: ref<StateGameScriptInterface>) -> Void {
@@ -362,8 +342,7 @@ protected final func OnEnter(stateContext: ref<StateContext>, scriptInterface: r
   }
   this.m_gorillaShells = kind == GorillaAkimboReload.Shells();
   if this.m_gorillaTimed {
-    this.m_gorillaMagWait = GorillaAkimboSounds.MagOut(GorillaAkimboReload.Audio(this.m_weaponRecord, kind), weapon.IsMagazineEmpty())
-      + GorillaAkimboReload.MagFall();
+    this.m_gorillaMagOut = GorillaAkimboSounds.MagOut(GorillaAkimboReload.Audio(this.m_weaponRecord, kind), weapon.IsMagazineEmpty());
     let stats = scriptInterface.GetStatsSystem();
     let id = Cast<StatsObjectID>(weapon.GetEntityID());
     // The arm clips are one whole reload; a shell count would send the anim graph into its shell loop, which
@@ -372,7 +351,7 @@ protected final func OnEnter(stateContext: ref<StateContext>, scriptInterface: r
     this.m_animReloadData.loopDuration = stats.GetStatValue(id, gamedataStatType.ReloadTime);
     this.m_animReloadData.emptyDuration = stats.GetStatValue(id, gamedataStatType.EmptyReloadTime);
     let duration = weapon.IsMagazineEmpty() ? this.m_animReloadData.emptyDuration : this.m_animReloadData.loopDuration;
-    this.m_gorillaSpeed = GorillaAkimboReload.Speed(0.0, duration, this.m_gorillaMagWait, this.m_gorillaShells);
+    this.m_gorillaSpeed = GorillaAkimboReload.Speed(0.0, duration, this.m_gorillaMagOut, this.m_gorillaShells);
     this.m_animReloadSpeed.reloadSpeed = this.m_gorillaSpeed;
     this.m_animReloadSpeed.emptyReloadSpeed = this.m_gorillaSpeed;
     this.m_animReloadDataDirty = true;
@@ -403,7 +382,7 @@ protected final func OnUpdate(timeDelta: Float, stateContext: ref<StateContext>,
   if !duration.valid {
     return;
   }
-  let speed = GorillaAkimboReload.Speed(this.GetInStateTime(), duration.value, this.m_gorillaMagWait, this.m_gorillaShells);
+  let speed = GorillaAkimboReload.Speed(this.GetInStateTime(), duration.value, this.m_gorillaMagOut, this.m_gorillaShells);
   if AbsF(speed - this.m_gorillaSpeed) > 0.001 {
     this.m_gorillaSpeed = speed;
     this.m_animReloadSpeed.reloadSpeed = speed;

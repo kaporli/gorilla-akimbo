@@ -25,19 +25,21 @@ The dual-wield ammo counter. Before: two long weapon icons push the left gun's c
 ![Ammo counter in 1.0.1, left count cut off](research/hud-before.png)
 ![Ammo counter in 2.0.0, both counts shown](research/hud-after.png)
 
-Mixed pairs work too, each gun with its own reload: a magazine Pozhar next to a shell-fed Carnage, and a pistol next to an SMG.
+Magazine shotguns: each gun tips up while its magazine slides out and falls, then goes down. Two Pozhars:
 
-| Pozhar + Carnage | Pistol + SMG |
-|---|---|
-| ![Pozhar and Carnage reloading](research/gifs30/shotgun-reload-mixed.gif) | ![Lexington and Saratoga reloading](research/gifs30/reload-mix-pistol-smg.gif) |
+![Two Pozhar shotguns reloading in 2.0.0](research/gifs30/shotgun-reload-pozhar-pair.gif)
 
-More pairs (Crusher, Zhuo, Tactician, Igla, Palica, Satara, Testera) are in [research/gifs30](research/gifs30).
+Mixed pairs work too, each gun with its own reload. A pistol next to an SMG: the pistol does its own vanilla reload, the SMG does Gorilla Akimbo's.
+
+![Lexington and Saratoga reloading](research/gifs30/reload-mix-pistol-smg.gif)
+
+More pairs (Pozhar + Carnage, Crusher, Zhuo, Tactician, Igla, Palica, Satara, Testera) are in [research/gifs30](research/gifs30).
 
 ## Features
 
 - **Dual-wield SMGs and shotguns** with Gorilla Arms and Double Trouble, including double-barrel shotguns and modded weapons of those types. Without Gorilla Arms, only pistols and revolvers can be dual-wielded, as in vanilla. Removing Gorilla Arms unequips the off-hand SMG or shotgun.
 - **Custom one-handed reload animations** for every dual-wielded SMG and shotgun, built from the game's own pistol dual-wield reload:
-  - The gun tips up (half the pistol's lift, so long guns stay on their side) and holds there until its own magazine has fallen out, timed per gun from its own reload animation, then goes down out of view with the muzzle tipped down.
+  - The gun tips up slowly (half the pistol's lift, so long guns stay on their side) while its magazine drops out, at a speed picked per gun from its own reload animation so the gun only goes down once the magazine has fallen clear, then goes down out of view with the muzzle tipped down.
   - It stays out of view until its ammo is in, then rises the way the pistol's empty reload does: muzzle up, a small overshoot, then it settles.
   - Shell-by-shell shotguns (Carnage, Tactician) skip the tip-up and go straight down, since they have no magazine.
   - Male and female V each get their own clips, made from the game's male and female sets.

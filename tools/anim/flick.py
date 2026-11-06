@@ -25,9 +25,9 @@ FWD_M = 0.12       # metres it moves forward on the way down, so the stock stays
 SMOOTH = 2.5       # gaussian sigma in frames for the pistol path
 FADE_F = 8         # frames over which the tip-up fades in
 PLAIN_F = 12       # plain variant (_02 clips, shell-by-shell guns): frames to go straight down, no tip-up
-TOP_F = 60         # the gun holds at the top of the tip-up until here (2.0 s), so a late magazine has time to fall;
-                   # the script fast-forwards the part of the hold a gun doesn't need (GorillaAkimboReload.TopEnd)
-PRE_F = 240        # clip frames before the rise: the drop ends by frame 69 (GorillaAkimboReload.DropEnd),
+OPEN_F = 36        # the tip-up is stretched over this many frames (1.2 s, GorillaAkimboReload.OpenEnd) so the magazine
+                   # has time to fall before the drop; the script picks the playback speed per gun
+PRE_F = 240        # clip frames before the rise: the drop ends by frame 45 (GorillaAkimboReload.DropEnd),
                    # then a hold the script fast-forwards so the rise starts when the gun's ammo lands
 SUFFIX = '' if SIDE == 'right' else '_l'
 S, s = ('Right', 'right') if SIDE == 'right' else ('Left', 'left')
@@ -116,7 +116,7 @@ for name, (src, n) in CLIPS.items():
     rise[-1] = (g0, IDENT)
     n = PRE_F + nr
     rise_f0 = PRE_F
-    drop_end = TOP_F + DROP_S * FPS
+    drop_end = OPEN_F + DROP_S * FPS
     # Gun offset per output frame: (gun position, rotation relative to rest).
     offs = []
     for f in range(n):
@@ -124,12 +124,14 @@ for name, (src, n) in CLIPS.items():
         if plain and f < rise_f0:
             u = ease(f / PLAIN_F)
             offs.append(((g0 + (drop[0] - g0) * u), slerp(IDENT, drop[1], u)))
-        elif f <= LIFT_F:
-            offs.append(lift[f])
-        elif f <= TOP_F:
-            offs.append(lift[LIFT_F])
+        elif f <= OPEN_F:
+            # The pistol's tip-up, stretched over OPEN_F frames (sampled between its frames).
+            x = f / OPEN_F * LIFT_F
+            i0 = min(int(x), LIFT_F - 1); w = x - i0
+            a, b = lift[i0], lift[i0 + 1]
+            offs.append((a[0] + (b[0] - a[0]) * w, slerp(a[1], b[1], w)))
         elif f <= drop_end:
-            u = ease((f - TOP_F) / (drop_end - TOP_F))
+            u = ease((f - OPEN_F) / (drop_end - OPEN_F))
             a = lift[LIFT_F]
             offs.append((a[0] + (drop[0] - a[0]) * u, slerp(a[1], drop[1], u)))
         elif f < rise_f0:
