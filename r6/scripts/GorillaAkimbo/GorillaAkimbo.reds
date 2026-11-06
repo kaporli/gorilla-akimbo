@@ -770,7 +770,7 @@ private func PerkWeaponGroupTypeToText(type: gamedataPerkWeaponGroupType) -> Str
 public class EnglishPackage extends ModLocalizationPackage {
   protected func DefineTexts() {
     this.Text("GorillaAkimbo-ArmsLine", "Reinforced grip actuators steady SMGs and shotguns one-handed: with Double Trouble, they can be dual-wielded.");
-    this.Text("GorillaAkimbo-PerkNote", "equipping Gorilla Arms extends this to SMGs and Shotguns");
+    this.Text("GorillaAkimbo-PerkNote", "equipping Gorilla Arms extends this effect to SMGs and Shotguns");
     this.Text("GorillaAkimbo-RecoilLine", "<Rich color=\"TooltipText.cyberwareDescriptionHighlightColor\" style=\"Semi-Bold\">-{float_0}% recoil</> with dual-wielded SMGs and shotguns per Attribute Point.\nCurrent total: <Rich color=\"TooltipText.cyberwareDescriptionHighlightColor\" style=\"Semi-Bold\">-{float_1}%</>");
     this.Text("GorillaAkimbo-FireRateLine", "<Rich color=\"TooltipText.cyberwareDescriptionHighlightColor\" style=\"Semi-Bold\">+{float_0}% fire rate</> with dual-wielded SMGs and shotguns per Attribute Point.\nCurrent total: <Rich color=\"TooltipText.cyberwareDescriptionHighlightColor\" style=\"Semi-Bold\">+{float_1}%</>");
     this.Text("GorillaAkimbo-ReloadLine", "<Rich color=\"TooltipText.cyberwareDescriptionHighlightColor\" style=\"Semi-Bold\">+{float_0}% reload speed</> with dual-wielded SMGs and shotguns per Attribute Point.\nCurrent total: <Rich color=\"TooltipText.cyberwareDescriptionHighlightColor\" style=\"Semi-Bold\">+{float_1}%</>");

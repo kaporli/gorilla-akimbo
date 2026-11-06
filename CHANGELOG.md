@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.1 (2026-11-06)
+
+- Double Trouble's weapon box now says Gorilla Arms extend "this effect" to SMGs and Shotguns.
+
 ## 2.1.0 (2026-11-06)
 
 In-game settings with [Mod Settings](https://www.nexusmods.com/cyberpunk2077/mods/4885), independent firing and Body scaling.

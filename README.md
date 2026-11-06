@@ -34,6 +34,9 @@ The **Double Trouble** perk only pairs pistols and power revolvers. **Equip Gori
 - **Each gun's own reload sounds**, for both guns.
 - **Ammo counter fix:** with two long guns, the left gun's count is no longer cut off.
 - **Fits the game's UI:** the **Double Trouble** weapon box and the **Gorilla Arms** tooltip mention the extension.
+
+  ![Double Trouble's weapon box with the Gorilla Arms note](screenshots/double-trouble-perk.png)
+
 - No new perk, nothing in your save. Single-wielded SMGs and shotguns are unchanged.
 
 ## Settings
