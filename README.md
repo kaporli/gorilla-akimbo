@@ -14,7 +14,7 @@ The **Double Trouble** perk only pairs pistols and revolvers. With **Gorilla Arm
 
 ## Comparison
 
-Left: without custom animations, the game's two-handed reloads. Right: Gorilla Akimbo's custom animations. A few shots, then a reload.
+Left: without custom animations, the game's two-handed reloads. Right: Gorilla Akimbo's custom animations.
 
 **One gun reloads, the other keeps firing** (Shingen + Pulsar).
 
