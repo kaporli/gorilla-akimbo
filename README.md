@@ -8,32 +8,52 @@ Since 2.0.0, dual-wielded SMGs and shotguns no longer borrow the game's two-hand
 
 ## Before and after
 
-Two SMGs reloading. Before (1.0.1): the right gun plays its two-handed reload across the screen and the left gun doesn't animate at all. After (2.0.0): each gun tips up while its magazine drops, goes down out of view, and comes back up once its own reload is done.
+Every clip: V shoots a few rounds from both guns, then reloads. Left column is 1.0.1, right column is 2.0.0, same spot, same weapons.
 
-| Before | After |
+**Two SMGs** (Shingen + Saratoga). Before: the right gun plays its two-handed reload across the screen and the left gun doesn't animate. After: each gun tips up while its magazine drops, goes down out of view, and comes back up once its own reload is done.
+
+| Before (1.0.1) | After (2.0.0) |
 |---|---|
-| ![Two SMGs reloading in 1.0.1](research/gifs30/smg-reload-before.gif) | ![Two SMGs reloading in 2.0.0](research/gifs30/smg-reload-after.gif) |
+| ![Shingen and Saratoga reloading, 1.0.1](research/showcase/before-smg-pair.gif) | ![Shingen and Saratoga reloading, 2.0.0](research/showcase/after-smg-pair.gif) |
 
-Two Carnage shotguns. Before: the right shotgun swings up through the middle of the screen. After: only the empty gun goes down and loads its shells one at a time (the counter fills shell by shell), while the other gun stays up and ready to fire.
+**One gun reloads, the other keeps firing** (Shingen + Pulsar). The Shingen runs dry first. Before: its two-handed reload swings through the middle of the screen. After: only the Shingen goes down while the Pulsar keeps shooting, then the Pulsar reloads on its own when it runs dry.
 
-| Before | After |
+| Before (1.0.1) | After (2.0.0) |
 |---|---|
-| ![Two shotguns reloading in 1.0.1](research/gifs30/shotgun-reload-before.gif) | ![Two shotguns reloading in 2.0.0](research/gifs30/shotgun-reload-carnage-pair.gif) |
+| ![Shingen running dry while the Pulsar keeps firing, 1.0.1](research/showcase/before-smg-one-hand.gif) | ![Shingen running dry while the Pulsar keeps firing, 2.0.0](research/showcase/after-smg-one-hand.gif) |
 
-The dual-wield ammo counter. Before: two long weapon icons push the left gun's count out of the HUD. After: both counts show, at the game's own icon sizes.
+**Shell-fed shotguns** (Carnage + Tactician). After: both go down and load their shells one at a time; the ammo counter fills shell by shell.
 
-![Ammo counter in 1.0.1, left count cut off](research/hud-before.png)
-![Ammo counter in 2.0.0, both counts shown](research/hud-after.png)
+| Before (1.0.1) | After (2.0.0) |
+|---|---|
+| ![Carnage and Tactician reloading, 1.0.1](research/showcase/before-shell-pair.gif) | ![Carnage and Tactician reloading, 2.0.0](research/showcase/after-shell-pair.gif) |
 
-Magazine shotguns: each gun tips up while its magazine slides out and falls, then goes down. Two Pozhars:
+**Magazine shotguns** (Pozhar + Crusher). After: each gun tips up while its magazine slides out and falls, then goes down.
 
-![Two Pozhar shotguns reloading in 2.0.0](research/gifs30/shotgun-reload-pozhar-pair.gif)
+| Before (1.0.1) | After (2.0.0) |
+|---|---|
+| ![Pozhar and Crusher reloading, 1.0.1](research/showcase/before-mag-shotgun-pair.gif) | ![Pozhar and Crusher reloading, 2.0.0](research/showcase/after-mag-shotgun-pair.gif) |
+| ![Zhuo and Pozhar reloading, 1.0.1](research/showcase/before-zhuo-pozhar.gif) | ![Zhuo and Pozhar reloading, 2.0.0](research/showcase/after-zhuo-pozhar.gif) |
 
-Mixed pairs work too, each gun with its own reload. A pistol next to an SMG: the pistol does its own vanilla reload, the SMG does Gorilla Akimbo's.
+**Double-barrel shotguns** (Igla + Testera, Palica + Satara).
 
-![Lexington and Saratoga reloading](research/gifs30/reload-mix-pistol-smg.gif)
+| Before (1.0.1) | After (2.0.0) |
+|---|---|
+| ![Igla and Testera reloading, 1.0.1](research/showcase/before-double-pair.gif) | ![Igla and Testera reloading, 2.0.0](research/showcase/after-double-pair.gif) |
+| ![Palica and Satara reloading, 1.0.1](research/showcase/before-double-pair-2.gif) | ![Palica and Satara reloading, 2.0.0](research/showcase/after-double-pair-2.gif) |
 
-More pairs (Pozhar + Carnage, Crusher, Zhuo, Tactician, Igla, Palica, Satara, Testera) are in [research/gifs30](research/gifs30).
+**Mixed pairs**, each gun with its own reload: a pistol + an SMG (the pistol keeps its vanilla reload), an SMG + a shotgun, and a magazine shotgun + a shell-fed one.
+
+| Before (1.0.1) | After (2.0.0) |
+|---|---|
+| ![Lexington and Saratoga reloading, 1.0.1](research/showcase/before-pistol-smg.gif) | ![Lexington and Saratoga reloading, 2.0.0](research/showcase/after-pistol-smg.gif) |
+| ![Saratoga and Carnage reloading, 1.0.1](research/showcase/before-smg-shotgun.gif) | ![Saratoga and Carnage reloading, 2.0.0](research/showcase/after-smg-shotgun.gif) |
+| ![Pozhar and Carnage reloading, 1.0.1](research/showcase/before-mag-shell.gif) | ![Pozhar and Carnage reloading, 2.0.0](research/showcase/after-mag-shell.gif) |
+
+**The dual-wield ammo counter** (Carnage + Tactician). Before: two long weapon icons push the left gun's count out of the HUD. After: both counts show, at the game's own icon sizes.
+
+![Ammo counter in 1.0.1, left count cut off](research/showcase/before-hud-long-shotguns.png)
+![Ammo counter in 2.0.0, both counts shown](research/showcase/after-hud-long-shotguns.png)
 
 ## Features
 
