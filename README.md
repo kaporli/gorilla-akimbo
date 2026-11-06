@@ -33,7 +33,7 @@ The **Double Trouble** perk only pairs pistols and revolvers. **Equip Gorilla Ar
 - **Dual-wield SMGs and shotguns** with Gorilla Arms and Double Trouble, including double-barrels and modded weapons of those types. Removing Gorilla Arms unequips the off-hand SMG or shotgun.
 - **One-handed reload animations**, for male and female V. The gun tips up while its magazine drops, goes down out of view, and rises once its ammo is in. Shell-fed shotguns go straight down.
 - **Independent reloads.** Only the gun that needs ammo goes down; the other can keep firing.
-- **Reload timing from each gun's stats**, including perks and weapon mods, so mixed pairs work.
+- **Reload timing calculated from each gun's stats**, including perks and weapon mods, so mixed pairs work.
 - **Shell-by-shell reloads like vanilla.** Shells load one at a time; firing mid-reload keeps them.
 - **Each gun's own reload sounds**, for both guns.
 - **Ammo counter fix:** with two long guns, the left gun's count is no longer cut off.
@@ -42,11 +42,8 @@ The **Double Trouble** perk only pairs pistols and revolvers. **Equip Gorilla Ar
 
 ## Limitations
 
-- Firing animations are still the game's.
 - Only the right gun's reload can be cut short by firing, unless the right gun is empty. Vanilla pistols work the same way.
 - Long shotguns (Zhuo, Tactician) swing toward the middle of the screen during the reload.
-- Weapons without their own reload sounds (the Guillotine, modded weapons) borrow those of a similar gun.
-- Female V's animations haven't been played on a female character yet.
 - Photo mode poses hold a single gun.
 
 ## Requirements
