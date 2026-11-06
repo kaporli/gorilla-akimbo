@@ -33,6 +33,10 @@ The **Double Trouble** perk only pairs pistols and power revolvers. **Equip Gori
 - **Shell-by-shell reloads like vanilla.** Shells load one at a time; firing mid-reload keeps them.
 - **Each gun's own reload sounds**, for both guns.
 - **Ammo counter fix:** with two long guns, the left gun's count is no longer cut off.
+- **Independent firing** (setting): the left mouse button fires the left gun, the right mouse button the right gun (each trigger on a controller). Aiming moves to its own key, mouse button 4 by default, rebindable in Key Bindings with [Unified Keybinds](https://www.nexusmods.com/cyberpunk2077/mods/37156). A gun's own button also cuts its shell-by-shell reload short.
+
+  ![The Independent firing setting and its aim key in Key Bindings](screenshots/independent-firing.png)
+
 - **Body scaling:** every Body point gives dual-wielded SMGs and shotguns -2% recoil, +2% fire rate and +3% reload speed, shown in the Gorilla Arms' Body Attuned block like the game's attribute bonuses. Each can be changed or turned off in the settings.
 
   ![The Body scaling settings and the Body Attuned block on the Gorilla Arms tooltip](screenshots/body-scaling.png)
@@ -53,12 +57,6 @@ Set it up in game with [Mod Settings](https://www.nexusmods.com/cyberpunk2077/mo
 - **Firing:** how one fire button uses both guns: as in vanilla, both at once, or taking turns.
 - **Remove Double Trouble's damage penalty:** both guns keep their full damage (Double Trouble normally cuts it by 37.5%).
 - **Shell-by-shell shotgun reload:** one shell at a time as in vanilla, or every shell in the time of one.
-
-## Independent firing
-
-Turn it on in the settings and each mouse button fires one gun: the left button the left gun, the right button the right gun (each trigger on a controller). Aiming moves to its own key, mouse button 4 by default, rebindable in Key Bindings with [Unified Keybinds](https://www.nexusmods.com/cyberpunk2077/mods/37156). A gun's own button also cuts its shell-by-shell reload short.
-
-![The Independent firing setting and its aim key in Key Bindings](screenshots/independent-firing.png)
 
 ## Limitations
 
