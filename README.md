@@ -16,25 +16,25 @@ Use one dual-wield mod at a time.
 
 ## Comparison
 
-Left: the game's animations (as in Gorilla Akimbo 1.0.1; the other dual-wield mods reuse them too). Right: Gorilla Akimbo 2.0.0. A few shots, then a reload.
+Left: without custom animations, the game's two-handed reloads. Right: Gorilla Akimbo's custom animations. A few shots, then a reload.
 
 **One gun reloads, the other keeps firing** (Shingen + Pulsar).
 
-| Game animations | Gorilla Akimbo |
+| Without custom animations | Gorilla Akimbo |
 |---|---|
-| ![Shingen and Pulsar, game animations](research/showcase/before-smg-one-hand.gif) | ![Shingen and Pulsar, Gorilla Akimbo](research/showcase/after-smg-one-hand.gif) |
+| ![Shingen and Pulsar, without custom animations](research/showcase/before-smg-one-hand.gif) | ![Shingen and Pulsar, Gorilla Akimbo](research/showcase/after-smg-one-hand.gif) |
 
 **Magazine shotguns** (Pozhar + Crusher).
 
-| Game animations | Gorilla Akimbo |
+| Without custom animations | Gorilla Akimbo |
 |---|---|
-| ![Pozhar and Crusher, game animations](research/showcase/before-mag-shotgun-pair.gif) | ![Pozhar and Crusher, Gorilla Akimbo](research/showcase/after-mag-shotgun-pair.gif) |
+| ![Pozhar and Crusher, without custom animations](research/showcase/before-mag-shotgun-pair.gif) | ![Pozhar and Crusher, Gorilla Akimbo](research/showcase/after-mag-shotgun-pair.gif) |
 
 **Pistol + SMG** (Lexington + Saratoga). The pistol keeps its vanilla reload.
 
-| Game animations | Gorilla Akimbo |
+| Without custom animations | Gorilla Akimbo |
 |---|---|
-| ![Lexington and Saratoga, game animations](research/showcase/before-pistol-smg.gif) | ![Lexington and Saratoga, Gorilla Akimbo](research/showcase/after-pistol-smg.gif) |
+| ![Lexington and Saratoga, without custom animations](research/showcase/before-pistol-smg.gif) | ![Lexington and Saratoga, Gorilla Akimbo](research/showcase/after-pistol-smg.gif) |
 
 ## Features
 
@@ -60,7 +60,7 @@ Left: the game's animations (as in Gorilla Akimbo 1.0.1; the other dual-wield mo
 ## Requirements
 
 - Cyberpunk 2077 **2.5**
-- [RED4ext](https://www.nexusmods.com/cyberpunk2077/mods/2380), [redscript](https://www.nexusmods.com/cyberpunk2077/mods/1511), [TweakXL](https://www.nexusmods.com/cyberpunk2077/mods/4197), [Codeware](https://www.nexusmods.com/cyberpunk2077/mods/7780), [ArchiveXL](https://www.nexusmods.com/cyberpunk2077/mods/4198) (new in 2.0.0)
+- [RED4ext](https://www.nexusmods.com/cyberpunk2077/mods/2380), [redscript](https://www.nexusmods.com/cyberpunk2077/mods/1511), [TweakXL](https://www.nexusmods.com/cyberpunk2077/mods/4197), [Codeware](https://www.nexusmods.com/cyberpunk2077/mods/7780), [ArchiveXL](https://www.nexusmods.com/cyberpunk2077/mods/4198)
 
 ## Installation
 
@@ -74,7 +74,7 @@ r6/scripts/GorillaAkimbo/GorillaAkimboSounds.reds
 r6/tweaks/GorillaAkimbo/GorillaAkimbo.yaml
 ```
 
-Updating from 1.0.0 (Gorilla Grip) by hand: delete the old `r6/scripts/GorillaGrip` and `r6/tweaks/GorillaGrip` folders.
+Updating from Gorilla Grip by hand: delete the old `r6/scripts/GorillaGrip` and `r6/tweaks/GorillaGrip` folders.
 
 ## Uninstallation
 
