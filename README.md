@@ -27,6 +27,13 @@ The **Double Trouble** perk only pairs pistols and power revolvers. **Equip Gori
 ## Features
 
 - **Dual-wield SMGs and shotguns** with Gorilla Arms and Double Trouble, including double-barrels and modded weapons of those types. Removing Gorilla Arms unequips the off-hand SMG or shotgun.
+
+  ![Double Trouble's weapon box with the Gorilla Arms note](screenshots/double-trouble-perk.png)
+
+- **Body scaling:** every Body point gives dual-wielded SMGs and shotguns -2% recoil, +2% fire rate and +3% reload speed, shown in the Gorilla Arms' Body Attuned block like the game's attribute bonuses. Each can be changed or turned off in the settings.
+
+  ![The Body scaling settings and the Body Attuned block on the Gorilla Arms tooltip](screenshots/body-scaling.png)
+
 - **One-handed reload animations**, for male and female V. The gun tips up while its magazine drops, goes down out of view, and rises once its ammo is in. Shell-fed shotguns go straight down.
 - **Independent reloads.** Only the gun that needs ammo goes down; the other can keep firing.
 - **Reload timing calculated from each gun's stats**, including perks and weapon mods, so mixed pairs work.
@@ -36,14 +43,6 @@ The **Double Trouble** perk only pairs pistols and power revolvers. **Equip Gori
 - **Independent firing** (setting): the left mouse button fires the left gun, the right mouse button the right gun (each trigger on a controller). Aiming moves to its own key, mouse button 4 by default, rebindable in Key Bindings with [Unified Keybinds](https://www.nexusmods.com/cyberpunk2077/mods/37156). A gun's own button also cuts its shell-by-shell reload short.
 
   ![The Independent firing setting and its aim key in Key Bindings](screenshots/independent-firing.png)
-
-- **Body scaling:** every Body point gives dual-wielded SMGs and shotguns -2% recoil, +2% fire rate and +3% reload speed, shown in the Gorilla Arms' Body Attuned block like the game's attribute bonuses. Each can be changed or turned off in the settings.
-
-  ![The Body scaling settings and the Body Attuned block on the Gorilla Arms tooltip](screenshots/body-scaling.png)
-
-- **Fits the game's UI:** the **Double Trouble** weapon box and the **Gorilla Arms** tooltip mention the extension.
-
-  ![Double Trouble's weapon box with the Gorilla Arms note](screenshots/double-trouble-perk.png)
 
 - No new perk, nothing in your save. Single-wielded SMGs and shotguns are unchanged.
 
