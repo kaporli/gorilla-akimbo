@@ -26,6 +26,8 @@ The **Double Trouble** perk only pairs pistols and revolvers. **Equip Gorilla Ar
 |---|---|
 | ![Pozhar and Crusher, without custom animations](research/showcase/before-mag-shotgun-pair.gif) | ![Pozhar and Crusher, Gorilla Akimbo](research/showcase/after-mag-shotgun-pair.gif) |
 
+<sub>The animations are in active development and will be refined further.</sub>
+
 ## Features
 
 - **Dual-wield SMGs and shotguns** with Gorilla Arms and Double Trouble, including double-barrels and modded weapons of those types. Removing Gorilla Arms unequips the off-hand SMG or shotgun.
@@ -40,7 +42,6 @@ The **Double Trouble** perk only pairs pistols and revolvers. **Equip Gorilla Ar
 
 ## Limitations
 
-- The animations are in active development and will be refined further.
 - Firing animations are still the game's.
 - Only the right gun's reload can be cut short by firing, unless the right gun is empty. Vanilla pistols work the same way.
 - Long shotguns (Zhuo, Tactician) swing toward the middle of the screen during the reload.
