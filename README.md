@@ -2,7 +2,7 @@
 
 Gorilla Arms let V dual-wield SMGs and shotguns, with their own one-handed reload animations.
 
-The **Double Trouble** perk only pairs pistols and revolvers. **Equip Gorilla Arms** and SMGs and shotguns can be paired too. Without them, everything stays vanilla.
+The **Double Trouble** perk only pairs pistols and power revolvers. **Equip Gorilla Arms** and SMGs and shotguns can be paired too. Without them, everything stays vanilla.
 
 ## How it differs from other dual-wield mods
 
@@ -16,15 +16,11 @@ The **Double Trouble** perk only pairs pistols and revolvers. **Equip Gorilla Ar
 
 **One gun reloads, the other keeps firing** (Shingen + Pulsar).
 
-| Without custom animations | Gorilla Akimbo |
-|---|---|
-| ![Shingen and Pulsar, without custom animations](research/showcase/before-smg-one-hand.gif) | ![Shingen and Pulsar, Gorilla Akimbo](research/showcase/after-smg-one-hand.gif) |
+![Shingen and Pulsar, without custom animations and with Gorilla Akimbo](research/showcase/compare-smg-one-hand.gif)
 
 **Magazine shotguns** (Pozhar + Crusher).
 
-| Without custom animations | Gorilla Akimbo |
-|---|---|
-| ![Pozhar and Crusher, without custom animations](research/showcase/before-mag-shotgun-pair.gif) | ![Pozhar and Crusher, Gorilla Akimbo](research/showcase/after-mag-shotgun-pair.gif) |
+![Pozhar and Crusher, without custom animations and with Gorilla Akimbo](research/showcase/compare-mag-shotgun-pair.gif)
 
 <sub>The animations are in active development and will be refined further.</sub>
 
@@ -37,7 +33,7 @@ The **Double Trouble** perk only pairs pistols and revolvers. **Equip Gorilla Ar
 - **Shell-by-shell reloads like vanilla.** Shells load one at a time; firing mid-reload keeps them.
 - **Each gun's own reload sounds**, for both guns.
 - **Ammo counter fix:** with two long guns, the left gun's count is no longer cut off.
-- **Fits the game's UI:** Double Trouble's weapon box and the Gorilla Arms tooltip mention the extension.
+- **Fits the game's UI:** the **Double Trouble** weapon box and the **Gorilla Arms** tooltip mention the extension.
 - No new perk, nothing in your save. Single-wielded SMGs and shotguns are unchanged.
 
 ## Limitations
@@ -63,11 +59,16 @@ r6/scripts/GorillaAkimbo/GorillaAkimboSounds.reds
 r6/tweaks/GorillaAkimbo/GorillaAkimbo.yaml
 ```
 
-Updating from Gorilla Grip by hand: **delete the old** `r6/scripts/GorillaGrip` and `r6/tweaks/GorillaGrip` folders.
+*Formerly Gorilla Grip.* Updating by hand from Gorilla Grip: **delete the old** `r6/scripts/GorillaGrip` and `r6/tweaks/GorillaGrip` folders.
 
 ## Uninstallation
 
 **Unpair any dual-wielded SMGs or shotguns**, then remove the files above.
+
+## Credits
+
+- Inspired by Rebecca in *Cyberpunk: Edgerunners* (Studio Trigger / CD PROJEKT RED).
+- psiberx for [Codeware](https://www.nexusmods.com/cyberpunk2077/mods/7780), [TweakXL](https://www.nexusmods.com/cyberpunk2077/mods/4197) and [ArchiveXL](https://www.nexusmods.com/cyberpunk2077/mods/4198), jac3km4 for [redscript](https://www.nexusmods.com/cyberpunk2077/mods/1511), WopsS for [RED4ext](https://www.nexusmods.com/cyberpunk2077/mods/2380), and the [WolvenKit](https://github.com/WolvenKit/WolvenKit) team.
 
 ## Building
 
