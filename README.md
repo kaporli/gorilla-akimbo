@@ -4,14 +4,6 @@ Gorilla Arms let V dual-wield SMGs and shotguns, with their own one-handed reloa
 
 The **Double Trouble** perk only pairs pistols and revolvers. **Equip Gorilla Arms** and SMGs and shotguns can be paired too. Without them, everything stays vanilla.
 
-## How it differs from other dual-wield mods
-
-[Dual Wield Anything](https://www.nexusmods.com/cyberpunk2077/mods/35632) and [Expanded Dual Wielding](https://www.nexusmods.com/cyberpunk2077/mods/35626) open dual-wielding to more weapon types and reuse the game's animations for them; both pages say reloads look janky or unusual. Gorilla Akimbo covers only SMGs and shotguns, and gives them:
-
-- One-handed reload animations instead of the game's two-handed ones.
-- Independent reloads per hand: one gun reloads while the other keeps firing.
-- Reload timing per gun, shell-by-shell loading like vanilla, and each gun's own reload sounds.
-
 ## Comparison
 
 Left: without custom animations, the game's two-handed reloads. Right: Gorilla Akimbo's custom animations.
@@ -27,6 +19,14 @@ Left: without custom animations, the game's two-handed reloads. Right: Gorilla A
 | Without custom animations | Gorilla Akimbo |
 |---|---|
 | ![Pozhar and Crusher, without custom animations](research/showcase/before-mag-shotgun-pair.gif) | ![Pozhar and Crusher, Gorilla Akimbo](research/showcase/after-mag-shotgun-pair.gif) |
+
+## How it differs from other dual-wield mods
+
+[Dual Wield Anything](https://www.nexusmods.com/cyberpunk2077/mods/35632) and [Expanded Dual Wielding](https://www.nexusmods.com/cyberpunk2077/mods/35626) open dual-wielding to more weapon types and reuse the game's animations for them; both pages say reloads look janky or unusual. Gorilla Akimbo covers only SMGs and shotguns, and gives them:
+
+- One-handed reload animations instead of the game's two-handed ones.
+- Independent reloads per hand: one gun reloads while the other keeps firing.
+- Reload timing per gun, shell-by-shell loading like vanilla, and each gun's own reload sounds.
 
 ## Features
 
