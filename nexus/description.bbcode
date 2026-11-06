@@ -17,6 +17,17 @@ The [b]Double Trouble[/b] perk only pairs pistols and power revolvers. [b]Equip 
 [img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/showcase/compare-mag-shotgun-pair.gif[/img]
 [size=1][color=#ffffff]The animations are in active development and will be refined further.[/color][/size]
 
+[size=4][b]Settings[/b][/size]
+Everything can be set in game with [url=https://www.nexusmods.com/cyberpunk2077/mods/4885]Mod Settings[/url]: which weapons can be paired, how the guns fire, Double Trouble's damage penalty, shell reloads and the Body scaling.
+[img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/screenshots/settings-weapons-firing.jpg[/img]
+[img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/screenshots/settings-reload-body.jpg[/img]
+
+[b]Body scaling.[/b] Every Body point gives dual-wielded SMGs and shotguns less recoil, a higher fire rate and faster reloads, shown in the Gorilla Arms' Body Attuned block like the game's attribute bonuses.
+[img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/screenshots/body-scaling-tooltip.png[/img]
+
+[b]Independent firing.[/b] The left mouse button fires the left gun, the right mouse button the right gun. Aiming moves to its own key, mouse button 4 by default, rebindable in Key Bindings with [url=https://www.nexusmods.com/cyberpunk2077/mods/37156]Unified Keybinds[/url].
+[img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/screenshots/key-binding-aim.png[/img]
+
 [size=4][b]Features[/b][/size]
 [list]
 [*][b]Dual-wield SMGs and shotguns[/b] with Gorilla Arms and Double Trouble, including double-barrels and modded weapons of those types. Removing Gorilla Arms unequips the off-hand SMG or shotgun.[/*]
@@ -25,23 +36,33 @@ The [b]Double Trouble[/b] perk only pairs pistols and power revolvers. [b]Equip 
 [*][b]Reload timing calculated from each gun's stats[/b], including perks and weapon mods, so mixed pairs work.[/*]
 [*][b]Shell-by-shell reloads like vanilla.[/b] Shells load one at a time; firing mid-reload keeps them.[/*]
 [*][b]Each gun's own reload sounds[/b], for both guns.[/*]
+[*][b]Independent firing[/b] (setting): each mouse button fires one gun (each trigger on a controller), and aiming moves to its own rebindable key. A gun's own button also cuts its shell-by-shell reload short.[/*]
+[*][b]Body scaling:[/b] -2% recoil, +2% fire rate and +3% reload speed per Body point for dual-wielded SMGs and shotguns, shown on the Gorilla Arms tooltip. Adjustable or off in the settings.[/*]
+[*][b]More settings:[/b] pair SMGs, magazine shotguns, shell-by-shell shotguns and double-barrels or not; fire both guns at once or alternate them; remove Double Trouble's 37.5% damage penalty; load all shells at once.[/*]
 [*][b]Ammo counter fix:[/b] with two long guns, the left gun's count is no longer cut off.[/*]
-[*][b]Fits the game's UI:[/b] the [b]Double Trouble[/b] weapon box and the [b]Gorilla Arms[/b] tooltip mention the extension.[/*]
+[*][b]Fits the game's UI:[/b] the [b]Double Trouble[/b] weapon box and the [b]Gorilla Arms[/b] tooltip mention the extension, and the tooltip shows the Body scaling.[/*]
 [*]No new perk, nothing in your save. Single-wielded SMGs and shotguns are unchanged.[/*]
 [/list][size=4][b][color=#e5be37]Limitations[/color][/b][/size]
 [list]
-[*][color=#e5be37][b]Only the right gun's reload can be cut short by firing, unless the right gun is empty. Vanilla pistols work the same way.[/b][/color][/*]
+[*][color=#e5be37][b]Without independent firing, only the right gun's reload can be cut short by firing, unless the right gun is empty. Vanilla pistols work the same way.[/b][/color][/*]
 [*][color=#e5be37][b]Long shotguns (Zhuo, Tactician) swing toward the middle of the screen during the reload.[/b][/color][/*]
 [*][color=#e5be37][b]Photo mode poses hold a single gun.[/b][/color][/*]
+[*][color=#e5be37][b]Independent firing hasn't been tested with a controller.[/b][/color][/*]
 [/list][size=4][b]Requirements[/b][/size]
 [list]
 [*]Cyberpunk 2077 [b]2.5[/b][/*]
 [*][url=https://www.nexusmods.com/cyberpunk2077/mods/2380]RED4ext[/url], [url=https://www.nexusmods.com/cyberpunk2077/mods/1511]redscript[/url], [url=https://www.nexusmods.com/cyberpunk2077/mods/4197]TweakXL[/url], [url=https://www.nexusmods.com/cyberpunk2077/mods/7780]Codeware[/url], [url=https://www.nexusmods.com/cyberpunk2077/mods/4198]ArchiveXL[/url][/*]
+[*][url=https://www.nexusmods.com/cyberpunk2077/mods/4885]Mod Settings[/url] for the settings (without it, the defaults apply)[/*]
+[*][url=https://www.nexusmods.com/cyberpunk2077/mods/4575]Input Loader[/url] and [url=https://www.nexusmods.com/cyberpunk2077/mods/37156]Unified Keybinds[/url] for independent firing's aim key[/*]
 [/list][size=4][b]Installation[/b][/size]
 Install with Mod Organizer 2 or Vortex, or extract into the game folder. The files go to:
 [code]archive/pc/mod/GorillaAkimbo.archive
 archive/pc/mod/GorillaAkimbo.archive.xl
+r6/config/modkeybinds/GorillaAkimbo.json
+r6/input/GorillaAkimbo.xml
 r6/scripts/GorillaAkimbo/GorillaAkimbo.reds
+r6/scripts/GorillaAkimbo/GorillaAkimboIndependent.reds
+r6/scripts/GorillaAkimbo/GorillaAkimboSettings.reds
 r6/scripts/GorillaAkimbo/GorillaAkimboSounds.reds
 r6/tweaks/GorillaAkimbo/GorillaAkimbo.yaml[/code]
 [i]Formerly Gorilla Grip. Updating by hand from Gorilla Grip: [b]delete the old[/b] [font=Courier New]r6/scripts/GorillaGrip[/font] [b]and[/b] [font=Courier New]r6/tweaks/GorillaGrip[/font] [b]folders[/b].[/i]
@@ -52,6 +73,6 @@ r6/tweaks/GorillaAkimbo/GorillaAkimbo.yaml[/code]
 [size=4][b]Credits[/b][/size]
 [list]
 [*]Inspired by Rebecca in [i]Cyberpunk: Edgerunners[/i] (Studio Trigger / CD PROJEKT RED).[/*]
-[*]psiberx for [url=https://www.nexusmods.com/cyberpunk2077/mods/7780]Codeware[/url], [url=https://www.nexusmods.com/cyberpunk2077/mods/4197]TweakXL[/url] and [url=https://www.nexusmods.com/cyberpunk2077/mods/4198]ArchiveXL[/url], jac3km4 for [url=https://www.nexusmods.com/cyberpunk2077/mods/1511]redscript[/url], WopsS for [url=https://www.nexusmods.com/cyberpunk2077/mods/2380]RED4ext[/url], and the [url=https://github.com/WolvenKit/WolvenKit]WolvenKit[/url] team.[/*]
+[*]psiberx for [url=https://www.nexusmods.com/cyberpunk2077/mods/7780]Codeware[/url], [url=https://www.nexusmods.com/cyberpunk2077/mods/4197]TweakXL[/url] and [url=https://www.nexusmods.com/cyberpunk2077/mods/4198]ArchiveXL[/url], jac3km4 for [url=https://www.nexusmods.com/cyberpunk2077/mods/1511]redscript[/url], WopsS for [url=https://www.nexusmods.com/cyberpunk2077/mods/2380]RED4ext[/url], jackhumbert for [url=https://www.nexusmods.com/cyberpunk2077/mods/4885]Mod Settings[/url] and [url=https://www.nexusmods.com/cyberpunk2077/mods/4575]Input Loader[/url], and the [url=https://github.com/WolvenKit/WolvenKit]WolvenKit[/url] team.[/*]
 [/list][size=4][b]Source[/b][/size]
 [url=https://github.com/kaporli/gorilla-akimbo]github.com/kaporli/gorilla-akimbo[/url] (MIT)

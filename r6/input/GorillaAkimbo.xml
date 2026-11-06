@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!-- Gorilla Akimbo: the aim key used while dual-wielding with Independent firing on (Mod Settings), since both fire
+     buttons then fire a gun. Rebindable in Settings > Controls > Key Bindings with Unified Keybinds. -->
+<bindings>
+  <mapping name="GorillaAkimboAim_Button" type="Button">
+    <button id="IK_Mouse4" overridableUI="gorillaAkimboAim" />
+    <button id="IK_Pad_LeftThumb" />
+  </mapping>
+
+  <context name="Combat" append="true">
+    <action name="GorillaAkimboAim" map="GorillaAkimboAim_Button" />
+  </context>
+</bindings>

@@ -7,3 +7,40 @@ GorillaAkimbo.GripPackage:
   $type: gamedataGameplayLogicPackage_Record
   UIData: GorillaAkimbo.GripUIData
   stackable: false
+
+# Double Trouble's own damage multiplier, copied here at load so the damage penalty setting can put it back.
+GorillaAkimbo.DoubleTroubleDamage:
+  $type: gamedataConstantStatModifier_Record
+  value: 0.625
+
+# Gorilla Arms tooltip lines in the Body Attuned block, one per Body scaling, set by GorillaAkimboBody.UpdateTooltip:
+# the change per Body point and the total at the player's Body, in percent.
+GorillaAkimbo.RecoilUIData:
+  $type: gamedataGameplayLogicPackageUIData_Record
+  localizedDescription: LocKey#GorillaAkimbo-RecoilLine
+  floatValues: [ 0, 0 ]
+
+GorillaAkimbo.RecoilPackage:
+  $type: gamedataGameplayLogicPackage_Record
+  UIData: GorillaAkimbo.RecoilUIData
+  stackable: false
+
+GorillaAkimbo.FireRateUIData:
+  $type: gamedataGameplayLogicPackageUIData_Record
+  localizedDescription: LocKey#GorillaAkimbo-FireRateLine
+  floatValues: [ 0, 0 ]
+
+GorillaAkimbo.FireRatePackage:
+  $type: gamedataGameplayLogicPackage_Record
+  UIData: GorillaAkimbo.FireRateUIData
+  stackable: false
+
+GorillaAkimbo.ReloadUIData:
+  $type: gamedataGameplayLogicPackageUIData_Record
+  localizedDescription: LocKey#GorillaAkimbo-ReloadLine
+  floatValues: [ 0, 0 ]
+
+GorillaAkimbo.ReloadPackage:
+  $type: gamedataGameplayLogicPackage_Record
+  UIData: GorillaAkimbo.ReloadUIData
+  stackable: false

@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.1.0 (2026-11-06)
+
+In-game settings with [Mod Settings](https://www.nexusmods.com/cyberpunk2077/mods/4885), independent firing and Body scaling.
+
+- Settings: pair SMGs, magazine shotguns, shell-by-shell shotguns and double-barrels or not; fire both guns at once or alternate them; remove Double Trouble's 37.5% damage penalty; load all shells of a shell-by-shell shotgun at once. Without Mod Settings, the defaults apply (the same behavior as 2.0.1).
+- Independent firing (setting, off by default): the left mouse button fires the left gun, the right mouse button the right gun (left and right trigger on a controller). Aiming moves to its own key, mouse button 4 or the left stick click by default, rebindable in Key Bindings with [Unified Keybinds](https://www.nexusmods.com/cyberpunk2077/mods/37156). Needs [Input Loader](https://www.nexusmods.com/cyberpunk2077/mods/4575). Each gun's own button also cuts its shell-by-shell reload short.
+- Body scaling: every Body point gives dual-wielded SMGs and shotguns -2% recoil, +2% fire rate and +3% reload speed (-40%, +40% and +60% at Body 20). Each can be changed or turned off in the settings. Raising Body applies to drawn guns right away.
+- The Gorilla Arms tooltip shows the Body scaling in its Body Attuned block.
+
 ## 2.0.1 (2026-11-06)
 
 - Fixed a crash when a dual-wielded SMG or shotgun reloads, most often when both guns reload at once. The reload animations pointed at fallback poses of other clips.

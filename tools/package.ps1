@@ -1,5 +1,5 @@
 # Builds dist/GorillaAkimbo-<version>.zip for Nexus (game-folder layout: r6/...).
-param([string]$Version = "2.0.1")
+param([string]$Version = "2.1.0")
 $root = Split-Path -Parent $PSScriptRoot
 $dist = Join-Path $root "dist"
 New-Item -ItemType Directory -Force $dist | Out-Null
