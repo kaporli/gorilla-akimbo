@@ -26,10 +26,6 @@ The **Double Trouble** perk only pairs pistols and power revolvers. **Equip Gori
 
 ## Features
 
-- **All new custom animations:** a dual-wielded Shingen reloads two-handed. The other gun knocks its top magazine out, both guns go down while the new one goes in, and both come back up. Three animations each with an SMG and with a long shotgun in the other hand, and three for two Shingens, picked at random, for male and female V.
-
-  ![Shingen reloads with an SMG and with a long shotgun](research/showcase/new-animations.gif)
-
 - **Dual-wield SMGs and shotguns** with Gorilla Arms and Double Trouble, including double-barrels and modded weapons of those types. Removing Gorilla Arms unequips the off-hand SMG or shotgun.
 
   ![Double Trouble's weapon box with the Gorilla Arms note](screenshots/double-trouble-perk.png)
