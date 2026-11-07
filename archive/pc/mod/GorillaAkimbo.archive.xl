@@ -337,3 +337,617 @@ animations:
     set: gorillaakimbo\animations\pwa_dual_wield_left_lowered.anims
     vars: [dual_wield, w_base_shotgun_dual_left]
     priority: 64
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left]
+    priority: 63
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_handgun_arasaka_kenshin]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_handgun_constitutional_liberty]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_handgun_constitutional_unity]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_handgun_kangtao_chao]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_handgun_malorian_silverhand]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_handgun_militech_omaha]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_handgun_militech_ticon]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_handgun_tsunami_nue]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_revolver_techtronika_metel]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearshort_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_2020_shotgun_blunderbuss]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearshort_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_handgun_arasaka_yukimura]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearshort_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_handgun_militech_lexington]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearshort_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_rifle_precision__techtronika_pozhar]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearshort_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_shotgun_dual_rostovic_palica]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearlong_gripstd_toptall.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_base_submachinegun]
+    priority: 61
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearlong_griplong_toptall.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_handgun_budget_slaughtomatic]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearlong_griplong_toptall.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_submachinegun_krausser_warden]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearlong_griplong_toptall.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, warden_iconic]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearstd_gripstd_topstd.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_handgun_krauser_grit]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearstd_gripstd_topstd.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_special_kangtao_dian]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearshort_gripstd_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_revolver_darra_nova]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearshort_gripstd_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_revolver_malorian_overture]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearshort_gripstd_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_revolver_militech_crusher]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearshort_gripstd_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_submachinegun_arasaka_senkoh]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearstd_gripstd_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_revolver_darra_quasar]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearstd_gripshort_topstd.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_revolver_techtronika_burya]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearstd_gripshort_topstd.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_submachinegun_militech_saratoga]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearlong_gripshort_toptall.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_smg_midnight_borg]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_rearstd_griplong_topstd.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_submachinegun_darra_pulsar]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_long_carnage.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_shotgun_budget_carnage]
+    priority: 57
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_long_tactician.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_shotgun_constitutional_tactician]
+    priority: 57
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_long_zhuo.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_shotgun_zhuo]
+    priority: 57
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_long_igla.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_shotgun_dual_rostovic_igla]
+    priority: 57
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_long_testera.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_shotgun_dual_rostovic_testera]
+    priority: 57
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_left_long_satara.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_base_shotgun_dual]
+    priority: 58
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen]
+    priority: 63
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_handgun_arasaka_kenshin_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_handgun_constitutional_liberty_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_handgun_constitutional_unity_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_handgun_kangtao_chao_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_handgun_malorian_silverhand_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_handgun_militech_omaha_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_handgun_militech_ticon_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_handgun_tsunami_nue_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_revolver_techtronika_metel_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearshort_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_2020_shotgun_blunderbuss_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearshort_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_handgun_arasaka_yukimura_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearshort_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_handgun_militech_lexington_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearshort_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_rifle_precision__techtronika_pozhar_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearshort_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_shotgun_dual_rostovic_palica_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearlong_gripstd_toptall.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_base_submachinegun_left]
+    priority: 61
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearlong_griplong_toptall.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_handgun_budget_slaughtomatic_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearlong_griplong_toptall.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_submachinegun_krausser_warden_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearlong_griplong_toptall.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, warden_iconic_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearstd_gripstd_topstd.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_handgun_krauser_grit_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearstd_gripstd_topstd.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_special_kangtao_dian_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearshort_gripstd_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_revolver_darra_nova_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearshort_gripstd_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_revolver_malorian_overture_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearshort_gripstd_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_revolver_militech_crusher_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearshort_gripstd_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_submachinegun_arasaka_senkoh_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearstd_gripstd_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_revolver_darra_quasar_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearstd_gripshort_topstd.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_revolver_techtronika_burya_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearstd_gripshort_topstd.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_submachinegun_militech_saratoga_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearlong_gripshort_toptall.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_smg_midnight_borg_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_rearstd_griplong_topstd.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_submachinegun_darra_pulsar_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_long_carnage.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_shotgun_budget_carnage_left]
+    priority: 57
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_long_tactician.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_shotgun_constitutional_tactician_left]
+    priority: 57
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_long_zhuo.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_shotgun_zhuo_left]
+    priority: 57
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_long_igla.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_shotgun_dual_rostovic_igla_left]
+    priority: 57
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_long_testera.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_shotgun_dual_rostovic_testera_left]
+    priority: 57
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_shingen_right_long_satara.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_base_shotgun_dual_left]
+    priority: 58
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_topmag_pair_SS.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_submachinegun_arasaka_shingen_left]
+    priority: 59
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left]
+    priority: 63
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_handgun_arasaka_kenshin]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_handgun_constitutional_liberty]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_handgun_constitutional_unity]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_handgun_kangtao_chao]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_handgun_malorian_silverhand]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_handgun_militech_omaha]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_handgun_militech_ticon]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_handgun_tsunami_nue]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_revolver_techtronika_metel]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearshort_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_2020_shotgun_blunderbuss]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearshort_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_handgun_arasaka_yukimura]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearshort_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_handgun_militech_lexington]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearshort_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_rifle_precision__techtronika_pozhar]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearshort_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_shotgun_dual_rostovic_palica]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearlong_gripstd_toptall.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_base_submachinegun]
+    priority: 61
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearlong_griplong_toptall.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_handgun_budget_slaughtomatic]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearlong_griplong_toptall.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_submachinegun_krausser_warden]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearlong_griplong_toptall.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, warden_iconic]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearstd_gripstd_topstd.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_handgun_krauser_grit]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearstd_gripstd_topstd.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_special_kangtao_dian]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearshort_gripstd_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_revolver_darra_nova]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearshort_gripstd_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_revolver_malorian_overture]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearshort_gripstd_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_revolver_militech_crusher]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearshort_gripstd_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_submachinegun_arasaka_senkoh]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearstd_gripstd_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_revolver_darra_quasar]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearstd_gripshort_topstd.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_revolver_techtronika_burya]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearstd_gripshort_topstd.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_submachinegun_militech_saratoga]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearlong_gripshort_toptall.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_smg_midnight_borg]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_rearstd_griplong_topstd.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_submachinegun_darra_pulsar]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_long_carnage.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_shotgun_budget_carnage]
+    priority: 57
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_long_tactician.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_shotgun_constitutional_tactician]
+    priority: 57
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_long_zhuo.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_shotgun_zhuo]
+    priority: 57
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_long_igla.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_shotgun_dual_rostovic_igla]
+    priority: 57
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_long_testera.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_shotgun_dual_rostovic_testera]
+    priority: 57
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_left_long_satara.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen_left, w_base_shotgun_dual]
+    priority: 58
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen]
+    priority: 63
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_handgun_arasaka_kenshin_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_handgun_constitutional_liberty_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_handgun_constitutional_unity_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_handgun_kangtao_chao_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_handgun_malorian_silverhand_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_handgun_militech_omaha_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_handgun_militech_ticon_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_handgun_tsunami_nue_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearstd_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_revolver_techtronika_metel_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearshort_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_2020_shotgun_blunderbuss_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearshort_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_handgun_arasaka_yukimura_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearshort_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_handgun_militech_lexington_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearshort_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_rifle_precision__techtronika_pozhar_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearshort_gripshort_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_shotgun_dual_rostovic_palica_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearlong_gripstd_toptall.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_base_submachinegun_left]
+    priority: 61
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearlong_griplong_toptall.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_handgun_budget_slaughtomatic_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearlong_griplong_toptall.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_submachinegun_krausser_warden_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearlong_griplong_toptall.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, warden_iconic_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearstd_gripstd_topstd.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_handgun_krauser_grit_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearstd_gripstd_topstd.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_special_kangtao_dian_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearshort_gripstd_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_revolver_darra_nova_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearshort_gripstd_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_revolver_malorian_overture_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearshort_gripstd_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_revolver_militech_crusher_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearshort_gripstd_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_submachinegun_arasaka_senkoh_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearstd_gripstd_toplow.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_revolver_darra_quasar_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearstd_gripshort_topstd.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_revolver_techtronika_burya_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearstd_gripshort_topstd.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_submachinegun_militech_saratoga_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearlong_gripshort_toptall.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_smg_midnight_borg_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_rearstd_griplong_topstd.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_submachinegun_darra_pulsar_left]
+    priority: 60
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_long_carnage.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_shotgun_budget_carnage_left]
+    priority: 57
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_long_tactician.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_shotgun_constitutional_tactician_left]
+    priority: 57
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_long_zhuo.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_shotgun_zhuo_left]
+    priority: 57
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_long_igla.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_shotgun_dual_rostovic_igla_left]
+    priority: 57
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_long_testera.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_shotgun_dual_rostovic_testera_left]
+    priority: 57
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_shingen_right_long_satara.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_base_shotgun_dual_left]
+    priority: 58
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_topmag_pair_SS.anims
+    vars: [dual_wield, w_submachinegun_arasaka_shingen, w_submachinegun_arasaka_shingen_left]
+    priority: 59
+  - entity: base\weapons\weapon_root.ent
+    component: Magazine
+    set: gorillaakimbo\animations\w_smg__arasaka_shingen__mag_long_left.anims
+    vars: [gorillaakimbo_mag_long_left]
+    priority: 100
+  - entity: base\weapons\weapon_root.ent
+    component: Magazine
+    set: gorillaakimbo\animations\w_smg__arasaka_shingen__mag_long_right.anims
+    vars: [gorillaakimbo_mag_long_right]
+    priority: 100
+  - entity: base\weapons\weapon_root.ent
+    component: Magazine
+    set: gorillaakimbo\animations\w_smg__arasaka_shingen__mag_smg_left.anims
+    vars: [gorillaakimbo_mag_smg_left]
+    priority: 100
+  - entity: base\weapons\weapon_root.ent
+    component: Magazine
+    set: gorillaakimbo\animations\w_smg__arasaka_shingen__mag_smg_right.anims
+    vars: [gorillaakimbo_mag_smg_right]
+    priority: 100
+  - entity: base\weapons\weapon_root.ent
+    component: Magazine
+    set: gorillaakimbo\animations\w_smg__arasaka_shingen__mag_pair_left.anims
+    vars: [gorillaakimbo_mag_pair_left]
+    priority: 100
+  - entity: base\weapons\weapon_root.ent
+    component: Magazine
+    set: gorillaakimbo\animations\w_smg__arasaka_shingen__mag_pair_right.anims
+    vars: [gorillaakimbo_mag_pair_right]
+    priority: 100

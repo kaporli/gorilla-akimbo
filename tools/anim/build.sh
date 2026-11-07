@@ -21,7 +21,13 @@ for sex in pma pwa; do
     cp "$WORK/${sex}_$side.anims" "$PACK/${sex}_dual_wield_${side}_lowered.anims"
   done
 done
+# Top-magazine reloads (Shingen, Midnight Borg): two-handed clips authored in Blender, one glb per clip in CLIPS/<body>/
+# (see topmagsets.py for the sets and their names).
+export CLIPS="${CLIPS:-C:/Modding/anim-work/clips}"
+python "$HERE/topmagsets.py" "$CLIPS" sets | tr -d '\r' | while read -r body name clips; do
+  bash "$HERE/buildtopmag.sh" "$body" "$PACK/$name.anims" $clips
+done
 "$WK" pack "$WORK/pack" -o "$WORK"
 cp "$WORK/pack.archive" "$ROOT/archive/pc/mod/GorillaAkimbo.archive"
-python "$HERE/genxl.py" "$ROOT/archive/pc/mod/GorillaAkimbo.archive.xl"
+python "$HERE/genxl.py" "$ROOT/archive/pc/mod/GorillaAkimbo.archive.xl" "$PACK"
 echo "built $ROOT/archive/pc/mod/GorillaAkimbo.archive"

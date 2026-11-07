@@ -504,6 +504,18 @@ private let m_gorillaMagOut: Float;
 @wrapMethod(ReloadEvents)
 protected final func OnEnter(stateContext: ref<StateContext>, scriptInterface: ref<StateGameScriptInterface>) -> Void {
   let weapon = this.GetWeaponObject(scriptInterface);
+  GorillaAkimboTopMagSystem.Get(scriptInterface.GetGame()).SetReloading(this.IsLeftWeaponLogic(), true);
+  // Top-magazine guns: a two-handed clip (GorillaAkimboTopMag.reds).
+  this.m_gorillaTopMag = this.GorillaTopMagPrepare(weapon, scriptInterface);
+  if this.m_gorillaTopMag {
+    this.m_gorillaTimed = false;
+    this.m_gorillaShells = false;
+    ArrayClear(this.m_gorillaShellTimes);
+    ArrayClear(this.m_gorillaShellCounts);
+    wrappedMethod(stateContext, scriptInterface);
+    this.GorillaTopMagStart(scriptInterface);
+    return;
+  }
   let passStarts: array<Float>;
   let passLengths: array<Float>;
   let kind = GorillaAkimboReload.Prepare(weapon, scriptInterface.executionOwner, this.m_gorillaShellTimes, this.m_gorillaShellCounts, passStarts, passLengths);
@@ -549,6 +561,16 @@ protected final func OnEnter(stateContext: ref<StateContext>, scriptInterface: r
 @wrapMethod(ReloadEvents)
 protected final func OnUpdate(timeDelta: Float, stateContext: ref<StateContext>, scriptInterface: ref<StateGameScriptInterface>) -> Void {
   wrappedMethod(timeDelta, stateContext, scriptInterface);
+  if this.m_gorillaTopMag {
+    this.GorillaTopMagUpdate(timeDelta, scriptInterface);
+    // Top-magazine clips play at one speed; only the guns' own reload sounds are played here.
+    while ArraySize(this.m_gorillaSoundTimes) > 0 && this.GetInStateTime() >= this.m_gorillaSoundTimes[0] {
+      GameObject.PlaySoundEvent(scriptInterface.executionOwner, this.m_gorillaSoundNames[0]);
+      ArrayErase(this.m_gorillaSoundTimes, 0);
+      ArrayErase(this.m_gorillaSoundNames, 0);
+    }
+    return;
+  }
   if !this.m_gorillaTimed {
     return;
   }
@@ -610,38 +632,68 @@ public abstract class GorillaAkimboHands {
     return 1;
   }
 
-  // Sends the hand's item handling again with the dual-wield index. state: the itemState just sent.
-  public static func Send(owner: ref<GameObject>, left: Bool, state: Int32, duration: Float) {
-    let ts = GameInstance.GetTransactionSystem(owner.GetGame());
-    let item = ts.GetItemInSlot(owner, left ? t"AttachmentSlots.WeaponLeft" : t"AttachmentSlots.WeaponRight");
-    if !IsDefined(item) || !IsGripWeaponType(RPGManager.GetItemType(item.GetItemID())) {
-      return;
-    }
-    let dual = IsDefined(ts.GetItemInSlot(owner, t"AttachmentSlots.WeaponLeft"))
-      && IsDefined(ts.GetItemInSlot(owner, t"AttachmentSlots.WeaponRight"));
+  // Sets a hand's item handling with the dual-wield index, the way the game sets it (not replicated: a replicated
+  // feature keeps overriding the game's later updates, so the hands stayed "equipped" after the guns were put away).
+  public static func Set(scriptInterface: ref<StateGameScriptInterface>, left: Bool, state: Int32, duration: Float) {
     let feature = new AnimFeature_EquipUnequipItem();
     feature.stateTransitionDuration = duration;
     feature.itemState = state;
-    feature.itemType = dual ? GorillaAkimboHands.OneHandedIndex()
-      : TweakDBInterface.GetItemRecord(ItemID.GetTDBID(item.GetItemID())).ItemType().AnimFeatureIndex();
-    AnimationControllerComponent.ApplyFeatureToReplicate(owner, left ? n"leftHandItemHandling" : n"rightHandItemHandling", feature);
+    feature.itemType = GorillaAkimboHands.OneHandedIndex();
+    scriptInterface.SetAnimationParameterFeature(left ? n"leftHandItemHandling" : n"rightHandItemHandling", feature, scriptInterface.executionOwner);
+  }
+
+  // A grip weapon in a dual-wielded pair: both slots filled, this hand's item an SMG or shotgun.
+  public static func IsDualGrip(owner: ref<GameObject>, item: ItemID) -> Bool {
+    let ts = GameInstance.GetTransactionSystem(owner.GetGame());
+    return IsGripWeaponType(RPGManager.GetItemType(item)) && IsDefined(ts.GetItemInSlot(owner, t"AttachmentSlots.WeaponLeft"))
+      && IsDefined(ts.GetItemInSlot(owner, t"AttachmentSlots.WeaponRight"));
+  }
+
+  // Sends the hand's item handling again for the gun in its slot (state: the itemState just sent): the dual-wield
+  // index while dual-wielding, the weapon's own one otherwise.
+  public static func Send(scriptInterface: ref<StateGameScriptInterface>, left: Bool, state: Int32, duration: Float) {
+    let owner = scriptInterface.executionOwner;
+    let item = GameInstance.GetTransactionSystem(owner.GetGame()).GetItemInSlot(owner, left ? t"AttachmentSlots.WeaponLeft" : t"AttachmentSlots.WeaponRight");
+    if !IsDefined(item) || !IsGripWeaponType(RPGManager.GetItemType(item.GetItemID())) {
+      return;
+    }
+    if GorillaAkimboHands.IsDualGrip(owner, item.GetItemID()) {
+      GorillaAkimboHands.Set(scriptInterface, left, state, duration);
+    } else {
+      let feature = new AnimFeature_EquipUnequipItem();
+      feature.stateTransitionDuration = duration;
+      feature.itemState = state;
+      feature.itemType = TweakDBInterface.GetItemRecord(ItemID.GetTDBID(item.GetItemID())).ItemType().AnimFeatureIndex();
+      scriptInterface.SetAnimationParameterFeature(left ? n"leftHandItemHandling" : n"rightHandItemHandling", feature, owner);
+    }
   }
 }
 
 @wrapMethod(EquipmentBaseTransition)
 protected final const func HandleWeaponEquip(scriptInterface: ref<StateGameScriptInterface>, stateContext: ref<StateContext>, stateMachineInstanceData: StateMachineInstanceData, item: ItemID, isLeftWeapon: Bool) -> Void {
   wrappedMethod(scriptInterface, stateContext, stateMachineInstanceData, item, isLeftWeapon);
-  let owner = scriptInterface.executionOwner;
-  let duration = scriptInterface.GetStatsSystem().GetStatValue(Cast<StatsObjectID>(owner.GetEntityID()), gamedataStatType.EquipDuration);
-  GorillaAkimboHands.Send(owner, this.IsLeftHandLogic(stateMachineInstanceData), 1, duration);
+  let duration = scriptInterface.GetStatsSystem().GetStatValue(Cast<StatsObjectID>(scriptInterface.executionOwnerEntityID), gamedataStatType.EquipDuration);
+  GorillaAkimboHands.Send(scriptInterface, this.IsLeftHandLogic(stateMachineInstanceData), 1, duration);
+}
+
+// Putting a dual-wielded pair away (holstering, or the game hiding the guns for a very hard landing): the game sends
+// each hand with the weapon's own index; vanilla pistol pairs use the dual-wield index throughout, so this does too.
+@wrapMethod(EquipmentBaseTransition)
+protected final const func HandleWeaponUnequip(scriptInterface: ref<StateGameScriptInterface>, stateContext: ref<StateContext>, stateMachineInstanceData: StateMachineInstanceData, item: ItemID, isLeftWeapon: Bool) -> Void {
+  wrappedMethod(scriptInterface, stateContext, stateMachineInstanceData, item, isLeftWeapon);
+  if GorillaAkimboHands.IsDualGrip(scriptInterface.executionOwner, item) {
+    let edit = stateContext.GetPermanentBoolParameter(this.GetDualWieldLoadoutEdit(stateMachineInstanceData));
+    GorillaAkimboHands.Set(scriptInterface, this.IsLeftHandLogic(stateMachineInstanceData), edit.valid && edit.value ? 1 : 3,
+      this.GetWeaponUnEquipDuration(scriptInterface, stateContext, stateMachineInstanceData));
+  }
 }
 
 // Equip finished: both hands are refreshed, since the right hand's index depends on the left hand being filled.
 @wrapMethod(EquipCycleEvents)
 protected func OnExit(stateContext: ref<StateContext>, scriptInterface: ref<StateGameScriptInterface>) -> Void {
   wrappedMethod(stateContext, scriptInterface);
-  GorillaAkimboHands.Send(scriptInterface.executionOwner, false, 2, 0.0);
-  GorillaAkimboHands.Send(scriptInterface.executionOwner, true, 2, 0.0);
+  GorillaAkimboHands.Send(scriptInterface, false, 2, 0.0);
+  GorillaAkimboHands.Send(scriptInterface, true, 2, 0.0);
   GorillaAkimboBody.Refresh(scriptInterface.executionOwner);
   GorillaAkimboDamage.Apply(GorillaAkimboConfig.Get(scriptInterface.GetGame()));
 }
@@ -650,8 +702,9 @@ protected func OnExit(stateContext: ref<StateContext>, scriptInterface: ref<Stat
 @wrapMethod(UnequipCycleEvents)
 protected func OnExit(stateContext: ref<StateContext>, scriptInterface: ref<StateGameScriptInterface>) -> Void {
   wrappedMethod(stateContext, scriptInterface);
-  if !this.IsRightHandLogic(this.stateMachineInstanceData) {
-    GorillaAkimboHands.Send(scriptInterface.executionOwner, false, 2, 0.0);
+  if !this.IsRightHandLogic(this.stateMachineInstanceData) && this.IsRightHandInEquippedState(stateContext)
+    && !DefaultTransition.IsRightHandInUnequippingState(stateContext) {
+    GorillaAkimboHands.Send(scriptInterface, false, 2, 0.0);
   }
   GorillaAkimboBody.Refresh(scriptInterface.executionOwner);
 }

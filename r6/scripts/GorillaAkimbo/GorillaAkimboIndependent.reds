@@ -36,6 +36,10 @@ public abstract class GorillaAkimboIndependent {
 // Both guns may fire at any time; each one checks its own button.
 @wrapMethod(WeaponTransition)
 protected final const func ShouldShoot(scriptInterface: ref<StateGameScriptInterface>) -> Bool {
+  // Neither gun fires during a two-handed top-magazine reload (GorillaAkimboTopMag.reds).
+  if GorillaAkimboTopMagSystem.Busy(scriptInterface.GetGame()) {
+    return false;
+  }
   if GorillaAkimboIndependent.Active(scriptInterface.executionOwner)
     && scriptInterface.localBlackboard.GetInt(GetAllBlackboardDefs().PlayerStateMachine.ShootState) < EnumInt(gamePSMShootStates.ValentinosFrenzyInit) {
     return true;

@@ -5,7 +5,14 @@ The player entity picks arm animation sets by animation variables. Pistols and r
 every SMG and shotgun model variable (and the base ones modded weapons fall back to) the Gorilla Akimbo
 arm sets, per hand, for male (pma) and female (pwa) V.
 """
-import sys
+import os, sys
+
+# Optional second argument: the packed animations folder; top-magazine sets missing from it are left out.
+PACKED = sys.argv[2] if len(sys.argv) > 2 else None
+
+
+def built(name):
+    return PACKED is None or os.path.exists(os.path.join(PACKED, name + '.anims'))
 
 # Model variables of the player's SMG and shotgun arm sets (player_ma_fpp / player_wa_fpp and the ep1 ones).
 MODELS = [
@@ -31,5 +38,36 @@ for body, entities in ENTITIES.items():
             lines.append(f'    set: gorillaakimbo\\animations\\{body}_dual_wield_{side}_lowered.anims')
             lines.append('    vars: [dual_wield, ' + model + suffix + ']')
             lines.append('    priority: 64')
+# Top-magazine guns (topmagsets.py): two-handed reload clips, over the per-hand sets (a lower number wins: the
+# game's own per-model dual-wield sets use 64, its base dual-wield set 100, the two-handed SMG sets 128). Strict tiers
+# (topmagsets.PRIO): long partner 57 (base variable 58), two top-magazine guns 59, size category partner 60 (base
+# variable 61), default 63.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from topmagsets import plan
+CLIPS = os.environ.get('CLIPS', 'C:/Modding/anim-work/clips')
+for body, name, _, entries in plan(CLIPS):
+    if not built(name):
+        continue
+    for vars_, priority in entries:
+        lines.append('  - entity: [' + ', '.join(ENTITIES[body]) + ']')
+        lines.append(f'    set: gorillaakimbo\\animations\\{name}.anims')
+        lines.append('    vars: [dual_wield, ' + ', '.join(vars_) + ']')
+        lines.append(f'    priority: {priority}')
+# The Shingen magazine while dual-wielding (magtrack.py): the magazine stays seated until the other gun hits it, then
+# flies off. The Shingen's appearance (w_smg__arasaka_shingen.app) embeds the magazine as the animated component
+# "Magazine" of the weapon entity, so the entry targets the weapon entity template (weapon_root.ent, shared by all
+# player weapons) with component: Magazine. The sets only play while the script sets their wrapper on the gun
+# (GorillaAkimboTopMag.SetFamily); the vanilla magazine set has priority 128.
+MAG_ENTITY = 'base\\weapons\\weapon_root.ent'
+for family in ('long', 'smg', 'pair'):
+    for side in ('left', 'right'):
+        name = f'w_smg__arasaka_shingen__mag_{family}_{side}'
+        if not built(name):
+            continue
+        lines.append(f'  - entity: {MAG_ENTITY}')
+        lines.append('    component: Magazine')
+        lines.append(f'    set: gorillaakimbo\\animations\\{name}.anims')
+        lines.append(f'    vars: [gorillaakimbo_mag_{family}_{side}]')
+        lines.append('    priority: 100')
 open(sys.argv[1], 'w', newline='\n').write('\n'.join(lines) + '\n')
 print(sum(1 for l in lines if l.startswith('  - ')), 'entries')

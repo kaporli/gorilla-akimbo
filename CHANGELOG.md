@@ -1,5 +1,28 @@
 # Changelog
 
+## 3.0.0 (2026-11-08)
+
+All new custom animations: top-magazine reloads for the Shingen.
+
+- A dual-wielded Shingen reloads two-handed: the other hand, still holding its gun, knocks the top magazine out, both guns go down while the new magazine goes in, and both come back up. Three animations, picked at random each reload (flip and knock, double tap, uppercut), for the Shingen in either hand and for male and female V. The striking gun's path is adjusted to the partner gun's size (compact, standard or long).
+
+  ![Flip and knock, double tap and uppercut](research/showcase/topmag-smg-partner.gif)
+
+- With a long shotgun in the other hand (Carnage, Tactician, Zhuo, Igla, Testera, Satara), three animations made for it, picked at random (upright uppercut, overhead axe, hang and punch), so the shotgun never swings across the face.
+
+  ![Upright uppercut, overhead axe and hang and punch](research/showcase/topmag-long-partner.gif)
+
+- If the other gun needs a reload too (asked for together, or empty), it reloads in the same down time, and both guns stay down until it is done, the last shell of a shell-by-shell shotgun included.
+- Two Shingens reload together with one of three paired animations (over-under, scissor cross, gun clap); both magazines are knocked out and both guns refill.
+
+  ![Over-under, scissor cross and gun clap](research/showcase/topmag-pair.gif)
+
+- The magazine stays seated until the other gun hits it, then flies off along the hit and falls: while dual-wielded, the Shingen's magazine plays its own animation for each reload instead of the game's, which unlatches it before the hit.
+- The arms ease into the normal dual-wield stance as the guns come back up, with no jump when the reload ends.
+- Neither gun fires during a two-handed reload, and the other gun's reload waits until it is done (a reload asked for meanwhile starts right after).
+- Fix: hard landings with a pair of SMGs or shotguns had no camera dip or hand brace and left the arms stuck.
+- Fix: a holstered pair showed stretched or missing arms when looking down.
+
 ## 2.1.2 (2026-11-06)
 
 - Fix: Heywood Hurricane (Double Trouble level 2) stopped after one shot with a pair of Carnages. Each Carnage shot briefly staggers V, which ended it; it now keeps firing both guns for its full duration. Other pairs are unchanged.
