@@ -53,6 +53,11 @@ public abstract class GorillaAkimboTopMag {
     return kind == GorillaAkimboTopMag.Borg() ? 108.0 / 30.0 : 96.0 / 30.0;
   }
 
+  // Clip seconds before the end at which the arms are handed back to the dual-wield idle (6 frames).
+  public static func HandBack() -> Float {
+    return 6.0 / 30.0;
+  }
+
   // Clip seconds at which both guns are out of view (Shingen f46 to f62, Midnight Borg f53 to f73). The other gun's
   // ammo starts going in at Down; the clip is held between HoldStart and HoldEnd until that ammo is in.
   public static func Down(kind: Int32) -> Float {
@@ -188,10 +193,10 @@ public abstract class GorillaAkimboTopMag {
   }
 
   // Sets the left hand's item type: two-handed (2) while a top-magazine clip poses both arms, the dual-wield
-  // index (1) otherwise.
-  public static func LeftHand(scriptInterface: ref<StateGameScriptInterface>, twoHanded: Bool) {
+  // index (1) otherwise. `blend` is the transition time in seconds.
+  public static func LeftHand(scriptInterface: ref<StateGameScriptInterface>, twoHanded: Bool, blend: Float) {
     let feature = new AnimFeature_EquipUnequipItem();
-    feature.stateTransitionDuration = 0.0;
+    feature.stateTransitionDuration = blend;
     feature.itemState = 2;
     feature.itemType = twoHanded ? 2 : GorillaAkimboHands.OneHandedIndex();
     scriptInterface.SetAnimationParameterFeature(n"leftHandItemHandling", feature, scriptInterface.executionOwner);
@@ -308,6 +313,10 @@ private let m_gorillaTopMagSpeed: Float;
 @addField(ReloadEvents)
 private let m_gorillaTopMagClip: Float;
 
+// Set once the arms were handed back to the dual-wield idle, a few frames before the clip ends.
+@addField(ReloadEvents)
+private let m_gorillaTopMagHandedBack: Bool;
+
 // The other gun reloads in the same down time (see GorillaTopMagJoin): its shells and when its ammo is all in.
 @addField(ReloadEvents)
 private let m_gorillaJoin: Bool;
@@ -369,6 +378,7 @@ private final func GorillaTopMagPrepare(weapon: ref<WeaponObject>, scriptInterfa
   this.m_gorillaSpeed = speed;
   this.m_gorillaTopMagSpeed = speed;
   this.m_gorillaTopMagClip = 0.0;
+  this.m_gorillaTopMagHandedBack = false;
   this.m_gorillaJoin = false;
   ArrayClear(this.m_gorillaJoinShellTimes);
   ArrayClear(this.m_gorillaJoinShellCounts);
@@ -402,7 +412,7 @@ private final func GorillaTopMagStart(scriptInterface: ref<StateGameScriptInterf
   topMag.busy = true;
   topMag.busyLeft = this.IsLeftWeaponLogic();
   topMag.busyUntil = EngineTime.ToFloat(GameInstance.GetSimTime(owner.GetGame())) + GorillaAkimboTopMag.Length(this.m_gorillaTopMagKind) / MaxF(this.m_gorillaSpeed, 0.05) + 1.0;
-  GorillaAkimboTopMag.LeftHand(scriptInterface, true);
+  GorillaAkimboTopMag.LeftHand(scriptInterface, true, 0.0);
   topMag.pair = this.m_gorillaTopMagPair;
   topMag.pairOtherAt = -1.0;
   // One line per reload, to match a recording to its clips: the pick index selects the clip in the arm set and the
@@ -487,10 +497,9 @@ private final func GorillaTopMagStart(scriptInterface: ref<StateGameScriptInterf
 private final func GorillaTopMagEnd(stateContext: ref<StateContext>, scriptInterface: ref<StateGameScriptInterface>) {
   let owner = scriptInterface.executionOwner;
   let topMag = GorillaAkimboTopMagSystem.Get(owner.GetGame());
-  if this.IsLeftWeaponLogic() {
-    scriptInterface.PushAnimationEvent(n"InterruptReload");
+  if !this.m_gorillaTopMagHandedBack {
+    this.GorillaTopMagHandBack(scriptInterface);
   }
-  GorillaAkimboTopMag.LeftHand(scriptInterface, false);
   this.GorillaTopMagFinishOther(topMag);
   topMag.pair = false;
   topMag.busy = false;
@@ -501,6 +510,17 @@ private final func GorillaTopMagEnd(stateContext: ref<StateContext>, scriptInter
   // The right hand's own reload data again, so its next reload isn't read as an empty one.
   this.m_animReloadDataDirty = true;
   stateContext.SetConditionBoolParameter(this.IsLeftWeaponLogic() ? n"RightReloadDataDirty" : n"LeftReloadDataDirty", true, true);
+}
+
+// The arms go back to the dual-wield idle: the left gun's clip is ended in the graph and the left hand is one-handed
+// again, blended over HandBack() so the idle's own layers come in while the arms still move.
+@addMethod(ReloadEvents)
+private final func GorillaTopMagHandBack(scriptInterface: ref<StateGameScriptInterface>) {
+  this.m_gorillaTopMagHandedBack = true;
+  if this.IsLeftWeaponLogic() {
+    scriptInterface.PushAnimationEvent(n"InterruptReload");
+  }
+  GorillaAkimboTopMag.LeftHand(scriptInterface, false, GorillaAkimboTopMag.HandBack());
 }
 
 // A pair's other gun, or a magazine gun that joined, gets its ammo once its own reload time has passed (or when the
@@ -593,6 +613,9 @@ private final func GorillaTopMagUpdate(timeDelta: Float, scriptInterface: ref<St
   let now = this.GetInStateTime();
   let kind = this.m_gorillaTopMagKind;
   this.m_gorillaTopMagClip += timeDelta * this.m_gorillaSpeed;
+  if !this.m_gorillaTopMagHandedBack && this.m_gorillaTopMagClip >= GorillaAkimboTopMag.Length(kind) - GorillaAkimboTopMag.HandBack() {
+    this.GorillaTopMagHandBack(scriptInterface);
+  }
   if topMag.pairOtherAt >= 0.0 && now >= topMag.pairOtherAt {
     this.GorillaTopMagFinishOther(topMag);
   }

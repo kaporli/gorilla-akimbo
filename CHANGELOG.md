@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.1 (2026-11-08)
+
+- Fix: at the end of a top-magazine reload the arms held still for a moment, then twitched into the dual-wield stance. They now blend into it while the guns come back up.
+
 ## 3.0.0 (2026-11-08)
 
 All new custom animations: top-magazine reloads for the Shingen.
