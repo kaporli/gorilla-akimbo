@@ -50,7 +50,7 @@ The **Double Trouble** perk only pairs pistols and power revolvers. **Equip Gori
 
 Set it up in game with [Mod Settings](https://www.nexusmods.com/cyberpunk2077/mods/4885). Without it, the defaults apply.
 
-- **Weapons:** which SMGs and shotguns Gorilla Arms let you pair.
+- **Weapons:** which SMGs and shotguns Gorilla Arms let you pair, by type (Power, Smart, Tech) and, for shotguns, by how they reload.
 
   ![The Weapons settings](screenshots/setting-weapons.png)
 

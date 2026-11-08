@@ -23,9 +23,57 @@ public class GorillaAkimboSettings extends IScriptable {
   @runtimeProperty("ModSettings.mod", "Gorilla Akimbo")
   @runtimeProperty("ModSettings.category", "Weapons")
   @runtimeProperty("ModSettings.category.order", "1")
+  @runtimeProperty("ModSettings.dependency", "smgs")
+  @runtimeProperty("ModSettings.displayName", "Power SMGs")
+  @runtimeProperty("ModSettings.description", "Saratoga, Pulsar, Shigure and Guillotine.")
+  public let powerSmgs: Bool = true;
+
+  @runtimeProperty("ModSettings.mod", "Gorilla Akimbo")
+  @runtimeProperty("ModSettings.category", "Weapons")
+  @runtimeProperty("ModSettings.category.order", "1")
+  @runtimeProperty("ModSettings.dependency", "smgs")
+  @runtimeProperty("ModSettings.displayName", "Smart SMGs")
+  @runtimeProperty("ModSettings.description", "Shingen, Dian and Warden.")
+  public let smartSmgs: Bool = true;
+
+  @runtimeProperty("ModSettings.mod", "Gorilla Akimbo")
+  @runtimeProperty("ModSettings.category", "Weapons")
+  @runtimeProperty("ModSettings.category.order", "1")
+  @runtimeProperty("ModSettings.dependency", "smgs")
+  @runtimeProperty("ModSettings.displayName", "Tech SMGs")
+  @runtimeProperty("ModSettings.description", "Senkoh.")
+  public let techSmgs: Bool = true;
+
+  @runtimeProperty("ModSettings.mod", "Gorilla Akimbo")
+  @runtimeProperty("ModSettings.category", "Weapons")
+  @runtimeProperty("ModSettings.category.order", "1")
   @runtimeProperty("ModSettings.displayName", "Shotguns")
   @runtimeProperty("ModSettings.description", "Gorilla Arms let you dual-wield shotguns. Applies to guns you equip from now on.")
   public let shotguns: Bool = true;
+
+  @runtimeProperty("ModSettings.mod", "Gorilla Akimbo")
+  @runtimeProperty("ModSettings.category", "Weapons")
+  @runtimeProperty("ModSettings.category.order", "1")
+  @runtimeProperty("ModSettings.dependency", "shotguns")
+  @runtimeProperty("ModSettings.displayName", "Power shotguns")
+  @runtimeProperty("ModSettings.description", "Carnage, Tactician, Crusher, Pozhar, Igla and Testera.")
+  public let powerShotguns: Bool = true;
+
+  @runtimeProperty("ModSettings.mod", "Gorilla Akimbo")
+  @runtimeProperty("ModSettings.category", "Weapons")
+  @runtimeProperty("ModSettings.category.order", "1")
+  @runtimeProperty("ModSettings.dependency", "shotguns")
+  @runtimeProperty("ModSettings.displayName", "Smart shotguns")
+  @runtimeProperty("ModSettings.description", "Zhuo and Palica.")
+  public let smartShotguns: Bool = true;
+
+  @runtimeProperty("ModSettings.mod", "Gorilla Akimbo")
+  @runtimeProperty("ModSettings.category", "Weapons")
+  @runtimeProperty("ModSettings.category.order", "1")
+  @runtimeProperty("ModSettings.dependency", "shotguns")
+  @runtimeProperty("ModSettings.displayName", "Tech shotguns")
+  @runtimeProperty("ModSettings.description", "Satara.")
+  public let techShotguns: Bool = true;
 
   @runtimeProperty("ModSettings.mod", "Gorilla Akimbo")
   @runtimeProperty("ModSettings.category", "Weapons")

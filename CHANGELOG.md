@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.1.0 (2026-11-08)
+
+- New settings: Power, Smart and Tech SMGs and shotguns can each be switched off, on top of the magazine, shell-by-shell and double-barrel switches. For example, Power SMGs and Power shotguns only. All on by default.
+
 ## 3.0.1 (2026-11-08)
 
 - Fix: at the end of a top-magazine reload the arms held still for a moment, then twitched into the dual-wield stance. They now blend into it while the guns come back up.

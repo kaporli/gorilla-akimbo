@@ -102,13 +102,32 @@ class GorillaAkimboTweak extends ScriptableTweak {
   }
 }
 
-// Whether the settings allow dual-wielding this SMG or shotgun.
+// Whether a weapon type (Power, Smart, Tech) is switched on. Guns of no such type are allowed.
+public func IsEvolutionAllowed(item: ref<gameItemData>, power: Bool, smart: Bool, tech: Bool) -> Bool {
+  let record = TweakDBInterface.GetWeaponItemRecord(ItemID.GetTDBID(item.GetID()));
+  if !IsDefined(record) || !IsDefined(record.Evolution()) {
+    return true;
+  }
+  let evolution = record.Evolution().Type();
+  if Equals(evolution, gamedataWeaponEvolution.Power) {
+    return power;
+  }
+  if Equals(evolution, gamedataWeaponEvolution.Smart) {
+    return smart;
+  }
+  if Equals(evolution, gamedataWeaponEvolution.Tech) {
+    return tech;
+  }
+  return true;
+}
+
+// Whether the settings allow dual-wielding this SMG or shotgun: its type, and for shotguns how it reloads.
 public func IsGripWeaponAllowed(item: ref<gameItemData>, settings: ref<GorillaAkimboSettings>) -> Bool {
   let type = RPGManager.GetItemType(item.GetID());
   if Equals(type, gamedataItemType.Wea_SubmachineGun) {
-    return settings.smgs;
+    return settings.smgs && IsEvolutionAllowed(item, settings.powerSmgs, settings.smartSmgs, settings.techSmgs);
   }
-  if !settings.shotguns {
+  if !settings.shotguns || !IsEvolutionAllowed(item, settings.powerShotguns, settings.smartShotguns, settings.techShotguns) {
     return false;
   }
   if Equals(type, gamedataItemType.Wea_ShotgunDual) {
