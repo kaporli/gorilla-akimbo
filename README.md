@@ -60,7 +60,6 @@ The **Double Trouble** perk only pairs pistols and power revolvers. **Equip Gori
 
   ![The Smart Link setting](screenshots/setting-smart-link.png)
 
-- No new perk, nothing in your save. Single-wielded SMGs and shotguns are unchanged.
 
 ## Settings
 
