@@ -29,8 +29,16 @@ The [b]Double Trouble[/b] perk only pairs pistols and power revolvers. [b]Equip 
 [*][b]Shell-by-shell reloads like vanilla.[/b] Shells load one at a time; firing mid-reload keeps them.[/*]
 [*][b]Each gun's own reload sounds[/b], for both guns.[/*]
 [*][b]Ammo counter fix:[/b] with two long guns, the left gun's count is no longer cut off.[/*]
+[*][b]Lowered stance in safe zones[/b], for male and female V: low ready for SMGs and short shotguns, high port for long shotguns, each hand by its own gun. Firing raises the guns; they lower again after a while.
+[img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/showcase/compare-lowered.gif[/img][/*]
+[*][b]Grenades:[/b] the right gun stays up and can keep firing while the left hand throws, quick or charged. The left gun comes back on its own.
+[img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/research/showcase/grenade-pair.gif[/img][/*]
 [*][b]Independent firing[/b] (setting): the left mouse button fires the left gun, the right mouse button the right gun (each trigger on a controller). Aiming moves to its own key, mouse button 4 by default, rebindable in Key Bindings with [url=https://www.nexusmods.com/cyberpunk2077/mods/37156]Unified Keybinds[/url]. A gun's own button also cuts its shell-by-shell reload short.
 [img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/screenshots/independent-firing.png[/img][/*]
+[*][b]Key hints:[/b] with independent firing on, the input hints show which button fires which gun and the aim key, with your own keys on keyboard or controller.
+[img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/screenshots/key-hints.png[/img][/*]
+[*][b]Smart Link on both guns[/b] (setting, on by default): bullets from a Smart SMG or shotgun in the left hand go to the targets Smart Link locks, like the right gun's. In vanilla only the right gun's bullets track.
+[img]https://raw.githubusercontent.com/kaporli/gorilla-akimbo/main/screenshots/setting-smart-link.png[/img][/*]
 [*]No new perk, nothing in your save. Single-wielded SMGs and shotguns are unchanged.[/*]
 [/list][size=4][b]Settings[/b][/size]
 Set it up in game with [url=https://www.nexusmods.com/cyberpunk2077/mods/4885]Mod Settings[/url]. Without it, the defaults apply.
@@ -49,6 +57,7 @@ Set it up in game with [url=https://www.nexusmods.com/cyberpunk2077/mods/4885]Mo
 [*][color=#e5be37][b]Without independent firing, only the right gun's reload can be cut short by firing, unless the right gun is empty. Vanilla pistols work the same way.[/b][/color][/*]
 [*][color=#e5be37][b]Long shotguns (Zhuo, Tactician) swing toward the middle of the screen during the reload.[/b][/color][/*]
 [*][color=#e5be37][b]Photo mode poses hold a single gun.[/b][/color][/*]
+[*][color=#e5be37][b]The animations are first-person only. Third-person mods like Immersive Third Person switch to first person while a weapon is drawn.[/b][/color][/*]
 [*][color=#e5be37][b]Independent firing hasn't been tested with a controller.[/b][/color][/*]
 [/list][size=4][b]Requirements[/b][/size]
 [list]
@@ -60,12 +69,18 @@ Set it up in game with [url=https://www.nexusmods.com/cyberpunk2077/mods/4885]Mo
 Install with Mod Organizer 2 or Vortex, or extract into the game folder. The files go to:
 [code]archive/pc/mod/GorillaAkimbo.archive
 archive/pc/mod/GorillaAkimbo.archive.xl
+archive/pc/mod/GorillaAkimboLowered.archive
+archive/pc/mod/GorillaAkimboLowered.archive.xl
 r6/config/modkeybinds/GorillaAkimbo.json
 r6/input/GorillaAkimbo.xml
 r6/scripts/GorillaAkimbo/GorillaAkimbo.reds
+r6/scripts/GorillaAkimbo/GorillaAkimboGadget.reds
+r6/scripts/GorillaAkimbo/GorillaAkimboHints.reds
 r6/scripts/GorillaAkimbo/GorillaAkimboIndependent.reds
 r6/scripts/GorillaAkimbo/GorillaAkimboSettings.reds
+r6/scripts/GorillaAkimbo/GorillaAkimboSmart.reds
 r6/scripts/GorillaAkimbo/GorillaAkimboSounds.reds
+r6/scripts/GorillaAkimbo/GorillaAkimboTopMag.reds
 r6/tweaks/GorillaAkimbo/GorillaAkimbo.yaml[/code]
 [i]Formerly Gorilla Grip. Updating by hand from Gorilla Grip: [b]delete the old[/b] [font=Courier New]r6/scripts/GorillaGrip[/font] [b]and[/b] [font=Courier New]r6/tweaks/GorillaGrip[/font] [b]folders[/b].[/i]
 

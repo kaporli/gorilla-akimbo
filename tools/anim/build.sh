@@ -31,3 +31,5 @@ done
 cp "$WORK/pack.archive" "$ROOT/archive/pc/mod/GorillaAkimbo.archive"
 python "$HERE/genxl.py" "$ROOT/archive/pc/mod/GorillaAkimbo.archive.xl" "$PACK"
 echo "built $ROOT/archive/pc/mod/GorillaAkimbo.archive"
+# Lowered (safe) stance sets: their own archive and archive.xl (buildlowered.sh, lowsets.py).
+bash "$HERE/buildlowered.sh"

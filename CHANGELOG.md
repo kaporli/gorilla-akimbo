@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.2.0 (2026-11-09)
+
+- SMG and shotgun pairs have their own lowered stance in public safe zones, instead of the game's pistol pose, which put both guns huge and crossed in front of the camera. Low ready for SMGs and short shotguns, high port for the six long shotguns (Carnage, Tactician, Zhuo, Igla, Testera, Satara), each hand by its own gun, for male and female V. Firing raises the guns; they lower again after a while.
+- Grenades while dual-wielding SMGs or shotguns: the right gun stays up and can fire during quick and charged throws, and the left gun is put away for the throw and comes back on its own. Before, the right SMG could not fire during a quick throw, and a charged throw put both guns away.
+- New setting: Smart Link on both guns, on by default. Bullets from a Smart SMG or shotgun in the left hand go to the targets Smart Link locks, like the right gun's; in vanilla only the right gun's bullets track. Works with independent firing too.
+- With independent firing on, the input hints show "Fire left gun", "Fire right gun" and "Aim" with your own keys, keyboard or controller. Aim is left out while its key is unbound.
+- Fix: with Expanded Dual Wielding installed, the right mouse button fired no gun in either mod's independent firing. Gorilla Akimbo now reads both buttons through its own listener, and no longer blocks the right mouse button for other mods while its independent firing is off.
+
 ## 3.1.0 (2026-11-08)
 
 - New settings: Power, Smart and Tech SMGs and shotguns can each be switched off, on top of the magazine, shell-by-shell and double-barrel switches. For example, Power SMGs and Power shotguns only. All on by default.

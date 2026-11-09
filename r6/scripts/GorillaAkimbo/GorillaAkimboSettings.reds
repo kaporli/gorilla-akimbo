@@ -185,6 +185,13 @@ public class GorillaAkimboSettings extends IScriptable {
   @runtimeProperty("ModSettings.max", "10")
   @runtimeProperty("ModSettings.step", "0.1")
   public let reloadPerPoint: Float = 3.0;
+
+  @runtimeProperty("ModSettings.mod", "Gorilla Akimbo")
+  @runtimeProperty("ModSettings.category", "Smart Link")
+  @runtimeProperty("ModSettings.category.order", "5")
+  @runtimeProperty("ModSettings.displayName", "Smart Link on both guns")
+  @runtimeProperty("ModSettings.description", "Bullets from a Smart SMG or shotgun in the left hand go to the targets Smart Link locks, like the right gun's. Off: only the right gun's bullets track, as in the base game.")
+  public let smartLinkBoth: Bool = true;
 }
 
 // Holds the settings for the session and reapplies them when they change.

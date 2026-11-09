@@ -40,9 +40,25 @@ The **Double Trouble** perk only pairs pistols and power revolvers. **Equip Gori
 - **Shell-by-shell reloads like vanilla.** Shells load one at a time; firing mid-reload keeps them.
 - **Each gun's own reload sounds**, for both guns.
 - **Ammo counter fix:** with two long guns, the left gun's count is no longer cut off.
+- **Lowered stance in safe zones**, for male and female V: low ready for SMGs and short shotguns, high port for long shotguns, each hand by its own gun. Firing raises the guns; they lower again after a while.
+
+  ![The game's pistol pose and Gorilla Akimbo's lowered stance, SMGs and long shotguns](research/showcase/compare-lowered.gif)
+
+- **Grenades:** the right gun stays up and can keep firing while the left hand throws, quick or charged. The left gun comes back on its own.
+
+  ![The right SMG firing while the left hand throws a grenade](research/showcase/grenade-pair.gif)
+
 - **Independent firing** (setting): the left mouse button fires the left gun, the right mouse button the right gun (each trigger on a controller). Aiming moves to its own key, mouse button 4 by default, rebindable in Key Bindings with [Unified Keybinds](https://www.nexusmods.com/cyberpunk2077/mods/37156). A gun's own button also cuts its shell-by-shell reload short.
 
   ![The Independent firing setting and its aim key in Key Bindings](screenshots/independent-firing.png)
+
+- **Key hints:** with independent firing on, the input hints show which button fires which gun and the aim key, with your own keys on keyboard or controller.
+
+  ![The input hints for independent firing](screenshots/key-hints.png)
+
+- **Smart Link on both guns** (setting, on by default): bullets from a Smart SMG or shotgun in the left hand go to the targets Smart Link locks, like the right gun's. In vanilla only the right gun's bullets track.
+
+  ![The Smart Link setting](screenshots/setting-smart-link.png)
 
 - No new perk, nothing in your save. Single-wielded SMGs and shotguns are unchanged.
 
@@ -71,6 +87,7 @@ Set it up in game with [Mod Settings](https://www.nexusmods.com/cyberpunk2077/mo
 - Without independent firing, only the right gun's reload can be cut short by firing, unless the right gun is empty. Vanilla pistols work the same way.
 - Long shotguns (Zhuo, Tactician) swing toward the middle of the screen during the reload.
 - Photo mode poses hold a single gun.
+- The animations are first-person only. Third-person mods like Immersive Third Person switch to first person while a weapon is drawn.
 - Independent firing hasn't been tested with a controller.
 
 ## Requirements
@@ -87,12 +104,18 @@ Install with Mod Organizer 2 or Vortex, or extract into the game folder. The fil
 ```
 archive/pc/mod/GorillaAkimbo.archive
 archive/pc/mod/GorillaAkimbo.archive.xl
+archive/pc/mod/GorillaAkimboLowered.archive
+archive/pc/mod/GorillaAkimboLowered.archive.xl
 r6/config/modkeybinds/GorillaAkimbo.json
 r6/input/GorillaAkimbo.xml
 r6/scripts/GorillaAkimbo/GorillaAkimbo.reds
+r6/scripts/GorillaAkimbo/GorillaAkimboGadget.reds
+r6/scripts/GorillaAkimbo/GorillaAkimboHints.reds
 r6/scripts/GorillaAkimbo/GorillaAkimboIndependent.reds
 r6/scripts/GorillaAkimbo/GorillaAkimboSettings.reds
+r6/scripts/GorillaAkimbo/GorillaAkimboSmart.reds
 r6/scripts/GorillaAkimbo/GorillaAkimboSounds.reds
+r6/scripts/GorillaAkimbo/GorillaAkimboTopMag.reds
 r6/tweaks/GorillaAkimbo/GorillaAkimbo.yaml
 ```
 

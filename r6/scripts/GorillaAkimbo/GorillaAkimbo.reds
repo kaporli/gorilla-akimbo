@@ -676,7 +676,9 @@ public abstract class GorillaAkimboHands {
     if !IsDefined(item) || !IsGripWeaponType(RPGManager.GetItemType(item.GetItemID())) {
       return;
     }
-    if GorillaAkimboHands.IsDualGrip(owner, item.GetItemID()) {
+    // Gadget: during a pair's throw the right gun keeps the dual-wield index while the left slot is empty, so a reload
+    // of the right gun isn't cut when the left gun comes back (GorillaAkimboGadget.reds).
+    if GorillaAkimboHands.IsDualGrip(owner, item.GetItemID()) || (!left && GorillaAkimboGadgetSystem.Active(owner)) {
       GorillaAkimboHands.Set(scriptInterface, left, state, duration);
     } else {
       let feature = new AnimFeature_EquipUnequipItem();
