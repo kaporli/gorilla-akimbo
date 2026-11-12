@@ -1,6 +1,6 @@
 // Smart Link on both guns. The game's smart targeting runs for the right-hand gun only: its bullets are launched at
 // the targets Smart Link locks, the left gun's are launched untargeted. With the setting on, bullets of a dual-wielded
-// Smart SMG or shotgun in the left hand are launched at the right gun's locked targets the same way.
+// Smart gun in the left hand are launched at the right gun's locked targets the same way.
 module GorillaAkimbo
 
 // The targets the right gun's Smart Link has locked, read from the reticle data when a left bullet is launched.
@@ -51,7 +51,8 @@ public abstract class GorillaAkimboSmart {
     return IsDefined(record) && IsDefined(record.Evolution()) && Equals(record.Evolution().Type(), gamedataWeaponEvolution.Smart);
   }
 
-  // A dual-wielded Smart SMG or shotgun in the left hand, with the setting on and its type allowed in the settings.
+  // A dual-wielded Smart gun in the left hand that the mod made dual-wieldable, with the setting on and its type
+  // allowed in the settings.
   public static func IsLeftSmart(owner: ref<GameObject>, weapon: ref<WeaponObject>) -> Bool {
     if !IsDefined(owner) || !owner.IsPlayer() || !IsDefined(weapon) {
       return false;
@@ -61,10 +62,11 @@ public abstract class GorillaAkimboSmart {
       return false;
     }
     let left = GameInstance.GetTransactionSystem(owner.GetGame()).GetItemInSlot(owner, t"AttachmentSlots.WeaponLeft");
-    if !IsDefined(left) || left.GetEntityID() != weapon.GetEntityID() || !GorillaAkimboHands.IsDualGrip(owner, weapon.GetItemID()) {
+    if !IsDefined(left) || left.GetEntityID() != weapon.GetEntityID() || !GameObject.IsDualWielding(owner) {
       return false;
     }
-    return GorillaAkimboSmart.IsSmart(weapon) && IsGripWeaponAllowed(weapon.GetItemData(), settings);
+    let data = weapon.GetItemData();
+    return GorillaAkimboSmart.IsSmart(weapon) && IsDefined(data) && data.HasTag(GorillaAkimboTag()) && IsGripWeaponAllowed(data, settings);
   }
 
   // The same launch aimed at a target: the part of it to hit, as the game picks it for smart shots.

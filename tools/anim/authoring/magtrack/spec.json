@@ -1,0 +1,500 @@
+{
+ "_about": [
+  "Magazine flight per family, side and pick (tools/anim/magtrack.py; chosen and checked with authoring/magtrack).",
+  "clips: arm clips that play the track, relative to paths.clips (<body>/<clip>.glb); \"clips_pre_endpose:<body>/<clip>.glb\" is relative to paths.clips_pre_endpose.",
+  "Source: anim-work/magtrack/spec_r3_20261107.json (round 3, 2026-11-07)."
+ ],
+ "long_left": [
+  {
+   "clips": [
+    "pma/shingen_left_lupper_carnage.glb",
+    "pma/shingen_left_lupper_tactician.glb",
+    "pma/shingen_left_lupper_zhuo.glb",
+    "pma/shingen_left_lupper_igla.glb",
+    "pma/shingen_left_lupper_testera.glb",
+    "pma/shingen_left_lupper_satara.glb",
+    "pwa/shingen_left_lupper_carnage.glb",
+    "pwa/shingen_left_lupper_tactician.glb",
+    "pwa/shingen_left_lupper_zhuo.glb",
+    "pwa/shingen_left_lupper_igla.glb",
+    "pwa/shingen_left_lupper_testera.glb",
+    "pwa/shingen_left_lupper_satara.glb",
+    "pma/shingen_left_lupper_ajax.glb",
+    "pma/shingen_left_lupper_copperhead.glb",
+    "pma/shingen_left_lupper_masamune.glb",
+    "pma/shingen_left_lupper_sidewinder.glb",
+    "pma/shingen_left_lupper_hercules.glb",
+    "pwa/shingen_left_lupper_ajax.glb",
+    "pwa/shingen_left_lupper_copperhead.glb",
+    "pwa/shingen_left_lupper_masamune.glb",
+    "pwa/shingen_left_lupper_sidewinder.glb",
+    "pwa/shingen_left_lupper_hercules.glb"
+   ],
+   "pose_clips": [
+    "pma/shingen_left_lupper_carnage.glb",
+    "pma/shingen_left_lupper_tactician.glb",
+    "pma/shingen_left_lupper_zhuo.glb",
+    "pma/shingen_left_lupper_igla.glb",
+    "pma/shingen_left_lupper_testera.glb",
+    "pma/shingen_left_lupper_satara.glb",
+    "pwa/shingen_left_lupper_carnage.glb",
+    "pwa/shingen_left_lupper_tactician.glb",
+    "pwa/shingen_left_lupper_zhuo.glb",
+    "pwa/shingen_left_lupper_igla.glb",
+    "pwa/shingen_left_lupper_testera.glb",
+    "pwa/shingen_left_lupper_satara.glb"
+   ],
+   "side": "Left",
+   "K": 25,
+   "v": [-0.9035924717184134, 1.1519802168847348, 0.3262854960920072],
+   "axis": [-0.27224482915527926, -0.08991198262464803, -0.4364936675099307],
+   "spin": -180,
+   "H": 32,
+   "centre": [-1.3877787807814457e-17, 0.02285515833037967, -4.190903388212597e-10],
+   "gunvel": "pre"
+  },
+  {
+   "clips": [
+    "pma/shingen_left_axe_carnage.glb",
+    "pma/shingen_left_axe_tactician.glb",
+    "pma/shingen_left_axe_zhuo.glb",
+    "pma/shingen_left_axe_igla.glb",
+    "pma/shingen_left_axe_testera.glb",
+    "pma/shingen_left_axe_satara.glb",
+    "pwa/shingen_left_axe_carnage.glb",
+    "pwa/shingen_left_axe_tactician.glb",
+    "pwa/shingen_left_axe_zhuo.glb",
+    "pwa/shingen_left_axe_igla.glb",
+    "pwa/shingen_left_axe_testera.glb",
+    "pwa/shingen_left_axe_satara.glb",
+    "pma/shingen_left_axe_ajax.glb",
+    "pma/shingen_left_axe_copperhead.glb",
+    "pma/shingen_left_axe_masamune.glb",
+    "pma/shingen_left_axe_sidewinder.glb",
+    "pma/shingen_left_axe_hercules.glb",
+    "pwa/shingen_left_axe_ajax.glb",
+    "pwa/shingen_left_axe_copperhead.glb",
+    "pwa/shingen_left_axe_masamune.glb",
+    "pwa/shingen_left_axe_sidewinder.glb",
+    "pwa/shingen_left_axe_hercules.glb"
+   ],
+   "pose_clips": [
+    "pma/shingen_left_axe_carnage.glb",
+    "pma/shingen_left_axe_tactician.glb",
+    "pma/shingen_left_axe_zhuo.glb",
+    "pma/shingen_left_axe_igla.glb",
+    "pma/shingen_left_axe_testera.glb",
+    "pma/shingen_left_axe_satara.glb",
+    "pwa/shingen_left_axe_carnage.glb",
+    "pwa/shingen_left_axe_tactician.glb",
+    "pwa/shingen_left_axe_zhuo.glb",
+    "pwa/shingen_left_axe_igla.glb",
+    "pwa/shingen_left_axe_testera.glb",
+    "pwa/shingen_left_axe_satara.glb"
+   ],
+   "side": "Left",
+   "K": 25,
+   "v": [-0.4914148652662112, -0.9210961780524901, 0.591686792967772],
+   "axis": [-0.44693161399162235, -0.10995767107985668, -0.5423653751717111],
+   "spin": 540,
+   "H": 28,
+   "centre": [-1.3877787807814457e-17, 0.02285515833037967, -4.190903388212597e-10],
+   "gunvel": "pre"
+  },
+  {
+   "clips": [
+    "pma/shingen_left_hang_carnage.glb",
+    "pma/shingen_left_hang_tactician.glb",
+    "pma/shingen_left_hang_zhuo.glb",
+    "pma/shingen_left_hang_igla.glb",
+    "pma/shingen_left_hang_testera.glb",
+    "pma/shingen_left_hang_satara.glb",
+    "pwa/shingen_left_hang_carnage.glb",
+    "pwa/shingen_left_hang_tactician.glb",
+    "pwa/shingen_left_hang_zhuo.glb",
+    "pwa/shingen_left_hang_igla.glb",
+    "pwa/shingen_left_hang_testera.glb",
+    "pwa/shingen_left_hang_satara.glb",
+    "pma/shingen_left_hang_ajax.glb",
+    "pma/shingen_left_hang_copperhead.glb",
+    "pma/shingen_left_hang_masamune.glb",
+    "pma/shingen_left_hang_sidewinder.glb",
+    "pma/shingen_left_hang_hercules.glb",
+    "pwa/shingen_left_hang_ajax.glb",
+    "pwa/shingen_left_hang_copperhead.glb",
+    "pwa/shingen_left_hang_masamune.glb",
+    "pwa/shingen_left_hang_sidewinder.glb",
+    "pwa/shingen_left_hang_hercules.glb"
+   ],
+   "pose_clips": [
+    "pma/shingen_left_hang_carnage.glb",
+    "pma/shingen_left_hang_tactician.glb",
+    "pma/shingen_left_hang_zhuo.glb",
+    "pma/shingen_left_hang_igla.glb",
+    "pma/shingen_left_hang_testera.glb",
+    "pma/shingen_left_hang_satara.glb",
+    "pwa/shingen_left_hang_carnage.glb",
+    "pwa/shingen_left_hang_tactician.glb",
+    "pwa/shingen_left_hang_zhuo.glb",
+    "pwa/shingen_left_hang_igla.glb",
+    "pwa/shingen_left_hang_testera.glb",
+    "pwa/shingen_left_hang_satara.glb"
+   ],
+   "side": "Left",
+   "K": 25,
+   "v": [-0.8341236563858205, 1.214767713598798, 0.2803161212907635],
+   "axis": [-0.2454994514219112, -0.08017880474996539, -0.3830613674344384],
+   "spin": -360,
+   "H": 32,
+   "centre": [-1.3877787807814457e-17, 0.02285515833037967, -4.190903388212597e-10],
+   "gunvel": "pre"
+  }
+ ],
+ "long_right": [
+  {
+   "clips": [
+    "clips_pre_endpose:pma/shingen_right_lupper_carnage.glb",
+    "clips_pre_endpose:pma/shingen_right_lupper_tactician.glb",
+    "clips_pre_endpose:pma/shingen_right_lupper_zhuo.glb",
+    "clips_pre_endpose:pma/shingen_right_lupper_igla.glb",
+    "clips_pre_endpose:pma/shingen_right_lupper_testera.glb",
+    "clips_pre_endpose:pma/shingen_right_lupper_satara.glb",
+    "clips_pre_endpose:pwa/shingen_right_lupper_carnage.glb",
+    "clips_pre_endpose:pwa/shingen_right_lupper_tactician.glb",
+    "clips_pre_endpose:pwa/shingen_right_lupper_zhuo.glb",
+    "clips_pre_endpose:pwa/shingen_right_lupper_igla.glb",
+    "clips_pre_endpose:pwa/shingen_right_lupper_testera.glb",
+    "clips_pre_endpose:pwa/shingen_right_lupper_satara.glb",
+    "pma/shingen_right_lupper_ajax.glb",
+    "pma/shingen_right_lupper_copperhead.glb",
+    "pma/shingen_right_lupper_masamune.glb",
+    "pma/shingen_right_lupper_sidewinder.glb",
+    "pma/shingen_right_lupper_hercules.glb",
+    "pwa/shingen_right_lupper_ajax.glb",
+    "pwa/shingen_right_lupper_copperhead.glb",
+    "pwa/shingen_right_lupper_masamune.glb",
+    "pwa/shingen_right_lupper_sidewinder.glb",
+    "pwa/shingen_right_lupper_hercules.glb"
+   ],
+   "pose_clips": [
+    "clips_pre_endpose:pma/shingen_right_lupper_carnage.glb",
+    "clips_pre_endpose:pma/shingen_right_lupper_tactician.glb",
+    "clips_pre_endpose:pma/shingen_right_lupper_zhuo.glb",
+    "clips_pre_endpose:pma/shingen_right_lupper_igla.glb",
+    "clips_pre_endpose:pma/shingen_right_lupper_testera.glb",
+    "clips_pre_endpose:pma/shingen_right_lupper_satara.glb",
+    "clips_pre_endpose:pwa/shingen_right_lupper_carnage.glb",
+    "clips_pre_endpose:pwa/shingen_right_lupper_tactician.glb",
+    "clips_pre_endpose:pwa/shingen_right_lupper_zhuo.glb",
+    "clips_pre_endpose:pwa/shingen_right_lupper_igla.glb",
+    "clips_pre_endpose:pwa/shingen_right_lupper_testera.glb",
+    "clips_pre_endpose:pwa/shingen_right_lupper_satara.glb"
+   ],
+   "side": "Right",
+   "K": 25,
+   "v": [0.9024271174091372, 1.1668128260989425, 0.27234743732158395],
+   "axis": [-0.23788229910741007, 0.08272758124680799, 0.43379822390521644],
+   "spin": -360,
+   "H": 32,
+   "centre": [-1.3877787807814457e-17, 0.02285515833037967, -4.190903388212597e-10],
+   "gunvel": "pre"
+  },
+  {
+   "clips": [
+    "pma/shingen_right_axe_carnage.glb",
+    "pma/shingen_right_axe_tactician.glb",
+    "pma/shingen_right_axe_zhuo.glb",
+    "pma/shingen_right_axe_igla.glb",
+    "pma/shingen_right_axe_testera.glb",
+    "pma/shingen_right_axe_satara.glb",
+    "pwa/shingen_right_axe_carnage.glb",
+    "pwa/shingen_right_axe_tactician.glb",
+    "pwa/shingen_right_axe_zhuo.glb",
+    "pwa/shingen_right_axe_igla.glb",
+    "pwa/shingen_right_axe_testera.glb",
+    "pwa/shingen_right_axe_satara.glb",
+    "pma/shingen_right_axe_ajax.glb",
+    "pma/shingen_right_axe_copperhead.glb",
+    "pma/shingen_right_axe_masamune.glb",
+    "pma/shingen_right_axe_sidewinder.glb",
+    "pma/shingen_right_axe_hercules.glb",
+    "pwa/shingen_right_axe_ajax.glb",
+    "pwa/shingen_right_axe_copperhead.glb",
+    "pwa/shingen_right_axe_masamune.glb",
+    "pwa/shingen_right_axe_sidewinder.glb",
+    "pwa/shingen_right_axe_hercules.glb"
+   ],
+   "pose_clips": [
+    "pma/shingen_right_axe_carnage.glb",
+    "pma/shingen_right_axe_tactician.glb",
+    "pma/shingen_right_axe_zhuo.glb",
+    "pma/shingen_right_axe_igla.glb",
+    "pma/shingen_right_axe_testera.glb",
+    "pma/shingen_right_axe_satara.glb",
+    "pwa/shingen_right_axe_carnage.glb",
+    "pwa/shingen_right_axe_tactician.glb",
+    "pwa/shingen_right_axe_zhuo.glb",
+    "pwa/shingen_right_axe_igla.glb",
+    "pwa/shingen_right_axe_testera.glb",
+    "pwa/shingen_right_axe_satara.glb"
+   ],
+   "side": "Right",
+   "K": 25,
+   "v": [-0.044160416987019, -1.3243150488213975, 0.7030216988377476],
+   "axis": [-0.417383101765969, 0.08418705292542059, 0.13236912806757414],
+   "spin": 360,
+   "H": 27,
+   "centre": [-1.3877787807814457e-17, 0.02285515833037967, -4.190903388212597e-10],
+   "gunvel": "none"
+  },
+  {
+   "clips": [
+    "pma/shingen_right_hang_carnage.glb",
+    "pma/shingen_right_hang_tactician.glb",
+    "pma/shingen_right_hang_zhuo.glb",
+    "pma/shingen_right_hang_igla.glb",
+    "pma/shingen_right_hang_testera.glb",
+    "pma/shingen_right_hang_satara.glb",
+    "pwa/shingen_right_hang_carnage.glb",
+    "pwa/shingen_right_hang_tactician.glb",
+    "pwa/shingen_right_hang_zhuo.glb",
+    "pwa/shingen_right_hang_igla.glb",
+    "pwa/shingen_right_hang_testera.glb",
+    "pwa/shingen_right_hang_satara.glb",
+    "pma/shingen_right_hang_ajax.glb",
+    "pma/shingen_right_hang_copperhead.glb",
+    "pma/shingen_right_hang_masamune.glb",
+    "pma/shingen_right_hang_sidewinder.glb",
+    "pma/shingen_right_hang_hercules.glb",
+    "pwa/shingen_right_hang_ajax.glb",
+    "pwa/shingen_right_hang_copperhead.glb",
+    "pwa/shingen_right_hang_masamune.glb",
+    "pwa/shingen_right_hang_sidewinder.glb",
+    "pwa/shingen_right_hang_hercules.glb"
+   ],
+   "pose_clips": [
+    "pma/shingen_right_hang_carnage.glb",
+    "pma/shingen_right_hang_tactician.glb",
+    "pma/shingen_right_hang_zhuo.glb",
+    "pma/shingen_right_hang_igla.glb",
+    "pma/shingen_right_hang_testera.glb",
+    "pma/shingen_right_hang_satara.glb",
+    "pwa/shingen_right_hang_carnage.glb",
+    "pwa/shingen_right_hang_tactician.glb",
+    "pwa/shingen_right_hang_zhuo.glb",
+    "pwa/shingen_right_hang_igla.glb",
+    "pwa/shingen_right_hang_testera.glb",
+    "pwa/shingen_right_hang_satara.glb"
+   ],
+   "side": "Right",
+   "K": 25,
+   "v": [0.8194095822338852, 1.2375278643922223, 0.21700857447602212],
+   "axis": [-0.2051810122634129, 0.0707991523136061, 0.37100544977105554],
+   "spin": -360,
+   "H": 33,
+   "centre": [-1.3877787807814457e-17, 0.02285515833037967, -4.190903388212597e-10],
+   "gunvel": "pre"
+  }
+ ],
+ "smg_left": [
+  {
+   "clips": [
+    "pma/shingen_left_flip_rear_long.glb",
+    "pma/shingen_left_flip_rear_short.glb",
+    "pma/shingen_left_flip_rear_std.glb",
+    "pwa/shingen_left_flip_rear_long.glb",
+    "pwa/shingen_left_flip_rear_short.glb",
+    "pwa/shingen_left_flip_rear_std.glb"
+   ],
+   "side": "Left",
+   "K": 25,
+   "v": [-0.7820803059009425, -0.17818996618494704, 0.8925237986030937],
+   "axis": [-0.718383266119046, 0.35346664938325123, -0.5589197677419383],
+   "spin": 720,
+   "H": 27,
+   "centre": [-1.3877787807814457e-17, 0.02285515833037967, -4.190903388212597e-10],
+   "gunvel": "post"
+  },
+  {
+   "clips": [
+    "pma/shingen_left_doubletap_grip_long.glb",
+    "pma/shingen_left_doubletap_grip_short.glb",
+    "pma/shingen_left_doubletap_grip_std.glb",
+    "pwa/shingen_left_doubletap_grip_long.glb",
+    "pwa/shingen_left_doubletap_grip_short.glb",
+    "pwa/shingen_left_doubletap_grip_std.glb"
+   ],
+   "side": "Left",
+   "K": 25,
+   "v": [-1.0055394946836664, -0.48854128517412787, 0.4361395846649653],
+   "axis": [-0.4254435372693693, 0.24299838705872598, -0.7086848936465995],
+   "spin": 720,
+   "H": 28,
+   "centre": [-1.3877787807814457e-17, 0.02285515833037967, -4.190903388212597e-10],
+   "gunvel": "post"
+  },
+  {
+   "clips": [
+    "pma/shingen_left_uppercut_top_low.glb",
+    "pma/shingen_left_uppercut_top_std.glb",
+    "pma/shingen_left_uppercut_top_tall.glb",
+    "pwa/shingen_left_uppercut_top_low.glb",
+    "pwa/shingen_left_uppercut_top_std.glb",
+    "pwa/shingen_left_uppercut_top_tall.glb"
+   ],
+   "side": "Left",
+   "K": 25,
+   "v": [-0.7932153884591246, 1.243786889486643, 0.2716680346540271],
+   "axis": [-0.24124208936834968, -0.07678441683190948, -0.35283314351160433],
+   "spin": -360,
+   "H": 32,
+   "centre": [-1.3877787807814457e-17, 0.02285515833037967, -4.190903388212597e-10],
+   "gunvel": "pre"
+  }
+ ],
+ "smg_right": [
+  {
+   "clips": [
+    "pma/shingen_right_flip_rear_long.glb",
+    "pma/shingen_right_flip_rear_short.glb",
+    "pma/shingen_right_flip_rear_std.glb",
+    "pwa/shingen_right_flip_rear_long.glb",
+    "pwa/shingen_right_flip_rear_short.glb",
+    "pwa/shingen_right_flip_rear_std.glb"
+   ],
+   "side": "Right",
+   "K": 25,
+   "v": [0.36687832486773003, -0.2992801232186301, 0.8808130917444915],
+   "axis": [-0.8727186672781547, -0.3461819712273699, 0.24588210797125237],
+   "spin": 720,
+   "H": 27,
+   "centre": [-1.3877787807814457e-17, 0.02285515833037967, -4.190903388212597e-10],
+   "gunvel": "post"
+  },
+  {
+   "clips": [
+    "pma/shingen_right_doubletap_grip_long.glb",
+    "pma/shingen_right_doubletap_grip_short.glb",
+    "pma/shingen_right_doubletap_grip_std.glb",
+    "pwa/shingen_right_doubletap_grip_long.glb",
+    "pwa/shingen_right_doubletap_grip_short.glb",
+    "pwa/shingen_right_doubletap_grip_std.glb"
+   ],
+   "side": "Right",
+   "K": 25,
+   "v": [0.6468638061718522, -0.49679505764487064, 0.8802055935771448],
+   "axis": [-0.781817837124701, -0.2748712287779236, 0.41941905005347857],
+   "spin": 720,
+   "H": 27,
+   "centre": [-1.3877787807814457e-17, 0.02285515833037967, -4.190903388212597e-10],
+   "gunvel": "post"
+  },
+  {
+   "clips": [
+    "clips_pre_endpose:pma/shingen_right_uppercut_top_low.glb",
+    "clips_pre_endpose:pma/shingen_right_uppercut_top_std.glb",
+    "clips_pre_endpose:pma/shingen_right_uppercut_top_tall.glb",
+    "clips_pre_endpose:pwa/shingen_right_uppercut_top_low.glb",
+    "clips_pre_endpose:pwa/shingen_right_uppercut_top_std.glb",
+    "clips_pre_endpose:pwa/shingen_right_uppercut_top_tall.glb"
+   ],
+   "side": "Right",
+   "K": 25,
+   "v": [0.863301218391092, 1.2219508537623613, 0.10745751399456249],
+   "axis": [-0.1319757963825388, 0.05774781025300663, 0.40360025242912934],
+   "spin": -360,
+   "H": 34,
+   "centre": [-1.3877787807814457e-17, 0.02285515833037967, -4.190903388212597e-10],
+   "gunvel": "pre"
+  }
+ ],
+ "pair_left": [
+  {
+   "clips": [
+    "pma/pair_SS_overunder.glb",
+    "pwa/pair_SS_overunder.glb"
+   ],
+   "side": "Left",
+   "K": 25,
+   "v": [-0.616791498925204, -0.6909809028433498, 0.37697962645133665],
+   "axis": [-0.47524035817674143, 0.12651577295199518, -0.5456640503033741],
+   "spin": 720,
+   "H": 29,
+   "centre": [-1.3877787807814457e-17, 0.02285515833037967, -4.190903388212597e-10],
+   "gunvel": "pre"
+  },
+  {
+   "clips": [
+    "pma/pair_SS_scissor.glb",
+    "pwa/pair_SS_scissor.glb"
+   ],
+   "side": "Left",
+   "K": 25,
+   "v": [-0.19324302395966064, 1.4813736420890782, -0.13486758770981946],
+   "axis": [0.7221177563381619, 0.03200550027263107, -0.6831301423009983],
+   "spin": 360,
+   "H": 37,
+   "centre": [-1.3877787807814457e-17, 0.02285515833037967, -4.190903388212597e-10],
+   "gunvel": "none"
+  },
+  {
+   "clips": [
+    "pma/pair_SS_clap.glb",
+    "pwa/pair_SS_clap.glb"
+   ],
+   "side": "Left",
+   "K": 25,
+   "v": [-1.2504531048339982, 0.8251856857064694, 0.07372663505245361],
+   "axis": [0.029801060196010865, 0.09304640446832452, -0.5359763509640078],
+   "spin": 360,
+   "H": 33,
+   "centre": [-1.3877787807814457e-17, 0.02285515833037967, -4.190903388212597e-10],
+   "gunvel": "post"
+  }
+ ],
+ "pair_right": [
+  {
+   "clips": [
+    "pma/pair_SS_overunder.glb",
+    "pwa/pair_SS_overunder.glb"
+   ],
+   "side": "Right",
+   "K": 25,
+   "v": [0.6681506015129849, 1.3187336643928593, -0.2540005828631471],
+   "axis": [0.34271351398864824, -0.07522992176042057, 0.510928001267456],
+   "spin": -180,
+   "H": 37,
+   "centre": [-1.3877787807814457e-17, 0.02285515833037967, -4.190903388212597e-10],
+   "gunvel": "none"
+  },
+  {
+   "clips": [
+    "pma/pair_SS_scissor.glb",
+    "pwa/pair_SS_scissor.glb"
+   ],
+   "side": "Right",
+   "K": 25,
+   "v": [0.7997414101160357, -1.2688956937969083, -0.017815588939962615],
+   "axis": [-0.4986917482186222, -0.30681847614147245, -0.5334540896950035],
+   "spin": -360,
+   "H": 26,
+   "centre": [-1.3877787807814457e-17, 0.02285515833037967, -4.190903388212597e-10],
+   "gunvel": "post"
+  },
+  {
+   "clips": [
+    "pma/pair_SS_clap.glb",
+    "pwa/pair_SS_clap.glb"
+   ],
+   "side": "Right",
+   "K": 25,
+   "v": [1.4701304003645408, 0.03232488952612955, 0.2960940854544706],
+   "axis": [0.0002639557468016886, -0.25092199749922095, 0.026082846164455123],
+   "spin": 360,
+   "H": 30,
+   "centre": [-1.3877787807814457e-17, 0.02285515833037967, -4.190903388212597e-10],
+   "gunvel": "post"
+  }
+ ],
+ "_reaim": "right lupper (long_right[0]) and right SMG uppercut (smg_right[2]) are computed on the re-aimed arm clips as they were before the end-pose fix (clips_pre_endpose); everything else on the shipped clips"
+}

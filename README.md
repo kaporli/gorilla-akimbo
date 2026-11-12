@@ -1,12 +1,12 @@
 # Gorilla Akimbo
 
-Gorilla Arms let V dual-wield SMGs and shotguns, with their own one-handed reload animations.
+Gorilla Arms let V dual-wield SMGs, shotguns and assault rifles, with their own one-handed reload animations. Every pistol and revolver can be dual-wielded too.
 
-The **Double Trouble** perk only pairs pistols and power revolvers. **Equip Gorilla Arms** and SMGs and shotguns can be paired too. Without them, everything stays vanilla.
+The **Double Trouble** perk only pairs Power pistols and revolvers. With it, Tech and Smart pistols and Tech revolvers can be paired as well. **Equip Gorilla Arms** and SMGs, shotguns and assault rifles can be paired too.
 
 ## How it differs from other dual-wield mods
 
-[Dual Wield Anything](https://www.nexusmods.com/cyberpunk2077/mods/35632) and [Expanded Dual Wielding](https://www.nexusmods.com/cyberpunk2077/mods/35626) open dual-wielding to more weapon types and reuse the game's animations for them; both pages say reloads look janky or unusual. Gorilla Akimbo covers only SMGs and shotguns, and gives them:
+[Dual Wield Anything](https://www.nexusmods.com/cyberpunk2077/mods/35632) and [Expanded Dual Wielding](https://www.nexusmods.com/cyberpunk2077/mods/35626) open dual-wielding to more weapon types and reuse the game's animations for them; both pages say reloads look janky or unusual. Gorilla Akimbo covers SMGs, shotguns and assault rifles, and gives them:
 
 - One-handed reload animations instead of the game's two-handed ones.
 - Independent reloads per hand: one gun reloads while the other keeps firing.
@@ -26,21 +26,30 @@ The **Double Trouble** perk only pairs pistols and power revolvers. **Equip Gori
 
 ## Features
 
-- **Dual-wield SMGs and shotguns** with Gorilla Arms and Double Trouble, including double-barrels and modded weapons of those types. Removing Gorilla Arms unequips the off-hand SMG or shotgun.
+- **Dual-wield SMGs, shotguns and assault rifles** with Gorilla Arms and Double Trouble, including double-barrels and modded weapons of those types. Removing Gorilla Arms unequips the off-hand gun.
 
   ![Double Trouble's weapon box with the Gorilla Arms note](screenshots/double-trouble-perk.png)
 
-- **Body scaling:** every Body point gives dual-wielded SMGs and shotguns -2% recoil, +2% fire rate and +3% reload speed, shown in the Gorilla Arms' Body Attuned block like the game's attribute bonuses. Each can be changed or turned off in the settings.
+- **Body scaling:** every Body point gives dual-wielded SMGs, shotguns and assault rifles -2% recoil, +2% fire rate and +3% reload speed, shown in the Gorilla Arms' Body Attuned block like the game's attribute bonuses. Each can be changed or turned off in the settings.
 
   ![The Body scaling settings and the Body Attuned block on the Gorilla Arms tooltip](screenshots/body-scaling.png)
 
 - **One-handed reload animations**, for male and female V. The gun tips up while its magazine drops, goes down out of view, and rises once its ammo is in. Shell-fed shotguns go straight down.
+- **Assault rifle reloads made for each rifle's magazine**, three picks per rifle: front-magazine rifles throw the magazine out, shove it out forward or leave it behind and are driven onto a fresh one at the belt, the Masamune throws its magazine out with a nod or a corkscrew roll, or heaves the rifle off it, the Hercules pops its latch and throws or drops the cassette. The magazine has its own animation in each.
+
+  ![Rifle reloads: Copperhead, Masamune, Hercules, Ajax](research/showcase/rifle-reloads.gif)
+
+- **Bulky rifles held at the hip** (Masamune, Hercules, Copperhead, Umbra, Sidewinder, Divided We Stand), so a pair doesn't fill the view. Aiming and shots are unchanged.
+- **Every pistol and revolver**: Tech and Smart pistols and Tech revolvers pair with Double Trouble alone, with the Lexington's and the Nova's dual-wield animations.
+
+  ![Kenshin and Yukimura pairs](research/showcase/pistol-pairs.gif)
+
 - **Independent reloads.** Only the gun that needs ammo goes down; the other can keep firing.
 - **Reload timing calculated from each gun's stats**, including perks and weapon mods, so mixed pairs work.
 - **Shell-by-shell reloads like vanilla.** Shells load one at a time; firing mid-reload keeps them.
 - **Each gun's own reload sounds**, for both guns.
 - **Ammo counter fix:** with two long guns, the left gun's count is no longer cut off.
-- **Lowered stance in safe zones**, for male and female V: low ready for SMGs and short shotguns, high port for long shotguns, each hand by its own gun. Firing raises the guns; they lower again after a while.
+- **Lowered stance in safe zones**, for male and female V: low ready for SMGs, short shotguns and assault rifles, high port for long shotguns, each hand by its own gun. Firing raises the guns; they lower again after a while.
 
   ![The game's pistol pose and Gorilla Akimbo's lowered stance, SMGs and long shotguns](research/showcase/compare-lowered.gif)
 
@@ -56,7 +65,7 @@ The **Double Trouble** perk only pairs pistols and power revolvers. **Equip Gori
 
   ![The input hints for independent firing](screenshots/key-hints.png)
 
-- **Smart Link on both guns** (setting, on by default): bullets from a Smart SMG or shotgun in the left hand go to the targets Smart Link locks, like the right gun's. In vanilla only the right gun's bullets track.
+- **Smart Link on both guns** (setting, on by default): bullets from a Smart gun in the left hand go to the targets Smart Link locks, like the right gun's. In vanilla only the right gun's bullets track.
 
   ![The Smart Link setting](screenshots/setting-smart-link.png)
 
@@ -68,6 +77,14 @@ Set it up in game with [Mod Settings](https://www.nexusmods.com/cyberpunk2077/mo
 - **Weapons:** which SMGs and shotguns Gorilla Arms let you pair, by type (Power, Smart, Tech) and, for shotguns, by how they reload.
 
   ![The Weapons settings](screenshots/setting-weapons.png)
+
+- **Assault rifles:** which assault rifles Gorilla Arms let you pair, all or by type (Power, Smart).
+
+  ![The Assault rifles settings](screenshots/setting-rifles.png)
+
+- **Pistols and revolvers:** which pistols and revolvers the game leaves out you can pair (Tech and Smart pistols, Tech revolvers).
+
+  ![The Pistols and revolvers settings](screenshots/setting-pistols.png)
 
 - **Firing:** how one fire button uses both guns: as in vanilla, both at once, or taking turns.
 
@@ -105,16 +122,20 @@ archive/pc/mod/GorillaAkimbo.archive
 archive/pc/mod/GorillaAkimbo.archive.xl
 archive/pc/mod/GorillaAkimboLowered.archive
 archive/pc/mod/GorillaAkimboLowered.archive.xl
+archive/pc/mod/GorillaAkimboRifles.archive
+archive/pc/mod/GorillaAkimboRifles.archive.xl
 r6/config/modkeybinds/GorillaAkimbo.json
 r6/input/GorillaAkimbo.xml
 r6/scripts/GorillaAkimbo/GorillaAkimbo.reds
 r6/scripts/GorillaAkimbo/GorillaAkimboGadget.reds
+r6/scripts/GorillaAkimbo/GorillaAkimboGuns.reds
 r6/scripts/GorillaAkimbo/GorillaAkimboHints.reds
 r6/scripts/GorillaAkimbo/GorillaAkimboIndependent.reds
 r6/scripts/GorillaAkimbo/GorillaAkimboSettings.reds
 r6/scripts/GorillaAkimbo/GorillaAkimboSmart.reds
 r6/scripts/GorillaAkimbo/GorillaAkimboSounds.reds
 r6/scripts/GorillaAkimbo/GorillaAkimboTopMag.reds
+r6/scripts/GorillaAkimbo/GorillaAkimboVanilla.reds
 r6/tweaks/GorillaAkimbo/GorillaAkimbo.yaml
 ```
 
@@ -122,7 +143,7 @@ r6/tweaks/GorillaAkimbo/GorillaAkimbo.yaml
 
 ## Uninstallation
 
-**Unpair any dual-wielded SMGs or shotguns**, then remove the files above.
+**Unpair any dual-wielded SMGs, shotguns, assault rifles, Tech or Smart pistols and Tech revolvers**, then remove the files above.
 
 ## Credits
 

@@ -14,6 +14,10 @@ animations:
     vars: [dual_wield, w_base_shotgun]
     priority: 62
   - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_dual_wield_right_safe_v1_arasaka_masamune.anims
+    vars: [dual_wield, w_rifle_assault_arasaka_masamune]
+    priority: 61
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
     set: gorillaakimbo\animations\pma_dual_wield_right_safe_v1_arasaka_shingen.anims
     vars: [dual_wield, w_submachinegun_arasaka_shingen]
     priority: 61
@@ -38,12 +42,24 @@ animations:
     vars: [dual_wield, w_smg_midnight_borg]
     priority: 61
   - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_dual_wield_right_safe_v1_militech_ajax.anims
+    vars: [dual_wield, w_rifle_assault_militech_ajax]
+    priority: 61
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
     set: gorillaakimbo\animations\pma_dual_wield_right_safe_v1_militech_crusher.anims
     vars: [dual_wield, w_revolver_militech_crusher]
     priority: 61
   - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_dual_wield_right_safe_v1_militech_hercules.anims
+    vars: [dual_wield, w_special__militech_hercules]
+    priority: 61
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
     set: gorillaakimbo\animations\pma_dual_wield_right_safe_v1_militech_saratoga.anims
     vars: [dual_wield, w_submachinegun_militech_saratoga]
+    priority: 61
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_dual_wield_right_safe_v1_nokota_sidewinder.anims
+    vars: [dual_wield, w_rifle_assault_nokota_sidewinder]
     priority: 61
   - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
     set: gorillaakimbo\animations\pma_dual_wield_right_safe_v1_rostovic_palica.anims
@@ -57,6 +73,14 @@ animations:
     set: gorillaakimbo\animations\pma_dual_wield_right_safe_v1_techtronika_pozhar.anims
     vars: [dual_wield, w_rifle_precision__techtronika_pozhar]
     priority: 61
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_dual_wield_right_safe_v1d_nokota_copperhead.anims
+    vars: [dual_wield, w_rifle_assault_nokota_copperhead]
+    priority: 61
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_dual_wield_right_safe_v1d_nokota_copperhead.anims
+    vars: [dual_wield, w_base_rifle_assault]
+    priority: 62
   - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
     set: gorillaakimbo\animations\pma_dual_wield_right_safe_v2.anims
     vars: [dual_wield, w_shotgun_budget_carnage]
@@ -98,6 +122,10 @@ animations:
     vars: [dual_wield, w_base_shotgun_left]
     priority: 62
   - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_dual_wield_left_safe_v1_arasaka_masamune.anims
+    vars: [dual_wield, w_rifle_assault_arasaka_masamune_left]
+    priority: 61
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
     set: gorillaakimbo\animations\pma_dual_wield_left_safe_v1_arasaka_shingen.anims
     vars: [dual_wield, w_submachinegun_arasaka_shingen_left]
     priority: 61
@@ -122,12 +150,24 @@ animations:
     vars: [dual_wield, w_smg_midnight_borg_left]
     priority: 61
   - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_dual_wield_left_safe_v1_militech_ajax.anims
+    vars: [dual_wield, w_rifle_assault_militech_ajax_left]
+    priority: 61
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
     set: gorillaakimbo\animations\pma_dual_wield_left_safe_v1_militech_crusher.anims
     vars: [dual_wield, w_revolver_militech_crusher_left]
     priority: 61
   - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_dual_wield_left_safe_v1_militech_hercules.anims
+    vars: [dual_wield, w_special__militech_hercules_left]
+    priority: 61
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
     set: gorillaakimbo\animations\pma_dual_wield_left_safe_v1_militech_saratoga.anims
     vars: [dual_wield, w_submachinegun_militech_saratoga_left]
+    priority: 61
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_dual_wield_left_safe_v1_nokota_sidewinder.anims
+    vars: [dual_wield, w_rifle_assault_nokota_sidewinder_left]
     priority: 61
   - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
     set: gorillaakimbo\animations\pma_dual_wield_left_safe_v1_rostovic_palica.anims
@@ -141,6 +181,14 @@ animations:
     set: gorillaakimbo\animations\pma_dual_wield_left_safe_v1_techtronika_pozhar.anims
     vars: [dual_wield, w_rifle_precision__techtronika_pozhar_left]
     priority: 61
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_dual_wield_left_safe_v1d_nokota_copperhead.anims
+    vars: [dual_wield, w_rifle_assault_nokota_copperhead_left]
+    priority: 61
+  - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pma_dual_wield_left_safe_v1d_nokota_copperhead.anims
+    vars: [dual_wield, w_base_rifle_assault_left]
+    priority: 62
   - entity: [base\characters\entities\player\player_ma_fpp.ent, ep1\characters\entities\player\player_ma_fpp_ep1.ent]
     set: gorillaakimbo\animations\pma_dual_wield_left_safe_v2.anims
     vars: [dual_wield, w_shotgun_budget_carnage_left]
@@ -182,6 +230,10 @@ animations:
     vars: [dual_wield, w_base_shotgun]
     priority: 62
   - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_dual_wield_right_safe_v1_arasaka_masamune.anims
+    vars: [dual_wield, w_rifle_assault_arasaka_masamune]
+    priority: 61
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
     set: gorillaakimbo\animations\pwa_dual_wield_right_safe_v1_arasaka_shingen.anims
     vars: [dual_wield, w_submachinegun_arasaka_shingen]
     priority: 61
@@ -206,12 +258,24 @@ animations:
     vars: [dual_wield, w_smg_midnight_borg]
     priority: 61
   - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_dual_wield_right_safe_v1_militech_ajax.anims
+    vars: [dual_wield, w_rifle_assault_militech_ajax]
+    priority: 61
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
     set: gorillaakimbo\animations\pwa_dual_wield_right_safe_v1_militech_crusher.anims
     vars: [dual_wield, w_revolver_militech_crusher]
     priority: 61
   - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_dual_wield_right_safe_v1_militech_hercules.anims
+    vars: [dual_wield, w_special__militech_hercules]
+    priority: 61
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
     set: gorillaakimbo\animations\pwa_dual_wield_right_safe_v1_militech_saratoga.anims
     vars: [dual_wield, w_submachinegun_militech_saratoga]
+    priority: 61
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_dual_wield_right_safe_v1_nokota_sidewinder.anims
+    vars: [dual_wield, w_rifle_assault_nokota_sidewinder]
     priority: 61
   - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
     set: gorillaakimbo\animations\pwa_dual_wield_right_safe_v1_rostovic_palica.anims
@@ -225,6 +289,14 @@ animations:
     set: gorillaakimbo\animations\pwa_dual_wield_right_safe_v1_techtronika_pozhar.anims
     vars: [dual_wield, w_rifle_precision__techtronika_pozhar]
     priority: 61
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_dual_wield_right_safe_v1d_nokota_copperhead.anims
+    vars: [dual_wield, w_rifle_assault_nokota_copperhead]
+    priority: 61
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_dual_wield_right_safe_v1d_nokota_copperhead.anims
+    vars: [dual_wield, w_base_rifle_assault]
+    priority: 62
   - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
     set: gorillaakimbo\animations\pwa_dual_wield_right_safe_v2.anims
     vars: [dual_wield, w_shotgun_budget_carnage]
@@ -266,6 +338,10 @@ animations:
     vars: [dual_wield, w_base_shotgun_left]
     priority: 62
   - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_dual_wield_left_safe_v1_arasaka_masamune.anims
+    vars: [dual_wield, w_rifle_assault_arasaka_masamune_left]
+    priority: 61
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
     set: gorillaakimbo\animations\pwa_dual_wield_left_safe_v1_arasaka_shingen.anims
     vars: [dual_wield, w_submachinegun_arasaka_shingen_left]
     priority: 61
@@ -290,12 +366,24 @@ animations:
     vars: [dual_wield, w_smg_midnight_borg_left]
     priority: 61
   - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_dual_wield_left_safe_v1_militech_ajax.anims
+    vars: [dual_wield, w_rifle_assault_militech_ajax_left]
+    priority: 61
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
     set: gorillaakimbo\animations\pwa_dual_wield_left_safe_v1_militech_crusher.anims
     vars: [dual_wield, w_revolver_militech_crusher_left]
     priority: 61
   - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_dual_wield_left_safe_v1_militech_hercules.anims
+    vars: [dual_wield, w_special__militech_hercules_left]
+    priority: 61
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
     set: gorillaakimbo\animations\pwa_dual_wield_left_safe_v1_militech_saratoga.anims
     vars: [dual_wield, w_submachinegun_militech_saratoga_left]
+    priority: 61
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_dual_wield_left_safe_v1_nokota_sidewinder.anims
+    vars: [dual_wield, w_rifle_assault_nokota_sidewinder_left]
     priority: 61
   - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
     set: gorillaakimbo\animations\pwa_dual_wield_left_safe_v1_rostovic_palica.anims
@@ -309,6 +397,14 @@ animations:
     set: gorillaakimbo\animations\pwa_dual_wield_left_safe_v1_techtronika_pozhar.anims
     vars: [dual_wield, w_rifle_precision__techtronika_pozhar_left]
     priority: 61
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_dual_wield_left_safe_v1d_nokota_copperhead.anims
+    vars: [dual_wield, w_rifle_assault_nokota_copperhead_left]
+    priority: 61
+  - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
+    set: gorillaakimbo\animations\pwa_dual_wield_left_safe_v1d_nokota_copperhead.anims
+    vars: [dual_wield, w_base_rifle_assault_left]
+    priority: 62
   - entity: [base\characters\entities\player\player_wa_fpp.ent, ep1\characters\entities\player\player_wa_fpp_ep1.ent]
     set: gorillaakimbo\animations\pwa_dual_wield_left_safe_v2.anims
     vars: [dual_wield, w_shotgun_budget_carnage_left]

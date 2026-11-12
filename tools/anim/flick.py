@@ -3,19 +3,37 @@ the gun tips up like the pistol's (smoothed, scaled down for long guns) while th
 arm goes straight down out of view, holds there and rises straight back. This side's arm moves rigidly with
 the gun, so its FK chain and IK targets always agree.
 
-usage: flick.py <src glb> <out glb> <right|left> [lift share]
+usage: flick.py <src glb> <out glb> <right|left> [lift share] [--rest <glb>] [--hands <glb>]
+  --rest   a gun's raised pose clips (authoring/raised): the arm starts and ends in that glb's idlepose_shoulder
+           (_l on the left) instead of the pistol's first reload frame; the motion itself is the same
+  --hands  equip, unequip and melee (_l on the left) are taken from this glb (the same clips, moved to that pose)
 """
-import sys
+import os, sys
 import numpy as np
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import manifest
 from glb import Glb
 from fk import Clip, qinv, qmul, qrot, slerp
 
-SRC, OUT, SIDE = sys.argv[1], sys.argv[2], sys.argv[3]
-LIFT = float(sys.argv[4]) if len(sys.argv) > 4 else 0.5   # share of the pistol's tip-up kept
-FPS = 30.0
+ARGV = sys.argv[1:]
+
+
+def option(name):
+    if name in ARGV:
+        i = ARGV.index(name); v = ARGV[i + 1]; del ARGV[i:i + 2]
+        return v
+    return None
+
+
+REST, HANDS = option('--rest'), option('--hands')
+SRC, OUT, SIDE = ARGV[0], ARGV[1], ARGV[2]
+LIFT = float(ARGV[3]) if len(ARGV) > 3 else 0.5   # share of the pistol's tip-up kept
+# Clip layout: weapons.json reload_clip, the same numbers GorillaAkimboGuns.reds gives the script.
+LAYOUT = manifest.load()['reload_clip']
+FPS = float(LAYOUT['fps'])
 LIFT_F = 20        # pistol frames used for the tip-up (magazine out at frame 8)
-DROP_S = 0.30      # seconds to go down out of view
-RISE_F = (36, 69)  # pistol empty reload frames used for the rise: up from below, overshoot, settle
+DROP_S = LAYOUT['frames']['drop'] / FPS      # seconds to go down out of view
+RISE_F = tuple(LAYOUT['frames']['rise'])  # pistol empty reload frames used for the rise: up from below, overshoot, settle
 RISE_ROT = 0.4     # share of the pistol's rise rotation kept (muzzle up, turned in), so long barrels stay on their side
 RISE_BLEND = 0.35  # share of the rise over which the gun eases from its drop pose onto the pistol path
 DOWN = 0.62        # metres the gun goes down
@@ -24,10 +42,10 @@ OUT_M = 0.08       # metres it drifts outward on the way down
 FWD_M = 0.12       # metres it moves forward on the way down, so the stock stays clear of the camera
 SMOOTH = 2.5       # gaussian sigma in frames for the pistol path
 FADE_F = 8         # frames over which the tip-up fades in
-PLAIN_F = 12       # plain variant (_02 clips, shell-by-shell guns): frames to go straight down, no tip-up
-OPEN_F = 36        # the tip-up is stretched over this many frames (1.2 s, GorillaAkimboReload.OpenEnd) so the magazine
+PLAIN_F = LAYOUT['frames']['plain']       # plain variant (_02 clips, shell-by-shell guns): frames to go straight down, no tip-up
+OPEN_F = LAYOUT['frames']['open']        # the tip-up is stretched over this many frames (36: 1.2 s, OpenEnd) so the magazine
                    # has time to fall before the drop; the script picks the playback speed per gun
-PRE_F = 105        # clip frames before the rise (3.5 s, GorillaAkimboReload.HoldEnd): the drop ends by frame 45 (DropEnd),
+PRE_F = LAYOUT['frames']['pre']        # clip frames before the rise (105: 3.5 s, HoldEnd): the drop ends by frame 45 (DropEnd),
                    # then a hold the script fast-forwards so the rise starts when the gun's ammo lands
 SUFFIX = '' if SIDE == 'right' else '_l'
 S, s = ('Right', 'right') if SIDE == 'right' else ('Left', 'left')
@@ -79,13 +97,23 @@ def subtree(i, out):
 side = set()
 for t in tops:
     subtree(t, side)
+# A raised pose: this side's joints at rest come from its idle clip (the same rig).
+OVER = REST_W = None
+if REST:
+    rc = Clip(Glb(REST), 'idlepose_shoulder' + SUFFIX)
+    OVER = {i: rc.local(i, 0) for i in side}
+    REST_W = rc.world(0)   # the idle the graph cuts to when the reload ends: this side's joints are placed as there
 
 for name, (src, n) in CLIPS.items():
     plain = name.endswith('_02')
     name += SUFFIX
     c = Clip(src_g, src + SUFFIX)
-    rest = c.world(0)
+    rest = c.world(0, OVER)
+    if REST_W:
+        for i in side:
+            rest[i] = REST_W[i]
     g0, q0 = rest[gun]
+    g0p, q0p = c.world(0)[gun]   # the pistol's own rest: its path is taken as an offset from it
     # Pistol gun path over the tip-up, smoothed, as a scaled offset from the rest pose.
     raw = [c.world(f)[gun] for f in range(LIFT_F + 5)]
     P, Q = smooth_path([p for p, _ in raw], [q for _, q in raw], SMOOTH)
@@ -93,7 +121,7 @@ for name, (src, n) in CLIPS.items():
     for f in range(LIFT_F + 1):
         # Fade the offset in over the first frames so the clip starts exactly at rest.
         k = LIFT * ease(f / FADE_F)
-        lift.append((g0 + (P[f] - g0) * k, slerp(IDENT, qmul(Q[f], qinv(q0)), k)))
+        lift.append((g0 + (P[f] - g0p) * k, slerp(IDENT, qmul(Q[f], qinv(q0p)), k)))
     th = np.radians(-PITCH) / 2  # about the model X axis; negative lowers the muzzle (glTF: -Z forward)
     drop = (g0 + np.array([0.0, -DOWN, -FWD_M]) + out_dir * OUT_M, np.array([np.sin(th), 0.0, 0.0, np.cos(th)]))
     # Pistol rise from the empty reload, smoothed, as offsets from rest; the residual at its end is faded out.
@@ -152,7 +180,7 @@ for name, (src, n) in CLIPS.items():
         channels.append({'sampler': len(samplers) - 1, 'target': {'node': i, 'path': path}})
 
     for i in sorted(animated):
-        lt, lr = c.local(i, 0)
+        lt, lr = OVER[i] if OVER and i in OVER else c.local(i, 0)
         if i in tops:
             pw = rest[c.par[i]]
             pj, qj = rest[i]
@@ -178,5 +206,19 @@ for name, (src, n) in CLIPS.items():
     a['samplers'], a['channels'], a['extras'] = samplers, channels, ex
     print(name, n, 'frames from', src + SUFFIX)
 
+if HANDS:
+    h = Glb(HANDS)
+    for name in ('equip', 'unequip', 'melee'):
+        name += SUFFIX
+        src, a = h.anim(name), g.anim(name)
+        samplers = []
+        for s in src['samplers']:
+            samplers.append({'input': g.add_acc(h.acc(s['input']), h.j['accessors'][s['input']]['type']),
+                             'output': g.add_acc(h.acc(s['output']), h.j['accessors'][s['output']]['type']),
+                             'interpolation': s.get('interpolation', 'LINEAR')})
+        ex = dict(a['extras'])
+        ex['optimizationHints'] = dict(ex.get('optimizationHints', {}), preferSIMD=True)
+        a['samplers'], a['channels'], a['extras'] = samplers, [dict(ch) for ch in src['channels']], ex
+        print(name, 'from', HANDS)
 g.save(OUT)
 print('saved', OUT)

@@ -11,7 +11,7 @@ partner guns or categories of that pick, male and female V). One set per family 
 w_smg__arasaka_shingen__mag_<long|smg|pair>_<left|right>.anims, holding reload, reload_01, reload_02 (pick 0, 1, 2) and
 empty_reload, _01, _02 (the same tracks, held seated to f111).
 
-spec (json): {"<family>_<side>": [{"clips": [<clip glb>...], "side": "Left"|"Right", "K": 25, "v": [x, y, z] (m/s,
+spec (json; clips relative to paths.clips, as <body>/<clip>.glb): {"<family>_<side>": [{"clips": [<clip glb>...], "side": "Left"|"Right", "K": 25, "v": [x, y, z] (m/s,
 relative push), "axis": [x, y, z], "spin": deg/s, "H": frame}, ... x3 picks]}
 
 usage: magtrack.py <spec.json> <out dir> [--probe]
@@ -20,11 +20,17 @@ usage: magtrack.py <spec.json> <out dir> [--probe]
 import sys, os, json, copy
 import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import manifest
 from glb import Glb
 from fk import Clip
 
-WA = 'C:/Modding/_tools/gamefiles/wanim3/glb/'
-MAGGLB = WA + 'w_smg__arasaka_shingen__mag_std.anims.glb'
+# The gun's vanilla magazine set and weapon set (glb exports of the game files): weapons.json, topmag.magazine.
+MAG = manifest.magazine()
+MAGGLB = manifest.gamefile(MAG['vanilla_set'], '.glb')
+WEAPONGLB = manifest.gamefile(MAG['weapon_set'], '.glb')
+for _p in (MAGGLB, WEAPONGLB):
+    if not os.path.exists(_p):
+        raise SystemExit(f'missing {_p}: run build.sh extract')
 FPS = 30.0
 GRAV = np.array([0, -9.81, 0])
 NAMES = ('reload', 'reload_01', 'reload_02')
@@ -55,7 +61,7 @@ def rotm(axis, ang):
 
 
 # ---- the vanilla magazine rig ------------------------------------------------------------------------------------
-_gw = Glb(WA + 'w_smg__arasaka_shingen__base1.anims.glb')
+_gw = Glb(WEAPONGLB)
 SLOT = m4(*Clip(_gw, 'reload').world(0)[_gw.names.index('mag_slot')])
 MG = Glb(MAGGLB)
 JOINTS = ('magazine', 'magazine_reload')                    # identical tracks in every vanilla clip
@@ -189,7 +195,9 @@ def build_anim(name, Gs, Ss, pick, probe=False):
 
 
 def tracks_for(entry, arms=None):
-    arms = arms or [Arm(p) for p in entry['clips']]
+    # the mean Shingen pose comes from pose_clips when the entry has them (the clips the flight was made with), so
+    # clips added to a pick later do not move its track
+    arms = arms or [Arm(p) for p in entry.get('pose_clips') or entry['clips']]
     Wm = mean_pose(arms, entry['side'])
     return flight(Wm, entry['K'], entry['v'], entry['axis'], entry['spin'], entry['H'], centre=entry.get('centre'),
                   gunvel=entry.get('gunvel', 'pre'))
@@ -207,10 +215,16 @@ def write_set(entries, out, probe=False):
 
 
 if __name__ == '__main__':
-    spec = json.load(open(sys.argv[1])); outdir = sys.argv[2]; probe = '--probe' in sys.argv
+    spec = manifest.mag_spec(sys.argv[1])
+    for _k, _v in spec.items():
+        for _e in ([] if _k.startswith('_') else _v):
+            for _c in _e['clips'] + _e.get('pose_clips', []):
+                if not os.path.exists(_c):
+                    raise SystemExit(f'{sys.argv[1]}: clip {_c} is missing')
+    outdir = sys.argv[2]; probe = '--probe' in sys.argv
     os.makedirs(outdir, exist_ok=True)
     for key, entries in spec.items():
         if key.startswith('_'): continue
         global_bin = (bytearray(MG.bin), copy.deepcopy(MG.j))
-        write_set(entries, os.path.join(outdir, f'w_smg__arasaka_shingen__mag_{key}.glb'), probe)
+        write_set(entries, os.path.join(outdir, f'{MAG["set_prefix"]}_{key}.glb'), probe)
         MG.bin, MG.j = global_bin

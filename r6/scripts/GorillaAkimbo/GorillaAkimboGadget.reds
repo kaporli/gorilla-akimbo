@@ -113,15 +113,6 @@ protected final func OnUpdate(timeDelta: Float, stateContext: ref<StateContext>,
   }
 }
 
-// The throw is over once the left gun is equipped again.
-@wrapMethod(EquipCycleEvents)
-protected func OnExit(stateContext: ref<StateContext>, scriptInterface: ref<StateGameScriptInterface>) -> Void {
-  wrappedMethod(stateContext, scriptInterface);
-  if this.IsLeftHandLogic(this.stateMachineInstanceData) && IsDefined(GameObject.GetLeftActiveWeapon(scriptInterface.executionOwner)) {
-    GorillaAkimboGadgetSystem.Get(scriptInterface.GetGame()).Stop();
-  }
-}
-
 @wrapMethod(CombatGadgetUnequipEvents)
 protected func OnEnter(stateContext: ref<StateContext>, scriptInterface: ref<StateGameScriptInterface>) -> Void {
   wrappedMethod(stateContext, scriptInterface);
@@ -146,100 +137,9 @@ protected cb func OnCombatGadgetChanged(value: Int32) -> Bool {
   return result;
 }
 
-@wrapMethod(WeaponReadyListenerTransition)
-protected final const func IsWeaponReadyToShoot(const stateContext: ref<StateContext>, const scriptInterface: ref<StateGameScriptInterface>) -> Bool {
-  if !this.IsRightWeaponLogic() || !GorillaAkimboGadgetSystem.Active(scriptInterface.executionOwner)
-    || !stateContext.GetBoolParameter(n"UnequipToGadgetOrConsumable", true) {
-    return wrappedMethod(stateContext, scriptInterface);
-  }
-  // The game's checks, without the one for the left gun being put away for the grenade.
-  if !this.m_weaponReadyListenerReturnValue || stateContext.IsStateMachineActive(n"Consumable") {
-    return false;
-  }
-  if this.m_isInWorkspot && !stateContext.GetBoolParameter(n"isInVehCombat", true) && !stateContext.GetBoolParameter(n"isInDriverCombat", true) {
-    return false;
-  }
-  if !this.IsRightHandInEquippedState(stateContext) {
-    return false;
-  }
-  if (scriptInterface.executionOwner as PlayerPuppet).IsAimingAtFriendly() {
-    return this.ShouldIgnoreWeaponSafe(scriptInterface);
-  }
-  return true;
-}
-
-// A reload of the right gun goes on during a pair's throw (the game ends it when a grenade is used).
-@wrapMethod(ReloadDecisions)
-protected final const func ExitCondition(const stateContext: ref<StateContext>, const scriptInterface: ref<StateGameScriptInterface>) -> Bool {
-  if !GorillaAkimboGadget.KeepsReload(this.IsLeftWeaponLogic(), scriptInterface.executionOwner) {
-    return wrappedMethod(stateContext, scriptInterface);
-  }
-  if this.IsReloadDurationComplete(stateContext, scriptInterface) && stateContext.GetBoolParameter(this.GetFinishedReload(), true) {
-    return true;
-  }
-  if stateContext.IsStateMachineActive(n"Consumable") {
-    return true;
-  }
-  if stateContext.GetBoolParameter(n"TryInterruptReload") && !this.IsReloadUninterruptible(stateContext, scriptInterface) {
-    return true;
-  }
-  let fire = GorillaAkimboIndependent.Active(scriptInterface.executionOwner) ? GorillaAkimboIndependent.FireAction(false, scriptInterface.GetGame()) : n"RangedAttack";
-  if this.ShouldShoot(scriptInterface) && scriptInterface.IsActionJustPressed(fire)
-    && Cast<Int32>(scriptInterface.GetStatsSystem().GetStatValue(Cast<StatsObjectID>(scriptInterface.ownerEntityID), gamedataStatType.ReloadAmount)) > 0 {
-    if !this.GetWeaponObject(scriptInterface).IsMagazineEmpty() && !this.IsReloadUninterruptible(stateContext, scriptInterface) {
-      return true;
-    }
-  }
-  if !scriptInterface.HasStatFlag(gamedataStatType.CanWeaponReloadWhileVaulting) && stateContext.IsStateActive(n"Locomotion", n"vault") {
-    return true;
-  }
-  return false;
-}
-
-// A quick throw doesn't wait for the right gun's reload.
-@wrapMethod(CombatGadgetInactiveDecisions)
-protected final const func ToCombatGadgetQuickThrow(const stateContext: ref<StateContext>, const scriptInterface: ref<StateGameScriptInterface>) -> Bool {
-  if GorillaAkimboGadgetSystem.Active(scriptInterface.executionOwner) {
-    return scriptInterface.GetActionValue(n"UseCombatGadget") == 0.0 && NotEquals(stateContext.GetStateMachineCurrentState(n"UpperBody"), n"useConsumable");
-  }
-  return wrappedMethod(stateContext, scriptInterface);
-}
-
-// The game stops the gun's firing when the grenade comes up and when a charge starts or ends; the right gun keeps
-// firing during a pair's throw.
-@wrapMethod(CombatGadgetEquipEvents)
-protected func OnEnter(stateContext: ref<StateContext>, scriptInterface: ref<StateGameScriptInterface>) -> Void {
-  if !GorillaAkimboGadgetSystem.Active(scriptInterface.executionOwner) {
-    wrappedMethod(stateContext, scriptInterface);
-    return;
-  }
-  this.SetBlackbordThrowUnequip(scriptInterface, false);
-  scriptInterface.PushAnimationEvent(n"CombatGadgetEquip");
-  stateContext.RemovePermanentBoolParameter(n"cgCached");
-  this.SetBlackboardIntVariable(scriptInterface, GetAllBlackboardDefs().PlayerStateMachine.CombatGadget, 2);
-}
-
-// Charging: the grenade stays in the left hand and the right gun stays up (the game puts it away and moves the
-// grenade to the right hand). The trajectory preview starts from the left hand.
-@wrapMethod(CombatGadgetChargeEvents)
-protected func OnEnter(stateContext: ref<StateContext>, scriptInterface: ref<StateGameScriptInterface>) -> Void {
-  if !GorillaAkimboGadgetSystem.Active(scriptInterface.executionOwner) {
-    wrappedMethod(stateContext, scriptInterface);
-    return;
-  }
-  let broadcaster = scriptInterface.executionOwner.GetStimBroadcasterComponent();
-  if IsDefined(broadcaster) {
-    broadcaster.AddActiveStimuli(scriptInterface.executionOwner, gamedataStimType.IllegalInteraction, -1.0);
-  }
-  this.DisableCameraBobbing(stateContext, scriptInterface, true);
-  this.ShowInputHint(scriptInterface, n"CancelChargingCG", n"Locomotion", "LocKey#49906");
-  this.initiated = false;
-  this.itemSwitched = false;
-  stateContext.RemovePermanentBoolParameter(n"rightHandThrow");
-  this.SetCombatGadgetAnimFeature(scriptInterface, false, true);
-  this.SetItemInLeftHand(scriptInterface, true);
-}
-
+// Charging: the grenade stays in the left hand, where the trajectory preview starts (the game moves it to the right
+// hand once the right gun is away). Written by hand; tools/vanilla/derive.py reports when the game's method changes.
+// The other throw methods are the game's own with small edits, in GorillaAkimboVanilla.reds.
 @wrapMethod(CombatGadgetChargeEvents)
 protected final func OnUpdate(timeDelta: Float, stateContext: ref<StateContext>, scriptInterface: ref<StateGameScriptInterface>) -> Void {
   if !GorillaAkimboGadgetSystem.Active(scriptInterface.executionOwner) {
@@ -264,86 +164,18 @@ protected final func OnUpdate(timeDelta: Float, stateContext: ref<StateContext>,
   }
 }
 
-@addMethod(CombatGadgetChargeEvents)
-private final func GorillaChargeEnd(stateContext: ref<StateContext>, scriptInterface: ref<StateGameScriptInterface>) {
-  this.TogglePreview(false, scriptInterface, stateContext);
-  let broadcaster = scriptInterface.executionOwner.GetStimBroadcasterComponent();
-  if IsDefined(broadcaster) {
-    broadcaster.RemoveActiveStimuliByName(scriptInterface.executionOwner, gamedataStimType.IllegalInteraction);
-  }
-  this.DisableCameraBobbing(stateContext, scriptInterface, false);
-  this.RemoveInputHint(scriptInterface, n"CancelChargingCG", n"Locomotion");
-}
-
-@wrapMethod(CombatGadgetChargeEvents)
-protected final func OnExitToCombatGadgetChargedThrow(stateContext: ref<StateContext>, scriptInterface: ref<StateGameScriptInterface>) -> Void {
-  if !GorillaAkimboGadgetSystem.Active(scriptInterface.executionOwner) {
-    wrappedMethod(stateContext, scriptInterface);
-    return;
-  }
-  this.GorillaChargeEnd(stateContext, scriptInterface);
-}
-
-@wrapMethod(CombatGadgetChargeEvents)
-protected final func OnExitToCombatGadgetWaitForUnequip(stateContext: ref<StateContext>, scriptInterface: ref<StateGameScriptInterface>) -> Void {
-  if !GorillaAkimboGadgetSystem.Active(scriptInterface.executionOwner) {
-    wrappedMethod(stateContext, scriptInterface);
-    return;
-  }
-  this.GorillaChargeEnd(stateContext, scriptInterface);
-}
-
-@wrapMethod(CombatGadgetChargeEvents)
-protected final func OnExitToCombatGadgetUnequip(stateContext: ref<StateContext>, scriptInterface: ref<StateGameScriptInterface>) -> Void {
-  if !GorillaAkimboGadgetSystem.Active(scriptInterface.executionOwner) {
-    wrappedMethod(stateContext, scriptInterface);
-    return;
-  }
-  this.GorillaChargeEnd(stateContext, scriptInterface);
-}
-
-@wrapMethod(CombatGadgetChargeEvents)
-protected final func OnExitToCombatGadgetEquip(stateContext: ref<StateContext>, scriptInterface: ref<StateGameScriptInterface>) -> Void {
-  if !GorillaAkimboGadgetSystem.Active(scriptInterface.executionOwner) {
-    wrappedMethod(stateContext, scriptInterface);
-    return;
-  }
-  scriptInterface.PushAnimationEvent(n"CombatGadgetStopCharge");
-  stateContext.SetPermanentBoolParameter(n"CancelAction", true, true);
-  this.GorillaChargeEnd(stateContext, scriptInterface);
-}
-
-// The charged throw: the left hand's throw, along the charged throw's path and aim.
-@wrapMethod(CombatGadgetChargedThrowEvents)
-protected func OnEnter(stateContext: ref<StateContext>, scriptInterface: ref<StateGameScriptInterface>) -> Void {
-  if !GorillaAkimboGadgetSystem.Active(scriptInterface.executionOwner) {
-    wrappedMethod(stateContext, scriptInterface);
-    return;
-  }
-  this.SetBlackboardIntVariable(scriptInterface, GetAllBlackboardDefs().PlayerStateMachine.CombatGadget, 4);
-  this.SetBlackbordThrowUnequip(scriptInterface, true);
-  this.SetItemInLeftHand(scriptInterface, false);
-  this.SetCombatGadgetAnimFeature(scriptInterface, true, false);
-  scriptInterface.PushAnimationEvent(n"CombatGadgetQuickThrow");
-  this.SetThrowableAnimFeatureOnGrenade(scriptInterface, 2, true);
-  this.m_grenadeThrown = false;
-  DefaultTransition.PlayRumble(scriptInterface, "heavy_pulse");
-  let aimForward: Vector4;
-  let aimPosition: Vector4;
-  scriptInterface.GetTargetingSystem().GetDefaultCrosshairData(scriptInterface.executionOwner, aimPosition, aimForward);
-  let transform = scriptInterface.executionOwner.GetWorldTransform();
-  this.m_localAimForward = WorldTransform.TransformInvPoint(transform, scriptInterface.executionOwner.GetWorldPosition() + aimForward);
-  this.m_localAimPosition = WorldTransform.TransformInvPoint(transform, aimPosition);
-}
-
 // After a pair's throw in a public safe zone the left gun comes back with a fresh safe timer and lowers about a second
 // later while the right gun, fired during the throw, is still up. With one hand lowered and the other raised the arm
 // graph plays the game's pistol lowered pose on the right hand for a moment (a large swing across the view). The left
 // gun of a grip pair therefore lowers only once the right gun has lowered.
+// Independent firing: guns don't lower while the right mouse button (left trigger) is held, as with the fire button.
 @wrapMethod(PublicSafeDecisions)
 protected final const func EnterCondition(const stateContext: ref<StateContext>, const scriptInterface: ref<StateGameScriptInterface>) -> Bool {
   if this.IsLeftWeaponLogic() && GorillaAkimboGadget.IsPair(scriptInterface.executionOwner)
-    && scriptInterface.localBlackboard.GetInt(GetAllBlackboardDefs().PlayerStateMachine.RightWeapon) != 6 {
+    && scriptInterface.localBlackboard.GetInt(GetAllBlackboardDefs().PlayerStateMachine.RightWeapon) != EnumInt(gamePSMRangedWeaponStates.Safe) {
+    return false;
+  }
+  if GorillaAkimboIndependent.Active(scriptInterface.executionOwner) && scriptInterface.GetActionValue(n"CameraAim") > 0.0 {
     return false;
   }
   return wrappedMethod(stateContext, scriptInterface);

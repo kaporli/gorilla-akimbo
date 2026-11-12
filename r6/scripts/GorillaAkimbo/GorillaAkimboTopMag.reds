@@ -1,4 +1,4 @@
-// Top-magazine guns (Shingen, Midnight Borg) reload two-handed while dual-wielded: the other hand, still holding
+// Top-magazine guns (the Shingen) reload two-handed while dual-wielded: the other hand, still holding
 // its gun, knocks the magazine out, then both guns go down while the new magazine goes in and come back up.
 // One arm clip drives both arms: during the reload the left hand reports a two-handed item type, which turns off
 // the dual-wield graph's left-arm overlay, so the right hand's part of the graph poses both arms.
@@ -15,15 +15,8 @@ public abstract class GorillaAkimboTopMag {
     return 0;
   }
 
-  public static func Shingen() -> Int32 {
-    return 1;
-  }
-
-  public static func Borg() -> Int32 {
-    return 2;
-  }
-
-  // Which top-magazine gun this is, by its sound set (shared by every variant, iconic and modded copy).
+  // Which top-magazine gun this is (0 when it isn't one), by its sound set (shared by every variant, iconic and
+  // modded copy). Only guns whose two-handed clips ship count: see top-mag in tools/anim/weapons.json.
   public static func Kind(weapon: ref<WeaponObject>) -> Int32 {
     if !IsDefined(weapon) {
       return GorillaAkimboTopMag.None();
@@ -32,25 +25,18 @@ public abstract class GorillaAkimboTopMag {
     if !IsDefined(record) {
       return GorillaAkimboTopMag.None();
     }
-    switch record.AudioName() {
-      case n"wea_set_shingen":
-        return GorillaAkimboTopMag.Shingen();
-      case n"wea_set_borg4a":
-        return GorillaAkimboTopMag.Borg();
-    }
-    return GorillaAkimboTopMag.None();
+    return GorillaAkimboGuns.TopMagKind(record.AudioName());
   }
 
   // Clip seconds at which the new magazine is seated (the reload's ammo lands then), from the gun's own reload
-  // animation at 30 fps: Shingen f62 of 96, Midnight Borg f73 of 108 (its empty reload moves the magazine the same
-  // way). A pair's clip runs to the later gun's.
+  // animation. A pair's clip runs to the later gun's.
   public static func Seated(kind: Int32) -> Float {
-    return kind == GorillaAkimboTopMag.Borg() ? 73.0 / 30.0 : 62.0 / 30.0;
+    return GorillaAkimboGuns.TopMagSeated(kind);
   }
 
   // Clip length in seconds.
   public static func Length(kind: Int32) -> Float {
-    return kind == GorillaAkimboTopMag.Borg() ? 108.0 / 30.0 : 96.0 / 30.0;
+    return GorillaAkimboGuns.TopMagLength(kind);
   }
 
   // Clip seconds before the end at which the arms are handed back to the dual-wield idle (6 frames).
@@ -58,18 +44,18 @@ public abstract class GorillaAkimboTopMag {
     return 6.0 / 30.0;
   }
 
-  // Clip seconds at which both guns are out of view (Shingen f46 to f62, Midnight Borg f53 to f73). The other gun's
-  // ammo starts going in at Down; the clip is held between HoldStart and HoldEnd until that ammo is in.
+  // Clip seconds at which both guns are out of view. The other gun's ammo starts going in at Down; the clip is held
+  // between HoldStart and HoldEnd until that ammo is in.
   public static func Down(kind: Int32) -> Float {
-    return kind == GorillaAkimboTopMag.Borg() ? 53.0 / 30.0 : 46.0 / 30.0;
+    return GorillaAkimboGuns.TopMagDown(kind);
   }
 
   public static func HoldStart(kind: Int32) -> Float {
-    return kind == GorillaAkimboTopMag.Borg() ? 55.0 / 30.0 : 48.0 / 30.0;
+    return GorillaAkimboGuns.TopMagHoldStart(kind);
   }
 
   public static func HoldEnd(kind: Int32) -> Float {
-    return kind == GorillaAkimboTopMag.Borg() ? 71.0 / 30.0 : 60.0 / 30.0;
+    return GorillaAkimboGuns.TopMagHoldEnd(kind);
   }
 
   // Seconds into the reload at which the gun's own animation reaches gun seconds t (for its sounds). The gun's
@@ -78,8 +64,8 @@ public abstract class GorillaAkimboTopMag {
     return t / speed;
   }
 
-  // The long shotgun in the other hand, by its sound set: n"None" for any other gun. Beside these the clips are
-  // lupper, axe and hang, so the magazine leaves along a different hit.
+  // The long gun in the other hand, by its sound set: n"None" for any other gun. Beside these the clips are lupper,
+  // axe and hang, so the magazine leaves along a different hit.
   public static func LongPartner(weapon: ref<WeaponObject>) -> CName {
     if !IsDefined(weapon) {
       return n"None";
@@ -88,21 +74,7 @@ public abstract class GorillaAkimboTopMag {
     if !IsDefined(record) {
       return n"None";
     }
-    switch record.AudioName() {
-      case n"wea_set_carnage":
-        return n"carnage";
-      case n"wea_set_tactician":
-        return n"tactician";
-      case n"wea_set_zhuo":
-        return n"zhuo";
-      case n"wea_set_igla":
-        return n"igla";
-      case n"wea_set_testera":
-        return n"testera";
-      case n"wea_set_satara":
-        return n"satara";
-    }
-    return n"None";
+    return GorillaAkimboGuns.LongPartner(record.AudioName());
   }
 
   // The magazine track set of this hand's gun, as the anim wrapper on the gun that selects it in archive.xl: a
@@ -169,7 +141,7 @@ public abstract class GorillaAkimboTopMag {
     if mine == GorillaAkimboTopMag.None() || other == GorillaAkimboTopMag.None() {
       return GorillaAkimboTopMag.None();
     }
-    return mine == GorillaAkimboTopMag.Borg() || other == GorillaAkimboTopMag.Borg() ? GorillaAkimboTopMag.Borg() : GorillaAkimboTopMag.Shingen();
+    return GorillaAkimboTopMag.Seated(other) > GorillaAkimboTopMag.Seated(mine) ? other : mine;
   }
 
   // The reload time of a gun as its reload would start now (empty or not).
@@ -654,6 +626,7 @@ private final func GorillaTopMagUpdate(timeDelta: Float, scriptInterface: ref<St
 protected func OnExit(stateContext: ref<StateContext>, scriptInterface: ref<StateGameScriptInterface>) -> Void {
   wrappedMethod(stateContext, scriptInterface);
   GorillaAkimboTopMagSystem.Get(scriptInterface.GetGame()).SetReloading(this.IsLeftWeaponLogic(), false);
+  this.GorillaOwnEnd();
   if this.m_gorillaTopMag {
     this.GorillaTopMagEnd(stateContext, scriptInterface);
   }
@@ -664,6 +637,7 @@ protected func OnForcedExit(stateContext: ref<StateContext>, scriptInterface: re
   wrappedMethod(stateContext, scriptInterface);
   let topMag = GorillaAkimboTopMagSystem.Get(scriptInterface.GetGame());
   topMag.SetReloading(this.IsLeftWeaponLogic(), false);
+  this.GorillaOwnEnd();
   if this.m_gorillaTopMag {
     this.GorillaTopMagEnd(stateContext, scriptInterface);
     topMag.SetPending(!this.IsLeftWeaponLogic(), false);
@@ -712,29 +686,4 @@ protected final const func EnterCondition(const stateContext: ref<StateContext>,
     }
   }
   return wrappedMethod(stateContext, scriptInterface);
-}
-
-// Neither gun fires during a two-handed reload.
-@wrapMethod(WeaponTransition)
-protected final const func ShouldShoot(scriptInterface: ref<StateGameScriptInterface>) -> Bool {
-  if GorillaAkimboTopMagSystem.Busy(scriptInterface.GetGame()) {
-    return false;
-  }
-  return wrappedMethod(scriptInterface);
-}
-
-@wrapMethod(WeaponTransition)
-protected final const func IsSemiAutoAction(weaponObject: ref<WeaponObject>, const stateContext: ref<StateContext>, const scriptInterface: ref<StateGameScriptInterface>) -> Bool {
-  if GorillaAkimboTopMagSystem.Busy(scriptInterface.GetGame()) {
-    return false;
-  }
-  return wrappedMethod(weaponObject, stateContext, scriptInterface);
-}
-
-@wrapMethod(WeaponTransition)
-protected final const func IsFullAutoAction(weaponObject: ref<WeaponObject>, const stateContext: ref<StateContext>, const scriptInterface: ref<StateGameScriptInterface>) -> Bool {
-  if GorillaAkimboTopMagSystem.Busy(scriptInterface.GetGame()) {
-    return false;
-  }
-  return wrappedMethod(weaponObject, stateContext, scriptInterface);
 }

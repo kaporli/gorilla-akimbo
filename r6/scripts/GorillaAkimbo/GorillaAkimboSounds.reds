@@ -10,16 +10,24 @@ public abstract class GorillaAkimboSounds {
     if Equals(type, gamedataItemType.Wea_ShotgunDual) {
       return n"wea_set_igla";
     }
+    if Equals(type, gamedataItemType.Wea_Rifle) {
+      return n"wea_set_ajax";
+    }
     return shells ? n"wea_set_carnage" : n"wea_set_crusher";
   }
 
   public static func Has(audio: CName) -> Bool {
     switch audio {
+      case n"wea_set_ajax":
       case n"wea_set_borg4a":
       case n"wea_set_carnage":
+      case n"wea_set_copperhead":
       case n"wea_set_crusher":
       case n"wea_set_dian":
+      case n"wea_set_hercules":
       case n"wea_set_igla":
+      case n"wea_set_kyubi":
+      case n"wea_set_masamune":
       case n"wea_set_palica":
       case n"wea_set_pozhar":
       case n"wea_set_pulsar":
@@ -28,8 +36,10 @@ public abstract class GorillaAkimboSounds {
       case n"wea_set_senkoh":
       case n"wea_set_senkoh_prototype":
       case n"wea_set_shingen":
+      case n"wea_set_sidewinder":
       case n"wea_set_tactician":
       case n"wea_set_testera":
+      case n"wea_set_umbra":
       case n"wea_set_warden":
       case n"wea_set_warden_suppressor":
       case n"wea_set_zhuo":
@@ -40,6 +50,10 @@ public abstract class GorillaAkimboSounds {
 
   public static func Get(audio: CName, empty: Bool, times: script_ref<array<Float>>, names: script_ref<array<CName>>) {
     switch audio {
+      case n"wea_set_ajax":
+        Deref(times) = empty ? [0.633, 1.367, 1.500, 2.133, 2.833, 3.000, 3.300] : [0.467, 1.233, 1.733, 2.400];
+        Deref(names) = empty ? [n"w_gun_rifle_power_ajax_mag_new_grab", n"w_gun_rifle_power_ajax_mag_hit", n"w_gun_rifle_power_ajax_mag_eject", n"w_gun_rifle_power_ajax_mag_in", n"w_gun_rifle_power_ajax_handle_pull", n"w_gun_rifle_power_ajax_handle_release", n"w_gun_rifle_power_ajax_grab"] : [n"w_gun_rifle_power_ajax_mag_out", n"w_gun_rifle_power_ajax_mag_new_grab", n"w_gun_rifle_power_ajax_mag_in", n"w_gun_rifle_power_ajax_grab"];
+        break;
       case n"wea_set_borg4a":
         Deref(times) = empty ? [0.500, 0.900, 1.467, 1.867, 2.367, 3.033, 3.267, 3.800] : [0.367, 0.933, 1.500, 1.700, 2.200, 3.067];
         Deref(names) = empty ? [n"w_gun_borg4a_mag_unlock", n"w_gun_borg4a_mag_out", n"w_gun_smg_power_borg4a_mag_new_grab", n"w_gun_borg4a_mag_in", n"w_gun_borg4a_mag_lock", n"w_gun_borg4a_handle_pull", n"w_gun_borg4a_handle_release", n"w_gun_borg4a_grab"] : [n"w_gun_borg4a_mag_unlock", n"w_gun_borg4a_mag_out", n"w_gun_smg_power_borg4a_mag_new_grab", n"w_gun_borg4a_mag_in", n"w_gun_borg4a_mag_lock", n"w_gun_borg4a_grab"];
@@ -47,6 +61,10 @@ public abstract class GorillaAkimboSounds {
       case n"wea_set_carnage":
         Deref(times) = empty ? [0.367, 1.133, 1.567, 2.067, 2.367] : [0.267, 0.733, 1.900, 2.067];
         Deref(names) = empty ? [n"w_gun_shotgun_power_carnage_pump_open", n"w_gun_shotgun_power_carnage_mag_new_grab", n"w_gun_shotgun_power_carnage_shell_in_barrel", n"w_gun_shotgun_power_carnage_grab", n"w_gun_shotgun_power_carnage_pump_close"] : [n"w_gun_shotgun_power_carnage_shell_rattle", n"w_gun_shotgun_power_carnage_shell_in", n"w_gun_shotgun_power_carnage_grab", n"w_gun_shotgun_power_carnage_move"];
+        break;
+      case n"wea_set_copperhead":
+        Deref(times) = empty ? [0.233, 0.433, 1.000, 1.567, 1.733, 2.067, 2.400, 2.567, 2.900] : [0.233, 0.433, 1.000, 1.567, 1.733, 2.000, 2.267];
+        Deref(names) = empty ? [n"w_gun_rifle_power_copperhead_mag_grab", n"w_gun_rifle_power_copperhead_mag_out", n"w_gun_rifle_power_copperhead_mag_new_grab", n"w_gun_rifle_power_copperhead_mag_rattle", n"w_gun_rifle_power_copperhead_mag_in", n"w_gun_rifle_power_copperhead_handling", n"w_gun_rifle_power_copperhead_handle_pull", n"w_gun_rifle_power_copperhead_handle_release", n"w_gun_rifle_power_copperhead_grab"] : [n"w_gun_rifle_power_copperhead_mag_grab", n"w_gun_rifle_power_copperhead_mag_out", n"w_gun_rifle_power_copperhead_mag_new_grab", n"w_gun_rifle_power_copperhead_mag_rattle", n"w_gun_rifle_power_copperhead_mag_in", n"w_gun_rifle_power_copperhead_handling", n"w_gun_rifle_power_copperhead_grab"];
         break;
       case n"wea_set_crusher":
         Deref(times) = empty ? [0.300, 1.700, 1.833, 2.467, 2.833, 3.333] : [0.300, 1.700, 1.833, 2.500];
@@ -56,9 +74,21 @@ public abstract class GorillaAkimboSounds {
         Deref(times) = empty ? [0.067, 0.367, 1.067, 2.033, 2.633, 2.967] : [0.033, 0.333, 0.933, 1.767, 1.867];
         Deref(names) = empty ? [n"w_gun_smg_smart_dian_move", n"w_gun_smg_smart_dian_mag_out_empty", n"w_gun_smg_smart_dian_mag_in_empty", n"w_gun_smg_smart_dian_load", n"w_gun_smg_smart_dian_move", n"w_gun_smg_smart_dian_grab"] : [n"w_gun_smg_smart_dian_move", n"w_gun_smg_smart_dian_mag_out", n"w_gun_smg_smart_dian_mag_in", n"w_gun_smg_smart_dian_move", n"w_gun_smg_smart_dian_grab"];
         break;
+      case n"wea_set_hercules":
+        Deref(times) = empty ? [0.067, 0.167, 0.767, 1.067, 1.367, 1.433, 2.533, 3.167, 3.533, 4.433, 4.533, 4.667, 5.233, 5.233] : [0.067, 0.167, 0.767, 1.067, 1.367, 1.433, 2.533, 3.167, 3.533, 4.433, 4.533, 4.667, 5.233];
+        Deref(names) = empty ? [n"w_gun_hercules3ax_move", n"w_gun_hercules3ax_remove_ammo_connector", n"w_gun_hercules3ax_grab_munition_pack", n"w_gun_hercules3ax_remove_munition_pack", n"w_gun_hercules3ax_grab_ammo_box", n"w_gun_hercules3ax_remove_slide_ammo_box", n"w_gun_hercules3ax_take_out_ammo_box", n"w_gun_hercules3ax_attach_ammo_box", n"w_gun_hercules3ax_lock_ammo_box", n"w_gun_hercules3ax_grab_hazmat_connector", n"w_gun_hercules3ax_attach_ammo_connector", n"w_gun_hercules3ax_ui_empty_reload_loop_stop", n"w_gun_hercules3ax_move", n"w_gun_hercules3ax_move"] : [n"w_gun_hercules3ax_move", n"w_gun_hercules3ax_remove_ammo_connector", n"w_gun_hercules3ax_grab_munition_pack", n"w_gun_hercules3ax_remove_munition_pack", n"w_gun_hercules3ax_grab_ammo_box", n"w_gun_hercules3ax_remove_slide_ammo_box", n"w_gun_hercules3ax_take_out_ammo_box", n"w_gun_hercules3ax_attach_ammo_box", n"w_gun_hercules3ax_lock_ammo_box", n"w_gun_hercules3ax_grab_hazmat_connector", n"w_gun_hercules3ax_attach_ammo_connector", n"w_gun_hercules3ax_ui_empty_reload_loop_stop", n"w_gun_hercules3ax_move"];
+        break;
       case n"wea_set_igla":
         Deref(times) = empty ? [0.067, 0.167, 0.333, 0.500, 0.633, 1.300, 1.333, 1.867, 2.233] : [0.067, 0.133, 0.333, 0.500, 0.633, 1.000, 1.600, 2.000];
         Deref(names) = empty ? [n"w_gun_shotgun_power_igla_top_lever", n"w_gun_shotgun_power_igla_open_eject", n"w_gun_shotgun_power_igla_mag_new_grab", n"w_gun_shotgun_power_igla_top_lever", n"w_gun_shotgun_power_igla_shell_rattle", n"w_gun_shotgun_power_igla_shell_tap", n"w_gun_shotgun_power_igla_shell_insert", n"w_gun_shotgun_power_igla_close", n"w_gun_shotgun_power_igla_grab"] : [n"w_gun_shotgun_power_igla_top_lever", n"w_gun_shotgun_power_igla_open_eject", n"w_gun_shotgun_power_igla_mag_new_grab", n"w_gun_shotgun_power_igla_top_lever", n"w_gun_shotgun_power_igla_shell_rattle", n"w_gun_shotgun_power_igla_shell_insert", n"w_gun_shotgun_power_igla_close", n"w_gun_shotgun_power_igla_grab"];
+        break;
+      case n"wea_set_kyubi":
+        Deref(times) = empty ? [0.633, 1.367, 1.500, 2.133, 2.833, 3.000, 3.300] : [0.467, 1.233, 1.733, 2.400];
+        Deref(names) = empty ? [n"w_gun_rifle_power_ajax_mag_new_grab", n"w_gun_rifle_power_ajax_mag_hit", n"w_gun_rifle_power_ajax_mag_eject", n"w_gun_rifle_power_ajax_mag_in", n"w_gun_rifle_power_ajax_handle_pull", n"w_gun_rifle_power_ajax_handle_release", n"w_gun_rifle_power_ajax_grab"] : [n"w_gun_rifle_power_ajax_mag_out", n"w_gun_rifle_power_ajax_mag_new_grab", n"w_gun_rifle_power_ajax_mag_in", n"w_gun_rifle_power_ajax_grab"];
+        break;
+      case n"wea_set_masamune":
+        Deref(times) = empty ? [0.033, 0.333, 0.433, 0.767, 1.833, 2.533, 3.267, 3.667, 3.900] : [0.100, 0.467, 0.733, 1.833, 2.433, 3.233, 3.467];
+        Deref(names) = empty ? [n"w_gun_rifle_power_masamune_move", n"w_gun_rifle_power_masamune_grab", n"w_gun_rifle_power_masamune_handle_pull", n"w_gun_rifle_power_masamune_mag_out", n"w_gun_rifle_power_masamune_mag_new_grab", n"w_gun_rifle_power_masamune_mag_in", n"w_gun_rifle_power_masamune_handle_release", n"w_gun_rifle_power_masamune_grab", n"w_gun_rifle_power_masamune_move"] : [n"w_gun_rifle_power_masamune_move", n"w_gun_rifle_power_masamune_handle_pull", n"w_gun_rifle_power_masamune_mag_out", n"w_gun_rifle_power_masamune_mag_grab", n"w_gun_rifle_power_masamune_mag_in", n"w_gun_rifle_power_masamune_grab", n"w_gun_rifle_power_masamune_move"];
         break;
       case n"wea_set_palica":
         Deref(times) = empty ? [0.133, 0.400, 0.767, 1.533] : [0.100, 0.400, 0.667, 1.533];
@@ -92,6 +122,10 @@ public abstract class GorillaAkimboSounds {
         Deref(times) = empty ? [0.067, 0.300, 0.667, 1.100, 1.400, 1.867, 2.467, 2.933, 3.200] : [0.033, 0.267, 0.633, 1.167, 1.367, 1.933, 2.533];
         Deref(names) = empty ? [n"w_gun_smg_smart_shingen_move", n"w_gun_smg_smart_shingen_open", n"w_gun_smg_smart_shingen_mag_out", n"w_gun_smg_smart_shingen_mag_new_grab", n"w_gun_smg_smart_shingen_mag_grab", n"w_gun_smg_smart_shingen_mag_in", n"w_gun_smg_smart_shingen_load", n"w_gun_smg_smart_shingen_move", n"w_gun_smg_smart_shingen_grab"] : [n"w_gun_smg_smart_shingen_move", n"w_gun_smg_smart_shingen_open", n"w_gun_smg_smart_shingen_mag_out", n"w_gun_smg_smart_shingen_mag_new_grab", n"w_gun_smg_smart_shingen_mag_grab", n"w_gun_smg_smart_shingen_mag_in", n"w_gun_smg_smart_shingen_grab"];
         break;
+      case n"wea_set_sidewinder":
+        Deref(times) = empty ? [0.067, 0.933, 1.200, 2.333, 2.633] : [0.067, 0.933, 1.200, 2.267];
+        Deref(names) = empty ? [n"w_gun_smg_smart_sidewinder_mag_out", n"w_gun_smg_smart_sidewinder_mag_new_grab", n"w_gun_smg_smart_sidewinder_mag_in", n"w_gun_smg_smart_sidewinder_handle_pull", n"w_gun_smg_smart_sidewinder_handle_release"] : [n"w_gun_smg_smart_sidewinder_mag_out", n"w_gun_smg_smart_sidewinder_mag_new_grab", n"w_gun_smg_smart_sidewinder_mag_in", n"w_gun_smg_smart_sidewinder_grab"];
+        break;
       case n"wea_set_tactician":
         Deref(times) = empty ? [0.033, 0.567, 0.933, 1.700] : [0.200, 0.400, 0.933, 1.167];
         Deref(names) = empty ? [n"w_gun_shotgun_power_tactician_load_open", n"w_gun_shotgun_power_tactician_mag_new_grab", n"w_gun_shotgun_power_tactician_shell_in_empty", n"w_gun_shotgun_power_tactician_load_close"] : [n"w_gun_shotgun_power_tactician_move", n"w_gun_shotgun_power_tactician_shell_in", n"w_gun_shotgun_power_tactician_move", n"w_gun_shotgun_power_tactician_grab"];
@@ -99,6 +133,10 @@ public abstract class GorillaAkimboSounds {
       case n"wea_set_testera":
         Deref(times) = empty ? [0.067, 0.267, 0.400, 0.433, 1.300, 1.367, 1.900, 2.267] : [0.067, 0.267, 0.400, 0.433, 1.300, 1.367, 1.900, 2.267];
         Deref(names) = empty ? [n"w_gun_shotgun_power_testera_top_lever", n"w_gun_shotgun_power_testera_eject", n"w_gun_shotgun_power_testera_mag_new_grab", n"w_gun_shotgun_power_testera_top_lever", n"w_gun_shotgun_power_testera_shell_tap", n"w_gun_shotgun_power_testera_shell_in_double", n"w_gun_shotgun_power_testera_close", n"w_gun_shotgun_power_testera_grab"] : [n"w_gun_shotgun_power_testera_top_lever", n"w_gun_shotgun_power_testera_eject", n"w_gun_shotgun_power_testera_mag_new_grab", n"w_gun_shotgun_power_testera_top_lever", n"w_gun_shotgun_power_testera_shell_tap", n"w_gun_shotgun_power_testera_shell_in_double", n"w_gun_shotgun_power_testera_close", n"w_gun_shotgun_power_testera_grab"];
+        break;
+      case n"wea_set_umbra":
+        Deref(times) = empty ? [0.233, 0.433, 1.000, 1.567, 1.733, 2.067, 2.400, 2.567, 2.900] : [0.233, 0.433, 1.000, 1.567, 1.733, 2.000, 2.267];
+        Deref(names) = empty ? [n"w_gun_rifle_power_copperhead_mag_grab", n"w_gun_rifle_power_copperhead_mag_out", n"w_gun_rifle_power_copperhead_mag_new_grab", n"w_gun_rifle_power_copperhead_mag_rattle", n"w_gun_rifle_power_copperhead_mag_in", n"w_gun_rifle_power_copperhead_handling", n"w_gun_rifle_power_copperhead_handle_pull", n"w_gun_rifle_power_copperhead_handle_release", n"w_gun_rifle_power_copperhead_grab"] : [n"w_gun_rifle_power_copperhead_mag_grab", n"w_gun_rifle_power_copperhead_mag_out", n"w_gun_rifle_power_copperhead_mag_new_grab", n"w_gun_rifle_power_copperhead_mag_rattle", n"w_gun_rifle_power_copperhead_mag_in", n"w_gun_rifle_power_copperhead_handling", n"w_gun_rifle_power_copperhead_grab"];
         break;
       case n"wea_set_warden":
         Deref(times) = empty ? [0.033, 0.467, 0.767, 1.467, 1.900, 2.467, 2.600, 3.000, 3.133, 3.367, 3.667, 3.767] : [0.033, 0.467, 0.467, 0.800, 1.467, 1.933, 2.467, 2.600, 2.600, 2.867, 3.100, 3.267];
@@ -118,16 +156,26 @@ public abstract class GorillaAkimboSounds {
   // Clip seconds into the reload at which the magazine (or the spent shells) leaves the gun.
   public static func MagOut(audio: CName, empty: Bool) -> Float {
     switch audio {
+      case n"wea_set_ajax":
+        return empty ? 1.500 : 0.467;
       case n"wea_set_borg4a":
         return empty ? 0.900 : 0.933;
       case n"wea_set_carnage":
         return empty ? 0.367 : 0.500;
+      case n"wea_set_copperhead":
+        return empty ? 0.433 : 0.433;
       case n"wea_set_crusher":
         return empty ? 0.300 : 0.300;
       case n"wea_set_dian":
         return empty ? 0.367 : 0.333;
+      case n"wea_set_hercules":
+        return empty ? 0.500 : 0.500;
       case n"wea_set_igla":
         return empty ? 0.167 : 0.133;
+      case n"wea_set_kyubi":
+        return empty ? 1.500 : 0.467;
+      case n"wea_set_masamune":
+        return empty ? 0.767 : 0.733;
       case n"wea_set_palica":
         return empty ? 0.133 : 0.100;
       case n"wea_set_pozhar":
@@ -144,10 +192,14 @@ public abstract class GorillaAkimboSounds {
         return empty ? 0.333 : 0.433;
       case n"wea_set_shingen":
         return empty ? 0.667 : 0.633;
+      case n"wea_set_sidewinder":
+        return empty ? 0.067 : 0.067;
       case n"wea_set_tactician":
         return empty ? 0.033 : 0.500;
       case n"wea_set_testera":
         return empty ? 0.267 : 0.267;
+      case n"wea_set_umbra":
+        return empty ? 0.433 : 0.433;
       case n"wea_set_warden":
         return empty ? 0.767 : 0.800;
       case n"wea_set_warden_suppressor":

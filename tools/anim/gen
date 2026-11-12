@@ -1,0 +1,4 @@
+#!/bin/bash
+# Generators by name, e.g. "gen guns", "gen sounds", "gen xl": the same commands as build.sh.
+HERE="$(cd "$(dirname "$0")" && pwd)"
+exec python "$HERE/build.py" "$@"

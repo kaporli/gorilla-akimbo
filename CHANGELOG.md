@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.0.0 (2026-11-12)
+
+- Assault rifles: with Gorilla Arms and Double Trouble, V can pair the Ajax, Kyubi, Copperhead, Umbra, Masamune, Sidewinder, Divided We Stand, Hercules 3AX and modded assault rifles, with their own lowered stance in safe zones.
+- One-handed rifle reloads made for each rifle's magazine, for male and female V, either hand, three picks at random per rifle. Front-magazine rifles throw the magazine out, shove it out forward or leave it behind and are driven onto a fresh one at the belt; the Masamune throws its magazine out with a nod or a corkscrew roll, or heaves the rifle off it; the Hercules pops its latch and throws or drops the cassette. The magazine has its own animation in each, and an empty Ajax knocks its magazine out on the belt.
+- Bulky rifles (Masamune, Hercules, Copperhead, Umbra, Sidewinder, Divided We Stand) are held lower, at the hip, so a pair doesn't fill the view. Aiming and shots are unchanged.
+- Every pistol and revolver can be dual-wielded, with or without Gorilla Arms: Tech and Smart pistols (Kenshin, Omaha, Grit, Ticon, Yukimura, Kappa, Chao) and Tech revolvers (Quasar, Burya), with the Lexington's and the Nova's dual-wield animations. Double Trouble is still required.
+- New settings: Assault rifles (all, Power, Smart) and Pistols and revolvers (Tech and Smart pistols, Smart pistols, Tech pistols, Tech revolvers). All on by default.
+- Smart Link on both guns also covers a Smart pistol in the left hand.
+
 ## 3.2.0 (2026-11-09)
 
 - SMG and shotgun pairs have their own lowered stance in public safe zones, instead of the game's pistol pose, which put both guns huge and crossed in front of the camera. Low ready for SMGs and short shotguns, high port for the six long shotguns (Carnage, Tactician, Zhuo, Igla, Testera, Satara), each hand by its own gun, for male and female V. Firing raises the guns; they lower again after a while.

@@ -1,14 +1,20 @@
-// Gorilla Akimbo: with Gorilla Arms equipped, SMGs and shotguns can be dual-wielded (Double Trouble still required).
-// Without Gorilla Arms, dual-wielding stays vanilla (pistols and revolvers only).
+// Gorilla Akimbo: guns the game doesn't let V dual-wield can be dual-wielded (Double Trouble still required).
+// SMGs, shotguns and assault rifles need Gorilla Arms; pistols and revolvers of every kind don't. Which item types are
+// handled, and how, is in GorillaAkimboGuns.reds, generated from tools/anim/weapons.json.
 module GorillaAkimbo
 
 import Codeware.Localization.*
 
-// Weapon types the reinforced grip adds to dual-wielding.
+// Types that dual-wield with the mod's own arm clips and lowered stance, each hand on its own (not pistols and
+// revolvers, which use the game's dual-wield animations).
 public func IsGripWeaponType(type: gamedataItemType) -> Bool {
-  return Equals(type, gamedataItemType.Wea_SubmachineGun)
-    || Equals(type, gamedataItemType.Wea_Shotgun)
-    || Equals(type, gamedataItemType.Wea_ShotgunDual);
+  return GorillaAkimboGuns.UsesArmClips(type);
+}
+
+// The tag on every weapon record the mod added the game's DualWield tag to. Guns the game already lets V dual-wield
+// don't have it and are left alone.
+public func GorillaAkimboTag() -> CName {
+  return n"GorillaAkimboAdded";
 }
 
 public func HasGorillaArms(owner: wref<GameObject>) -> Bool {
@@ -33,7 +39,7 @@ public func HasGorillaArms(owner: wref<GameObject>) -> Bool {
   return false;
 }
 
-// At load: give SMGs and shotguns the game's dual-wield tag, and add the tooltip line to Gorilla Arms.
+// At load: give the handled guns the game's dual-wield tag, and add the tooltip line to Gorilla Arms.
 class GorillaAkimboTweak extends ScriptableTweak {
   // The package shown as the cyberware's attuned block (the tooltip draws an attribute header for it), or -1.
   public static func AttunedIndex(packages: array<TweakDBID>) -> Int32 {
@@ -64,10 +70,11 @@ class GorillaAkimboTweak extends ScriptableTweak {
         type = item.ItemType().Type();
       }
       let id = record.GetID();
-      if IsGripWeaponType(type) {
+      if GorillaAkimboGuns.IsHandled(type) {
         let tags = TweakDBInterface.GetCNameArray(id + t".tags");
         if !ArrayContains(tags, n"DualWield") {
           ArrayPush(tags, n"DualWield");
+          ArrayPush(tags, GorillaAkimboTag());
           TweakDBManager.SetFlat(id + t".tags", tags);
           TweakDBManager.UpdateRecord(id);
           tagged += 1;
@@ -98,7 +105,7 @@ class GorillaAkimboTweak extends ScriptableTweak {
       }
     }
     TweakDBManager.SetFlat(t"GorillaAkimbo.DoubleTroubleDamage.value", TweakDBInterface.GetFloat(GorillaAkimboDamage.Effector() + t".value", 0.625));
-    ModLog(n"GorillaAkimbo", s"Tagged \(tagged) SMG/shotgun records, added the tooltip line to \(armsLines) Gorilla Arms records.");
+    ModLog(n"GorillaAkimbo", s"Tagged \(tagged) weapon records, added the tooltip line to \(armsLines) Gorilla Arms records.");
   }
 }
 
@@ -121,30 +128,34 @@ public func IsEvolutionAllowed(item: ref<gameItemData>, power: Bool, smart: Bool
   return true;
 }
 
-// Whether the settings allow dual-wielding this SMG or shotgun: its type, and for shotguns how it reloads.
+// Whether the settings allow dual-wielding this gun: its type's switch, its kind (Power, Smart, Tech), and for
+// shotguns how it reloads.
 public func IsGripWeaponAllowed(item: ref<gameItemData>, settings: ref<GorillaAkimboSettings>) -> Bool {
   let type = RPGManager.GetItemType(item.GetID());
-  if Equals(type, gamedataItemType.Wea_SubmachineGun) {
-    return settings.smgs && IsEvolutionAllowed(item, settings.powerSmgs, settings.smartSmgs, settings.techSmgs);
-  }
-  if !settings.shotguns || !IsEvolutionAllowed(item, settings.powerShotguns, settings.smartShotguns, settings.techShotguns) {
+  if !settings.Allows(GorillaAkimboGuns.Group(type), item) {
     return false;
   }
   if Equals(type, gamedataItemType.Wea_ShotgunDual) {
     return settings.doubleBarrels;
   }
-  return item.GetStatValueByType(gamedataStatType.ReloadAmount) > 0.0 ? settings.shellShotguns : settings.magazineShotguns;
+  if Equals(type, gamedataItemType.Wea_Shotgun) {
+    return item.GetStatValueByType(gamedataStatType.ReloadAmount) > 0.0 ? settings.shellShotguns : settings.magazineShotguns;
+  }
+  return true;
 }
 
-// SMGs and shotguns only count as dual-wieldable while Gorilla Arms are equipped, and when the settings allow them.
+// Guns the mod made dual-wieldable only count as such when the settings allow them, and with Gorilla Arms equipped
+// where their type needs them.
 @wrapMethod(gameItemData)
 public func CanDualWield(owner: wref<GameObject>) -> Bool {
   let result = wrappedMethod(owner);
-  if result && IsGripWeaponType(RPGManager.GetItemType(this.GetID()))
-    && (!HasGorillaArms(owner) || !IsGripWeaponAllowed(this, GorillaAkimboConfig.Get(owner.GetGame()))) {
+  if !result || !this.HasTag(GorillaAkimboTag()) {
+    return result;
+  }
+  if GorillaAkimboGuns.NeedsArms(RPGManager.GetItemType(this.GetID())) && !HasGorillaArms(owner) {
     return false;
   }
-  return result;
+  return IsGripWeaponAllowed(this, GorillaAkimboConfig.Get(owner.GetGame()));
 }
 
 // Double Trouble's damage cut while dual-wielding (a multiplier on each hit), set from the settings.
@@ -288,18 +299,18 @@ public abstract class GorillaAkimboBody {
 }
 
 public abstract class GorillaAkimboReload {
-  // Arm clip layout, in clip seconds. Magazine guns: a slow tip-up until OpenEnd, down out of view by DropEnd, held
+  // Arm clip layout, in clip seconds (the numbers flick.py builds the clips with). Magazine guns: a slow tip-up until OpenEnd, down out of view by DropEnd, held
   // there until HoldEnd, then the rise. Shell-by-shell guns (_02 clips): down by PlainDrop.
   public static func OpenEnd() -> Float {
-    return 1.2;
+    return GorillaAkimboGuns.OpenEnd();
   }
 
   public static func DropEnd() -> Float {
-    return 1.5;
+    return GorillaAkimboGuns.DropEnd();
   }
 
   public static func HoldEnd() -> Float {
-    return 3.5;
+    return GorillaAkimboGuns.HoldEnd();
   }
 
   // Highest clip speed asked of the animation graph: very high speeds have crashed its speed node.
@@ -308,11 +319,11 @@ public abstract class GorillaAkimboReload {
   }
 
   public static func PlainDrop() -> Float {
-    return 0.4;
+    return GorillaAkimboGuns.PlainDrop();
   }
 
   public static func RiseLength() -> Float {
-    return 1.1;
+    return GorillaAkimboGuns.RiseLength();
   }
 
   // Seconds the magazine takes to fall clear after it leaves the gun.
@@ -342,11 +353,65 @@ public abstract class GorillaAkimboReload {
     return 1.0;
   }
 
+  // Guns with reload clips of their own (rifles; GorillaAkimboGuns.ReloadOwner): the clip plays at its own speed
+  // until the gun, hand and magazines are out of view (opening), the hidden part is fast-forwarded or slowed so it
+  // ends (holdEnd) when the ammo lands, and the rest plays at its own speed again.
+  public static func OwnSpeed(time: Float, duration: Float, opening: Float, holdEnd: Float) -> Float {
+    // Short reloads play the opening faster, so the gun is down well before the ammo lands.
+    let rate = MinF(MaxF(1.0, opening / MaxF(0.75 * duration, 0.05)), GorillaAkimboReload.MaxSpeed());
+    let openingReal = opening / rate;
+    if time < openingReal {
+      return rate;
+    }
+    if time < duration {
+      return MinF((holdEnd - opening) / MaxF(duration - openingReal, 0.05), GorillaAkimboReload.MaxSpeed());
+    }
+    return 1.0;
+  }
+
+  // Seconds into the reload at which such a clip reaches clip second t (for the gun's sounds).
+  public static func OwnTime(t: Float, duration: Float, opening: Float, holdEnd: Float) -> Float {
+    let rate = GorillaAkimboReload.OwnSpeed(0.0, duration, opening, holdEnd);
+    let openingReal = opening / rate;
+    if t <= opening {
+      return t / rate;
+    }
+    if t <= holdEnd {
+      return openingReal + (t - opening) / MaxF(GorillaAkimboReload.OwnSpeed(openingReal, duration, opening, holdEnd), 0.05);
+    }
+    return MaxF(duration, openingReal) + t - holdEnd;
+  }
+
+  // The longest part of such a gun's clips after the hidden part, over its variants: the reload state lasts that
+  // much longer than the ammo takes.
+  public static func OwnRise(owner: CName, empty: Bool) -> Float {
+    let rise = 0.0;
+    let i = 0;
+    while i < 3 {
+      rise = MaxF(rise, GorillaAkimboGuns.ReloadLength(owner, i, empty) - GorillaAkimboGuns.ReloadHideEnd(owner, i, empty));
+      i += 1;
+    }
+    return rise;
+  }
+
+  // The gun whose own reload clips this weapon plays while dual-wielded, n"None" on the generic clips.
+  public static func Owner(record: ref<WeaponItem_Record>) -> CName {
+    return IsDefined(record) ? GorillaAkimboGuns.ReloadOwner(record.AudioName()) : n"None";
+  }
+
+  // The magazine track set of such a gun, as the anim wrapper on the gun that selects it in the archive.xl
+  // (GorillaAkimboRifles.archive.xl): per gun, body and hand.
+  public static func MagazineWrapper(owner: CName, player: ref<GameObject>, left: Bool) -> CName {
+    let puppet = player as PlayerPuppet;
+    let body = IsDefined(puppet) && Equals(puppet.GetResolvedGenderName(), n"Female") ? "pwa" : "pma";
+    return StringToName("gorillaakimbo_rmag_" + NameToString(owner) + "_" + body + "_" + (left ? "left" : "right"));
+  }
+
   // The weapon's audio name, or a gun of its type when the game files have no reload sounds for it.
   public static func Audio(record: ref<WeaponItem_Record>, kind: Int32) -> CName {
     let audio = record.AudioName();
     if !GorillaAkimboSounds.Has(audio) {
-      audio = GorillaAkimboSounds.Fallback(audio, record.ItemType().Type(), kind == GorillaAkimboReload.Shells());
+      audio = GorillaAkimboGuns.FallbackAudio(record.ItemType().Type(), kind == GorillaAkimboReload.Shells());
     }
     return audio;
   }
@@ -420,8 +485,13 @@ public abstract class GorillaAkimboReload {
     }
     // The reload state lasts until the rise is done, so its end doesn't cut the clip. The gun can fire as
     // soon as the ammo is in: firing ends the reload state.
-    system.Add(weapon, n"reload", gamedataStatType.ReloadEndTime, gameStatModifierType.Additive, GorillaAkimboReload.RiseLength());
-    system.Add(weapon, n"reload", gamedataStatType.EmptyReloadEndTime, gameStatModifierType.Additive, GorillaAkimboReload.RiseLength());
+    let rise = GorillaAkimboReload.RiseLength();
+    let own = GorillaAkimboReload.Owner(weapon.GetWeaponRecord());
+    if kind == GorillaAkimboReload.Magazine() && IsNameValid(own) {
+      rise = GorillaAkimboReload.OwnRise(own, weapon.IsMagazineEmpty());
+    }
+    system.Add(weapon, n"reload", gamedataStatType.ReloadEndTime, gameStatModifierType.Additive, rise);
+    system.Add(weapon, n"reload", gamedataStatType.EmptyReloadEndTime, gameStatModifierType.Additive, rise);
     return kind;
   }
 
@@ -520,6 +590,40 @@ private let m_gorillaSoundNames: array<CName>;
 @addField(ReloadEvents)
 private let m_gorillaMagOut: Float;
 
+// A gun with reload clips of its own: that gun, the variant playing, whether it is the empty reload, and the
+// magazine wrapper turned on on the weapon for this reload.
+@addField(ReloadEvents)
+private let m_gorillaOwn: CName;
+
+@addField(ReloadEvents)
+private let m_gorillaOwnVariant: Int32;
+
+@addField(ReloadEvents)
+private let m_gorillaOwnEmpty: Bool;
+
+@addField(ReloadEvents)
+private let m_gorillaOwnWrapper: CName;
+
+@addField(ReloadEvents)
+private let m_gorillaOwnWeapon: wref<WeaponObject>;
+
+// The speed of a gun's own reload clip at a time into the reload.
+@addMethod(ReloadEvents)
+private final func GorillaOwnSpeed(time: Float, duration: Float) -> Float {
+  return GorillaAkimboReload.OwnSpeed(time, duration, GorillaAkimboGuns.ReloadHideStart(this.m_gorillaOwn, this.m_gorillaOwnVariant, this.m_gorillaOwnEmpty),
+    GorillaAkimboGuns.ReloadHideEnd(this.m_gorillaOwn, this.m_gorillaOwnVariant, this.m_gorillaOwnEmpty));
+}
+
+// Turns the magazine track set of the last own reload off again.
+@addMethod(ReloadEvents)
+public final func GorillaOwnEnd() -> Void {
+  if IsNameValid(this.m_gorillaOwnWrapper) && IsDefined(this.m_gorillaOwnWeapon) {
+    AnimationControllerComponent.SetAnimWrapperWeight(this.m_gorillaOwnWeapon, this.m_gorillaOwnWrapper, 0.0);
+  }
+  this.m_gorillaOwnWrapper = n"None";
+  this.m_gorillaOwn = n"None";
+}
+
 @wrapMethod(ReloadEvents)
 protected final func OnEnter(stateContext: ref<StateContext>, scriptInterface: ref<StateGameScriptInterface>) -> Void {
   let weapon = this.GetWeaponObject(scriptInterface);
@@ -546,6 +650,12 @@ protected final func OnEnter(stateContext: ref<StateContext>, scriptInterface: r
     ArrayClear(this.m_gorillaSoundNames);
   }
   this.m_gorillaShells = kind == GorillaAkimboReload.Shells();
+  this.GorillaOwnEnd();
+  if kind == GorillaAkimboReload.Magazine() {
+    this.m_gorillaOwn = GorillaAkimboReload.Owner(this.m_weaponRecord);
+    this.m_gorillaOwnVariant = 0;
+    this.m_gorillaOwnEmpty = weapon.IsMagazineEmpty();
+  }
   if this.m_gorillaTimed {
     this.m_gorillaMagOut = GorillaAkimboSounds.MagOut(GorillaAkimboReload.Audio(this.m_weaponRecord, kind), weapon.IsMagazineEmpty());
     let stats = scriptInterface.GetStatsSystem();
@@ -557,6 +667,9 @@ protected final func OnEnter(stateContext: ref<StateContext>, scriptInterface: r
     this.m_animReloadData.emptyDuration = stats.GetStatValue(id, gamedataStatType.EmptyReloadTime);
     let duration = weapon.IsMagazineEmpty() ? this.m_animReloadData.emptyDuration : this.m_animReloadData.loopDuration;
     this.m_gorillaSpeed = GorillaAkimboReload.Speed(0.0, duration, this.m_gorillaMagOut, this.m_gorillaShells);
+    if IsNameValid(this.m_gorillaOwn) {
+      this.m_gorillaSpeed = this.GorillaOwnSpeed(0.0, duration);
+    }
     this.m_animReloadSpeed.reloadSpeed = this.m_gorillaSpeed;
     this.m_animReloadSpeed.emptyReloadSpeed = this.m_gorillaSpeed;
     this.m_animReloadDataDirty = true;
@@ -570,6 +683,24 @@ protected final func OnEnter(stateContext: ref<StateContext>, scriptInterface: r
     }
   }
   wrappedMethod(stateContext, scriptInterface);
+  if this.m_gorillaTimed && IsNameValid(this.m_gorillaOwn) {
+    // The game's pick is known now: its own layout, the gun's sounds along it, and its magazine track set.
+    this.m_gorillaOwnVariant = IsDefined(this.m_randomSync) ? Clamp(this.m_randomSync.value, 0, 2) : 0;
+    let own = this.m_gorillaOwn;
+    let opening = GorillaAkimboGuns.ReloadHideStart(own, this.m_gorillaOwnVariant, this.m_gorillaOwnEmpty);
+    let holdEnd = GorillaAkimboGuns.ReloadHideEnd(own, this.m_gorillaOwnVariant, this.m_gorillaOwnEmpty);
+    let ownDuration = this.m_gorillaOwnEmpty ? this.m_animReloadData.emptyDuration : this.m_animReloadData.loopDuration;
+    let clipTimes: array<Float>;
+    GorillaAkimboSounds.Get(GorillaAkimboReload.Audio(this.m_weaponRecord, kind), this.m_gorillaOwnEmpty, clipTimes, this.m_gorillaSoundNames);
+    ArrayClear(this.m_gorillaSoundTimes);
+    for clipTime in clipTimes {
+      ArrayPush(this.m_gorillaSoundTimes, GorillaAkimboReload.OwnTime(clipTime, ownDuration, opening, holdEnd));
+    }
+    this.m_gorillaOwnWeapon = weapon;
+    this.m_gorillaOwnWrapper = GorillaAkimboReload.MagazineWrapper(own, scriptInterface.executionOwner, this.IsLeftWeaponLogic());
+    AnimationControllerComponent.SetAnimWrapperWeight(weapon, this.m_gorillaOwnWrapper, 1.0);
+    return;
+  }
   if this.m_gorillaTimed && IsDefined(this.m_randomSync) {
     this.m_randomSync.value = GorillaAkimboReload.Variant(kind, this.m_randomSync.value);
     scriptInterface.SetAnimationParameterFeature(this.IsRightWeaponLogic() ? n"RandomSync" : n"LeftRandomSync", this.m_randomSync);
@@ -598,6 +729,9 @@ protected final func OnUpdate(timeDelta: Float, stateContext: ref<StateContext>,
     return;
   }
   let speed = GorillaAkimboReload.Speed(this.GetInStateTime(), duration.value, this.m_gorillaMagOut, this.m_gorillaShells);
+  if IsNameValid(this.m_gorillaOwn) {
+    speed = this.GorillaOwnSpeed(this.GetInStateTime(), duration.value);
+  }
   if AbsF(speed - this.m_gorillaSpeed) > 0.001 {
     this.m_gorillaSpeed = speed;
     this.m_animReloadSpeed.reloadSpeed = speed;
@@ -717,6 +851,10 @@ protected func OnExit(stateContext: ref<StateContext>, scriptInterface: ref<Stat
   GorillaAkimboHands.Send(scriptInterface, true, 2, 0.0);
   GorillaAkimboBody.Refresh(scriptInterface.executionOwner);
   GorillaAkimboDamage.Apply(GorillaAkimboConfig.Get(scriptInterface.GetGame()));
+  // A pair's grenade throw is over once the left gun is equipped again (GorillaAkimboGadget.reds).
+  if this.IsLeftHandLogic(this.stateMachineInstanceData) && IsDefined(GameObject.GetLeftActiveWeapon(scriptInterface.executionOwner)) {
+    GorillaAkimboGadgetSystem.Get(scriptInterface.GetGame()).Stop();
+  }
 }
 
 // Unequip finished: a grip weapon left alone in the right hand goes back to its own index and loses the Body scaling.
@@ -744,6 +882,22 @@ public abstract class GorillaAkimboFiringMode {
   public static func BothReady(const stateContext: ref<StateContext>, const scriptInterface: ref<StateGameScriptInterface>) -> Bool {
     return DefaultTransition.HasRightWeaponEquipped(scriptInterface) && DefaultTransition.HasLeftWeaponEquipped(scriptInterface)
       && ShootTransition.IsRightWeaponReady(stateContext, scriptInterface) && ShootTransition.IsLeftWeaponReady(stateContext, scriptInterface);
+  }
+
+  // Heywood Hurricane (Double Trouble 2) ends as soon as a gun is not ready. A Carnage shot stuns V for a moment (the
+  // game's own recoil, also single-wielded), which stopped Hurricane after the first shot of a Carnage pair. True
+  // during that stun right after V's own shot: Hurricane's check then skips the weapons' ready test
+  // (CanBeInValentinosFrenzy in GorillaAkimboVanilla.reds).
+  public static func OwnShotStun(const scriptInterface: ref<StateGameScriptInterface>) -> Bool {
+    let shootState = scriptInterface.localBlackboard.GetInt(GetAllBlackboardDefs().PlayerStateMachine.ShootState);
+    if shootState != EnumInt(gamePSMShootStates.ValentinosFrenzyRightOnly) && shootState != EnumInt(gamePSMShootStates.ValentinosFrenzy) {
+      return false;
+    }
+    if !StatusEffectSystem.ObjectHasStatusEffect(scriptInterface.executionOwner, t"BaseStatusEffect.HeavyStun") {
+      return false;
+    }
+    let system = GorillaAkimboReloadSystem.Get(scriptInterface.GetGame());
+    return EngineTime.ToFloat(GameInstance.GetSimTime(scriptInterface.GetGame())) - MaxF(system.m_lastShotRight, system.m_lastShotLeft) <= 0.5;
   }
 
   // Alternate: whether the gun that has the turn (right when fromRight) passes it to the other one.
@@ -774,46 +928,6 @@ protected final func OnEnter(stateContext: ref<StateContext>, scriptInterface: r
     let fire = GorillaAkimboIndependent.FireAction(this.IsLeftWeaponLogic(), scriptInterface.GetGame());
     stateContext.SetPermanentIntParameter(this.GetLastChargePressCount(), Cast<Int32>(scriptInterface.GetActionPressCount(fire)), true);
   }
-}
-
-// Heywood Hurricane (Double Trouble 2) ends as soon as a gun is not ready. A Carnage shot stuns V for a moment (the
-// game's own recoil, also single-wielded), which stopped Hurricane after the first shot of a Carnage pair. A stun
-// right after V's own shot is ignored here; the other conditions still end Hurricane.
-@wrapMethod(DefaultTransition)
-protected final const func CanBeInValentinosFrenzy(const stateContext: ref<StateContext>, const scriptInterface: ref<StateGameScriptInterface>) -> Bool {
-  if wrappedMethod(stateContext, scriptInterface) {
-    return true;
-  }
-  let shootState = scriptInterface.localBlackboard.GetInt(GetAllBlackboardDefs().PlayerStateMachine.ShootState);
-  if shootState != EnumInt(gamePSMShootStates.ValentinosFrenzyRightOnly) && shootState != EnumInt(gamePSMShootStates.ValentinosFrenzy) {
-    return false;
-  }
-  if !StatusEffectSystem.ObjectHasStatusEffect(scriptInterface.executionOwner, t"BaseStatusEffect.HeavyStun") {
-    return false;
-  }
-  let system = GorillaAkimboReloadSystem.Get(scriptInterface.GetGame());
-  if EngineTime.ToFloat(GameInstance.GetSimTime(scriptInterface.GetGame())) - MaxF(system.m_lastShotRight, system.m_lastShotLeft) > 0.5 {
-    return false;
-  }
-  // The game's other conditions, without the weapons' ready check.
-  if DefaultTransition.IsAimingAtFriendly(scriptInterface) || this.IsSafeStateForced(stateContext, scriptInterface) {
-    return false;
-  }
-  if scriptInterface.localBlackboard.GetInt(GetAllBlackboardDefs().PlayerStateMachine.Vision) == 1 {
-    return false;
-  }
-  if stateContext.IsStateMachineActive(n"CombatGadget") || stateContext.IsStateMachineActive(n"LocomotionSwimming") || stateContext.IsStateMachineActive(n"Vehicle")
-    || stateContext.IsStateMachineActive(n"CarriedObject") || stateContext.IsStateMachineActive(n"Consumable")
-    || stateContext.GetBoolParameter(n"UnequipToGadgetOrConsumable", true) || stateContext.IsStateMachineActive(n"LocomotionTakedown") {
-    return false;
-  }
-  if !DefaultTransition.HasRightWeaponEquipped(scriptInterface, true) || !DefaultTransition.HasLeftWeaponEquipped(scriptInterface, true) {
-    return false;
-  }
-  if DefaultTransition.IsRightHandChangingEquipState(stateContext) || DefaultTransition.IsLeftHandChangingEquipState(stateContext) {
-    return false;
-  }
-  return !(DefaultTransition.RightWeaponHasNoAmmoOrIsReloading(scriptInterface) && DefaultTransition.LeftWeaponHasNoAmmoOrIsReloading(scriptInterface));
 }
 
 // A full-auto gun keeps firing each cycle while the trigger is held, whichever gun has the turn; in Alternate it only
@@ -883,11 +997,15 @@ private func PerkWeaponGroupTypeToText(type: gamedataPerkWeaponGroupType) -> Str
 
 public class EnglishPackage extends ModLocalizationPackage {
   protected func DefineTexts() {
-    this.Text("GorillaAkimbo-ArmsLine", "Reinforced grip actuators steady SMGs and shotguns one-handed: with Double Trouble, they can be dual-wielded.");
-    this.Text("GorillaAkimbo-PerkNote", "equipping Gorilla Arms extends this effect to SMGs and Shotguns");
-    this.Text("GorillaAkimbo-RecoilLine", "<Rich color=\"TooltipText.cyberwareDescriptionHighlightColor\" style=\"Semi-Bold\">-{float_0}% recoil</> with dual-wielded SMGs and shotguns per Attribute Point.\nCurrent total: <Rich color=\"TooltipText.cyberwareDescriptionHighlightColor\" style=\"Semi-Bold\">-{float_1}%</>");
-    this.Text("GorillaAkimbo-FireRateLine", "<Rich color=\"TooltipText.cyberwareDescriptionHighlightColor\" style=\"Semi-Bold\">+{float_0}% fire rate</> with dual-wielded SMGs and shotguns per Attribute Point.\nCurrent total: <Rich color=\"TooltipText.cyberwareDescriptionHighlightColor\" style=\"Semi-Bold\">+{float_1}%</>");
-    this.Text("GorillaAkimbo-ReloadLine", "<Rich color=\"TooltipText.cyberwareDescriptionHighlightColor\" style=\"Semi-Bold\">+{float_0}% reload speed</> with dual-wielded SMGs and shotguns per Attribute Point.\nCurrent total: <Rich color=\"TooltipText.cyberwareDescriptionHighlightColor\" style=\"Semi-Bold\">+{float_1}%</>");
+    let guns = GorillaAkimboGuns.ArmsTypeNames();
+    this.Text("GorillaAkimbo-ArmsLine", "Reinforced grip actuators steady " + guns + " one-handed: with Double Trouble, they can be dual-wielded.");
+    this.Text("GorillaAkimbo-HintFireLeft", "Fire left gun");
+    this.Text("GorillaAkimbo-HintFireRight", "Fire right gun");
+    this.Text("GorillaAkimbo-HintAim", "Aim");
+    this.Text("GorillaAkimbo-PerkNote", "equipping Gorilla Arms extends this effect to " + guns);
+    this.Text("GorillaAkimbo-RecoilLine", "<Rich color=\"TooltipText.cyberwareDescriptionHighlightColor\" style=\"Semi-Bold\">-{float_0}% recoil</> with dual-wielded " + guns + " per Attribute Point.\nCurrent total: <Rich color=\"TooltipText.cyberwareDescriptionHighlightColor\" style=\"Semi-Bold\">-{float_1}%</>");
+    this.Text("GorillaAkimbo-FireRateLine", "<Rich color=\"TooltipText.cyberwareDescriptionHighlightColor\" style=\"Semi-Bold\">+{float_0}% fire rate</> with dual-wielded " + guns + " per Attribute Point.\nCurrent total: <Rich color=\"TooltipText.cyberwareDescriptionHighlightColor\" style=\"Semi-Bold\">+{float_1}%</>");
+    this.Text("GorillaAkimbo-ReloadLine", "<Rich color=\"TooltipText.cyberwareDescriptionHighlightColor\" style=\"Semi-Bold\">+{float_0}% reload speed</> with dual-wielded " + guns + " per Attribute Point.\nCurrent total: <Rich color=\"TooltipText.cyberwareDescriptionHighlightColor\" style=\"Semi-Bold\">+{float_1}%</>");
   }
 }
 

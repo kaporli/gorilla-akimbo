@@ -1,9 +1,11 @@
 # Imports animations from a glb into an existing .anims file (in place), via WolvenKit's library.
 # Usage: pwsh animimport.ps1 <glb> <anims>
 # WK_DIR: the WolvenKit CLI folder. GAME: the Cyberpunk 2077 folder (the rig is read from its archives).
+# build.py sets both from weapons.json (paths.wolvenkit, paths.game).
 param([string]$Glb, [string]$Anims)
-$d = if ($env:WK_DIR) { $env:WK_DIR } else { 'C:\Modding\_tools\wolvenkit-cli' }
-$game = if ($env:GAME) { $env:GAME } else { 'C:\Program Files (x86)\Steam\steamapps\common\Cyberpunk 2077' }
+if (-not $env:WK_DIR -or -not $env:GAME) { throw 'set WK_DIR and GAME (build.py sets them from weapons.json paths)' }
+$d = $env:WK_DIR
+$game = $env:GAME
 $env:WK_DIR = $d
 [AppContext]::SetData('APP_CONTEXT_BASE_DIRECTORY', "$d\")
 [AppDomain]::CurrentDomain.add_AssemblyResolve({ param($s, $e)

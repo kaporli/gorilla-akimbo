@@ -1,0 +1,20 @@
+{
+ "guillotine": ["w_smg__budget_guillotine__base1_01", "w_smg__budget_guillotine__base1_01_cap", "w_smg__budget_guillotine__base1_01_stock_01"],
+ "lexington": ["w_handgun__militech_lexington__base1_01", "w_handgun__militech_lexington__base1_01_rail_01"],
+ "unity": ["w_handgun__constitutional_unity__base1_01", "w_handgun__constitutional_liberty__base1_01_rail_01"],
+ "liberty": ["w_handgun__constitutional_liberty__base1_01", "w_handgun__constitutional_liberty__base1_01_rail_01"],
+ "slaughtomatic": ["w_handgun__budget_slaughtomatic__base1_01_lock_01", "w_handgun__budget_slaughtomatic__base1_01"],
+ "nue": ["w_handgun__tsunami_nue__base1_01", "w_handgun__tsunami_nue__base1_01_sight", "w_handgun__tsunami_nue__base1_01_rail_01"],
+ "silverhand": ["w_handgun__malorian_silverhand__base1_01"],
+ "kenshin": ["w_handgun__arasaka_kenshin__base1_01", "w_handgun__arasaka_kenshin__base1_01_ironsights", "w_handgun__arasaka_kenshin__base1_01_rail_01"],
+ "yukimura": ["w_handgun__arasaka_yukimura__base1_01"],
+ "chao": ["w_handgun__kangtao_chao__base1_02"],
+ "grit": ["w_handgun__krausser_grit__base1_01"],
+ "omaha": ["w_handgun__militech_omaha__base1_01", "w_handgun__militech_omaha__base1_01_rail_01", "w_handgun__militech_omaha__base1_01_ironsights"],
+ "ticon": ["w_handgun__militech_ticon__base1_01"],
+ "nova": ["w_revolver__darra_nova__base1_01", "w_revolver__darra_nova__base1_01_rail_01"],
+ "quasar": ["w_revolver__darra_quasar__base1_01", "w_revolver__darra_quasar__base1_01_stock_01", "w_revolver__darra_quasar__base1_01_rail_01", "w_revolver__darra_quasar__base1_01_ironsights"],
+ "overture": ["w_revolver__malorian_overture__base1_01", "w_revolver__malorian_overture__base1_01_rail", "w_revolver__malorian_overture__rcv1_01"],
+ "burya": ["w_revolver__techtronika_burya__base1_01", "w_revolver__techtronika_burya__base1_01_ironsights"],
+ "metel": ["w_revolver__techtronika_metel__base1_01", "w_revolver__techtronika_metel__base1_01_grip"]
+}

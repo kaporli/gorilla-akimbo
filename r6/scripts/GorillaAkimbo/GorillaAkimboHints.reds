@@ -106,10 +106,10 @@ public abstract class GorillaAkimboHints {
     }
     let source = GorillaAkimboHints.Source();
     GorillaAkimboHints.Send(game, n"RangedAttack", n"Ranged", "", 0, false);
-    GorillaAkimboHints.Send(game, GorillaAkimboIndependent.FireAction(true, game), source, "Fire left gun", -3, true);
-    GorillaAkimboHints.Send(game, GorillaAkimboIndependent.FireAction(false, game), source, "Fire right gun", -2, true);
+    GorillaAkimboHints.Send(game, GorillaAkimboIndependent.FireAction(true, game), source, GetLocalizedTextByKey(n"GorillaAkimbo-HintFireLeft"), -3, true);
+    GorillaAkimboHints.Send(game, GorillaAkimboIndependent.FireAction(false, game), source, GetLocalizedTextByKey(n"GorillaAkimbo-HintFireRight"), -2, true);
     if mode <= 2 {
-      GorillaAkimboHints.Send(game, GorillaAkimboIndependent.AimAction(), source, "Aim", -1, true);
+      GorillaAkimboHints.Send(game, GorillaAkimboIndependent.AimAction(), source, GetLocalizedTextByKey(n"GorillaAkimbo-HintAim"), -1, true);
     }
   }
 }
