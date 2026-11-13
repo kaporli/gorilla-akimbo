@@ -20,7 +20,7 @@ import sys, os, json, copy
 import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), 'authoring', 'reload'))
-from glb import Glb
+from glb import Glb, fit_track_keys
 
 FPS = 30.0; SMALL = 0.001
 EMPTY = ('empty_reload', 'empty_reload_01', 'empty_reload_02')
@@ -89,7 +89,7 @@ def build(vanilla_glb, weapon_glb, mesh_glb, out, items):
             for path, arr, kind in (('translation', T, 'VEC3'), ('rotation', Q, 'VEC4'), ('scale', Sc, 'VEC3')):
                 samplers.append({'input': ti, 'output': MG.add_acc(arr, kind), 'interpolation': 'LINEAR'}); channels.append({'sampler': len(samplers) - 1, 'target': {'node': k, 'path': path}})
         van = MG.anim(name) if name in [a['name'] for a in MG.j['animations']] else MG.anim(tr['clip'])
-        ex = copy.deepcopy(van.get('extras', {})); ex['trackKeys'] = [x for x in ex.get('trackKeys') or [] if x['time'] < keys / FPS - 1e-4]
+        ex = copy.deepcopy(van.get('extras', {})); ex['trackKeys'] = fit_track_keys(ex.get('trackKeys'), keys, FPS)
         ex['optimizationHints'] = dict(ex.get('optimizationHints', {}), preferSIMD=True)
         anims.append({'name': name, 'samplers': samplers, 'channels': channels, 'extras': ex})
         print(f'{name:16s} <- {os.path.basename(track_path)} ({nt} frames, {keys} keys, {"two joints" if two else "one joint"})')

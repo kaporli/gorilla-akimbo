@@ -21,7 +21,7 @@ import sys, os, json, copy
 import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import manifest
-from glb import Glb
+from glb import Glb, fit_track_keys
 from fk import Clip
 
 # The gun's vanilla magazine set and weapon set (glb exports of the game files): weapons.json, topmag.magazine.
@@ -189,7 +189,7 @@ def build_anim(name, Gs, Ss, pick, probe=False):
             samplers.append({'input': ti, 'output': MG.add_acc(arr, kind), 'interpolation': 'LINEAR'})
             channels.append({'sampler': len(samplers) - 1, 'target': {'node': k, 'path': path}})
     ex = copy.deepcopy(van['extras'])
-    ex['trackKeys'] = [k for k in ex.get('trackKeys') or [] if k['time'] < n / FPS - 1e-4]
+    ex['trackKeys'] = fit_track_keys(ex.get('trackKeys'), n, FPS)
     ex['optimizationHints'] = dict(ex.get('optimizationHints', {}), preferSIMD=True)
     return {'name': name, 'samplers': samplers, 'channels': channels, 'extras': ex}
 

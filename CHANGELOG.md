@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.2.0 (2026-11-13)
+
+- Inventory screen: V holds a pair of SMGs, shotguns or assault rifles in the game's dual-pistol pose, both guns raised, instead of the one-gun pose that clipped the left gun.
+- The rifles' magazine no longer disappears for a few frames at the end of a reload (Copperhead, Sidewinder, Umbra, Ajax, Kyubi; one frame on the Masamune).
+
 ## 4.1.0 (2026-11-13)
 
 - Carrying a body: with Gorilla Arms, the guns you can dual-wield (SMGs, shotguns, assault rifles) are held in the right hand while V carries a body, like the game does with pistols and revolvers. They fire, aim and reload one-handed. The left gun is put away for the carry and comes back when the body is put down. The game's own requirement for shooting while carrying a body still applies.

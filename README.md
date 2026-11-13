@@ -61,6 +61,10 @@ The **Double Trouble** perk only pairs Power pistols and revolvers. With it, Tec
 
   ![Picking up a body with an SMG pair, then switching to a shotgun and a rifle](research/showcase/carry-body.gif)
 
+- **Inventory screen:** a pair of SMGs, shotguns or assault rifles is held in the game's dual-pistol pose, both guns raised. Without it V holds the pair in the one-gun pose and the left gun clips.
+
+  ![The inventory screen before and with Gorilla Akimbo: SMG, shotgun and rifle pairs](research/showcase/inventory-pairs.png)
+
 - **Independent firing** (setting): the left mouse button fires the left gun, the right mouse button the right gun (each trigger on a controller). Aiming moves to its own key, mouse button 4 by default, rebindable in Key Bindings with [Unified Keybinds](https://www.nexusmods.com/cyberpunk2077/mods/37156). A gun's own button also cuts its shell-by-shell reload short.
 
   ![The Independent firing setting and its aim key in Key Bindings](screenshots/independent-firing.png)
@@ -131,10 +135,12 @@ archive/pc/mod/GorillaAkimboRifles.archive.xl
 r6/config/modkeybinds/GorillaAkimbo.json
 r6/input/GorillaAkimbo.xml
 r6/scripts/GorillaAkimbo/GorillaAkimbo.reds
+r6/scripts/GorillaAkimbo/GorillaAkimboCarry.reds
 r6/scripts/GorillaAkimbo/GorillaAkimboGadget.reds
 r6/scripts/GorillaAkimbo/GorillaAkimboGuns.reds
 r6/scripts/GorillaAkimbo/GorillaAkimboHints.reds
 r6/scripts/GorillaAkimbo/GorillaAkimboIndependent.reds
+r6/scripts/GorillaAkimbo/GorillaAkimboPaperdoll.reds
 r6/scripts/GorillaAkimbo/GorillaAkimboSettings.reds
 r6/scripts/GorillaAkimbo/GorillaAkimboSmart.reds
 r6/scripts/GorillaAkimbo/GorillaAkimboSounds.reds

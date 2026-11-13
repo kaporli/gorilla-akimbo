@@ -6,6 +6,21 @@ COMP = {5126: np.float32, 5123: np.uint16, 5125: np.uint32, 5121: np.uint8, 5122
 NCOMP = {'SCALAR': 1, 'VEC2': 2, 'VEC3': 3, 'VEC4': 4, 'MAT4': 16}
 
 
+def fit_track_keys(keys, n, fps=30.0):
+    """The game clip's float track keys (per-frame values such as which magazine mesh shows) fitted to a clip of n
+    keys: keys at or past the end are dropped, and each track holds its last value up to frame n-1. Without the hold
+    the import fills missing frames with 0, which hid the rifles' magazine for the last padded frames."""
+    keys = [k for k in keys or [] if k['time'] < n / fps - 1e-4]
+    last = {}
+    for k in keys:
+        if k['trackIndex'] not in last or k['time'] >= last[k['trackIndex']]['time']:
+            last[k['trackIndex']] = k
+    for i, k in sorted(last.items()):
+        f = int(round(k['time'] * fps))
+        keys += [{**k, 'time': round(g / fps, 6)} for g in range(f + 1, n)]
+    return sorted(keys, key=lambda k: (k['time'], k['trackIndex']))
+
+
 class Glb:
     def __init__(self, path):
         b = open(path, 'rb').read()
