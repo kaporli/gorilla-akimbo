@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.1.0 (2026-11-13)
+
+- Carrying a body: with Gorilla Arms, the guns you can dual-wield (SMGs, shotguns, assault rifles) are held in the right hand while V carries a body, like the game does with pistols and revolvers. They fire, aim and reload one-handed. The left gun is put away for the carry and comes back when the body is put down. The game's own requirement for shooting while carrying a body still applies.
+- The mouse wheel switches guns while carrying a body (the game blocks switching then), between any of those guns, paired or not, and pistols and revolvers.
+
 ## 4.0.0 (2026-11-12)
 
 - Assault rifles: with Gorilla Arms and Double Trouble, V can pair the Ajax, Kyubi, Copperhead, Umbra, Masamune, Sidewinder, Divided We Stand, Hercules 3AX and modded assault rifles, with their own lowered stance in safe zones.

@@ -57,6 +57,10 @@ The **Double Trouble** perk only pairs Power pistols and revolvers. With it, Tec
 
   ![The right SMG firing while the left hand throws a grenade](research/showcase/grenade-pair.gif)
 
+- **Carrying a body:** with Gorilla Arms, SMGs, shotguns and assault rifles are held in the right hand while V carries a body, like pistols and revolvers in vanilla, and fire and reload one-handed. The left gun comes back when the body is put down. The mouse wheel switches between these guns during the carry, paired or not. The game's own requirement for shooting while carrying a body still applies.
+
+  ![Picking up a body with an SMG pair, then switching to a shotgun and a rifle](research/showcase/carry-body.gif)
+
 - **Independent firing** (setting): the left mouse button fires the left gun, the right mouse button the right gun (each trigger on a controller). Aiming moves to its own key, mouse button 4 by default, rebindable in Key Bindings with [Unified Keybinds](https://www.nexusmods.com/cyberpunk2077/mods/37156). A gun's own button also cuts its shell-by-shell reload short.
 
   ![The Independent firing setting and its aim key in Key Bindings](screenshots/independent-firing.png)

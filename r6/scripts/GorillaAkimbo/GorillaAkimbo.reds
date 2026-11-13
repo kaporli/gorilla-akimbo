@@ -250,7 +250,7 @@ public abstract class GorillaAkimboBody {
     }
     let system = GorillaAkimboReloadSystem.Get(weapon.GetGame());
     system.Clear(weapon.GetItemID(), n"body");
-    if !IsGripWeaponType(RPGManager.GetItemType(weapon.GetItemID())) || !GameObject.IsDualWielding(owner) {
+    if !IsGripWeaponType(RPGManager.GetItemType(weapon.GetItemID())) || !GorillaAkimboCarry.OneHand(owner, weapon.GetItemID()) {
       return;
     }
     let settings = GorillaAkimboConfig.Get(weapon.GetGame());
@@ -437,7 +437,7 @@ public abstract class GorillaAkimboReload {
     // The Body scaling may have changed since the draw (a level up, the settings).
     GorillaAkimboBody.Apply(weapon, owner);
     let type = RPGManager.GetItemType(weapon.GetItemID());
-    if !IsGripWeaponType(type) || !GameObject.IsDualWielding(owner) {
+    if !IsGripWeaponType(type) || !GorillaAkimboCarry.OneHand(owner, weapon.GetItemID()) {
       return 0;
     }
     let settings = GorillaAkimboConfig.Get(weapon.GetGame());
@@ -812,7 +812,7 @@ public abstract class GorillaAkimboHands {
     }
     // Gadget: during a pair's throw the right gun keeps the dual-wield index while the left slot is empty, so a reload
     // of the right gun isn't cut when the left gun comes back (GorillaAkimboGadget.reds).
-    if GorillaAkimboHands.IsDualGrip(owner, item.GetItemID()) || (!left && GorillaAkimboGadgetSystem.Active(owner)) {
+    if GorillaAkimboHands.IsDualGrip(owner, item.GetItemID()) || (!left && (GorillaAkimboGadgetSystem.Active(owner) || GorillaAkimboCarry.OneHanded(owner, item.GetItemID()))) {
       GorillaAkimboHands.Set(scriptInterface, left, state, duration);
     } else {
       let feature = new AnimFeature_EquipUnequipItem();
@@ -836,7 +836,7 @@ protected final const func HandleWeaponEquip(scriptInterface: ref<StateGameScrip
 @wrapMethod(EquipmentBaseTransition)
 protected final const func HandleWeaponUnequip(scriptInterface: ref<StateGameScriptInterface>, stateContext: ref<StateContext>, stateMachineInstanceData: StateMachineInstanceData, item: ItemID, isLeftWeapon: Bool) -> Void {
   wrappedMethod(scriptInterface, stateContext, stateMachineInstanceData, item, isLeftWeapon);
-  if GorillaAkimboHands.IsDualGrip(scriptInterface.executionOwner, item) {
+  if GorillaAkimboHands.IsDualGrip(scriptInterface.executionOwner, item) || GorillaAkimboCarry.OneHanded(scriptInterface.executionOwner, item) {
     let edit = stateContext.GetPermanentBoolParameter(this.GetDualWieldLoadoutEdit(stateMachineInstanceData));
     GorillaAkimboHands.Set(scriptInterface, this.IsLeftHandLogic(stateMachineInstanceData), edit.valid && edit.value ? 1 : 3,
       this.GetWeaponUnEquipDuration(scriptInterface, stateContext, stateMachineInstanceData));
