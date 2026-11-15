@@ -271,6 +271,7 @@ judged in the preview and in game), the family poses, the flight when the search
 | `raisedsets.py`, `raisedset.py` | The raised pose sets and per-gun reload sets: which clips go into which set and their archive.xl entries; one raised pose set (pose clips under their names in a copy of the game's dual-wield base set). `flick.py --rest --hands` makes the per-gun reload set. |
 | `genxl.py` | `GorillaAkimbo.archive.xl`. |
 | `rreload.py`, `rarmset.py`, `rmagset.py`, `genrxl.py` | The rifle reload step: arm sets (pick clips in a copy of the gun's per-hand reload set, key padding, rotation signs), magazine sets, `GorillaAkimboRifles.archive.xl`, round trip. |
+| `rpartset.py` | Gun part sets of the shell-fed shotguns (`reload.parts`): pump or barrels from the drafts' part frames, shells from `_objects.json`, on the gun's Barrel and shell components, keyed on the magazine wrapper; `check()` rebuilds every frame against the draft. |
 | `gensounds.py`, `genguns.py` | `GorillaAkimboSounds.reds`, `GorillaAkimboGuns.reds`. |
 | `sounds.py`, `inktree.py` | Inspection helpers. |
 | `authoring/` | Above. |

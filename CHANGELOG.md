@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.3.0 (2026-11-15)
+
+- One-handed reloads made for each SMG's magazine, for male and female V, either hand, three picks at random per gun: Senkoh, Pulsar, Saratoga and Guillotine, Warden, Dian, Zhuo, Crusher and Pozhar. The magazine has its own animation in each. A reload too short for its pick (high Body with reload speed scaling) plays a quick drop instead, so no animation is sped up.
+- Double-barrel shotguns (Igla, Palica, Satara, Testera) go straight down for the reload, so their fresh shells are no longer seen going in while the gun is still up.
+- Fix: after a reload, a dual-wielded gun could not fire for up to a second while it was already loaded. Guns now fire exactly when they would without the mod: the reload animations fit the game's own reload time, and only the part where the gun is out of view is shortened or lengthened.
+- Fix: reloads got slower each time a gun was equipped again, by up to many seconds on shotguns, until a save was loaded.
+- Shingen and Midnight Borg: the two-handed reload ends at the game's own reload time, about half a second sooner. When the other gun reloads along with it, both guns come up when the slower of the two game reloads ends, about a second sooner than before.
+
 ## 4.2.0 (2026-11-13)
 
 - Inventory screen: V holds a pair of SMGs, shotguns or assault rifles in the game's dual-pistol pose, both guns raised, instead of the one-gun pose that clipped the left gun.

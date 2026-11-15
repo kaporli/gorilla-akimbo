@@ -13,8 +13,8 @@ usage: build.py <command> [...] [--with-test] [--force] [--ref <folder>]
   sounds    GorillaAkimboSounds.reds
   guns      GorillaAkimboGuns.reds
   tables    poses.json, tunes.json, partner_categories.json, guns.json for the authoring tools, into WORK/tables
-  rreload   the rifles' own one-handed reload sets, their magazine sets, archive and .archive.xl, round trip
-            (rreload.py; about 10 to 15 minutes)
+  rreload   the guns' own one-handed reload sets (rifles, SMGs, shotguns), their magazine sets, archives
+            (GorillaAkimboRifles, GorillaAkimboSmgShotgun) and .archive.xl, round trip (rreload.py)
   all       everything above except extract and tables
   verify    compare the outputs with a reference (git HEAD of the reference repo, or --ref <folder>)
   check     numeric checks of the shipped clips and built sets (authoring/checks/gate.py):
@@ -315,7 +315,7 @@ def sounds():
     for p, _ in manifest.sound_sets():
         need(manifest.gamefile(p, '.json'))
     os.makedirs(OUT_SCRIPTS, exist_ok=True)
-    print(py('gensounds.py', manifest.path('gamefiles'), OUT_SCRIPTS + '/GorillaAkimboSounds.reds').strip())
+    print(py('gensounds.py', manifest.path('gamefiles'), OUT_SCRIPTS + '/GorillaAkimboSounds.reds', WORK + '/sounds_own.txt').strip())
 
 
 def guns():

@@ -6,6 +6,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import manifest
 
 m = manifest.load()
+SETTLE_TOL = 1.0   # degrees: the arm counts as settled within this of the clip's last frame
 items = manifest.item_types()   # [(item type entry, type key, type)] of the handled types
 
 
@@ -103,16 +104,41 @@ sec = m['reload_clip']['seconds']
 L += ['  // Reload arm clip layout in clip seconds, the numbers flick.py builds with. Magazine guns: a slow tip-up until',
       '  // OpenEnd, down out of view by DropEnd, held there until HoldEnd, then the rise (RiseLength). Shell-by-shell guns',
       '  // (_02 clips): down by PlainDrop.']
-for fn, key in (('OpenEnd', 'open_end'), ('DropEnd', 'drop_end'), ('HoldEnd', 'hold_end'), ('PlainDrop', 'plain_drop'),
-                ('RiseLength', 'rise_length')):
+for fn, key in (('DropEnd', 'drop_end'), ('HoldEnd', 'hold_end'), ('PlainDrop', 'plain_drop')):
     L += [f'  public static func {fn}() -> Float {{', f'    return {flt(sec[key])};', '  }', '']
+# The generic clips' settle (GorillaAkimboReload: the rise settles there), measured from the built per-hand reload
+# sets (build.py reload, WORK/tmp_reload), the latest over bodies, hands and clips.
+def generic_settle():
+    import glob as _g, numpy as np
+    from glb import Glb
+    files = _g.glob(manifest.path('work') + '/tmp_reload/*_dual_wield_*_reload/*_dual_wield_*_reload.glb')
+    if not files:
+        sys.exit('genguns: no built generic reload clips in WORK/tmp_reload (run build.py reload first)')
+    worst = 0
+    for f in files:
+        g = Glb(f); side = 'Left' if '_left_' in os.path.basename(f) else 'Right'
+        for a in g.j['animations']:
+            if 'reload' not in a['name']:
+                continue
+            t = g.tracks(a['name']); w = None
+            for b in ('Shoulder', 'Arm', 'ForeArm', 'Hand'):
+                k = (side + b, 'rotation')
+                if k in t:
+                    v = t[k][1]; d = np.degrees(2 * np.arccos(np.abs(np.sum(v * v[-1][None], axis=-1)).clip(0, 1)))
+                    w = d if w is None else np.maximum(w, d)
+            if w is not None:
+                mv = np.nonzero(w > SETTLE_TOL)[0]
+                worst = max(worst, int(mv[-1]) + 1 if len(mv) else 0)
+    return worst
+L += ['  // Clip seconds at which the generic clips rise has settled (measured from the built clips).',
+      '  public static func GenericSettle() -> Float {', f"    return {generic_settle()}.0 / {m['reload_clip']['fps']}.0;", '  }', '']
 # Guns with reload clips of their own (weapons.json "reload"): which gun's sets a sound set plays, and per variant
 # and clip the frames the script times the reload with.
 fps = m['reload_clip']['fps']
 owners = {}
 for g in manifest.guns():
     r = g.get('reload')
-    if r:
+    if r and not r.get('parked'):   # parked: the generic reload clips (rreload.owners)
         owners.setdefault(r.get('shares') or g['id'], []).extend(g['audio'])
 byid = {g['id']: g for g in manifest.guns(True)}
 L += ['  // The gun whose own reload sets a gun plays, by its audio set (guns that share a model variable share them);',
@@ -123,6 +149,7 @@ for owner, audios in owners.items():
         L += [f'      case n"{audio}":']
     L += [f'        return n"{owner}";']
 L += ['    }', '    return n"None";', '  }', '']
+FALLBACK = 3      # the variant number of the quick-drop fallback (GorillaAkimboReload.Fallback)
 RDOC = {'hide_start': ['Clip seconds from which the gun, its hand and every magazine are off screen (variant: the game\'s random',
                        'reload pick 0 to 2; empty: the empty reload clip).'],
         'hide_end': ['Clip seconds at which the hidden part ends; the fresh magazine is seated by then.'],
@@ -134,6 +161,8 @@ for key, fn in (('hide_start', 'ReloadHideStart'), ('hide_end', 'ReloadHideEnd')
         r = byid[owner]['reload']
         take = 'A' if r['weight'] == 'light' else 'B'
         L += [f'    if Equals(owner, n"{owner}") {{']
+        if r.get('fallback'):
+            L += [f'      if variant == {FALLBACK} {{', f"        return {r['fallback']['layout'][key]}.0 / {fps}.0;", '      }']
         for v in (1, 2, 0):
             lay = r['layout'][r['slots'][v] + take]
             a, b = lay['reload'][key], lay['empty_reload'][key]
@@ -141,6 +170,133 @@ for key, fn in (('hide_start', 'ReloadHideStart'), ('hide_end', 'ReloadHideEnd')
             L += [f'      if variant == {v} {{', f'        return {value};', '      }'] if v else [f'      return {value};']
         L += ['    }']
     L += ['    return 0.0;', '  }', '']
+# Settle: the clip frame after which the reloading arm (shoulder to hand) stays within SETTLE_TOL degrees of the clip's
+# last frame, the latest over both bodies and hands; measured from the production clips (the clip length if none).
+def settle_frames(glb_path):
+    import numpy as np
+    from glb import Glb
+    if not os.path.exists(glb_path):
+        return None
+    g = Glb(glb_path)
+    side = 'Left' if '_left_' in os.path.basename(glb_path) else 'Right'
+    t = g.tracks(g.j['animations'][0]['name'])
+    worst = None
+    for b in ('Shoulder', 'Arm', 'ForeArm', 'Hand'):
+        k = (side + b, 'rotation')
+        if k in t:
+            v = t[k][1]
+            a = np.degrees(2 * np.arccos(np.abs(np.sum(v * v[-1][None], axis=-1)).clip(0, 1)))
+            worst = a if worst is None else np.maximum(worst, a)
+    if worst is None:
+        return None
+    moving = np.nonzero(worst > SETTLE_TOL)[0]
+    return int(moving[-1]) + 1 if len(moving) else 0
+
+
+def settle(owner, files, length):
+    found = [f for f in (settle_frames(p) for p in files) if f is not None]
+    if not found:
+        sys.exit(f'genguns: no clip to measure the settle of {owner} from: {files[:2]}')
+    return max(found)
+
+
+import rreload
+L += ['  // Clip seconds at which the rise has settled: after it the reloading arm holds still to the end of the clip (measured',
+      '  // from the clips, the latest over both bodies and hands).',
+      '  public static func ReloadSettle(owner: CName, variant: Int32, empty: Bool) -> Float {']
+for owner in owners:
+    g = byid[owner]; r = g['reload']
+    take = 'A' if r['weight'] == 'light' else 'B'
+    d = manifest.path(r.get('clips', 'rreload_clips'))
+    L += [f'    if Equals(owner, n"{owner}") {{']
+    if r.get('fallback'):
+        files = [rreload.fallback_files(g, body, side)[0] for body in manifest.bodies() for side in ('right', 'left')]
+        L += [f'      if variant == {FALLBACK} {{', f"        return {settle(owner, files, r['fallback']['layout']['length'])}.0 / {fps}.0;", '      }']
+    for v in (1, 2, 0):
+        lay = r['layout'][r['slots'][v] + take]
+        vals = []
+        for clip in ('reload', 'empty_reload'):
+            files = [rreload.clip_file(d, body, owner, side, r['slots'][v], take, clip) for body in manifest.bodies() for side in ('right', 'left')]
+            vals.append(settle(owner, files, lay[clip]['length']))
+        a, b = vals
+        value = f'{a}.0 / {fps}.0' if a == b else f'(empty ? {b}.0 : {a}.0) / {fps}.0'
+        L += [f'      if variant == {v} {{', f'        return {value};', '      }'] if v else [f'      return {value};']
+    L += ['    }']
+L += ['    return 0.0;', '  }', '']
+L += ['  // Guns with a quick-drop fallback clip (variant 3 in the layout functions): played instead of the picked reload',
+      '  // when that one would have to be sped up too much (GorillaAkimboReload.FallbackAbove).',
+      '  public static func ReloadFallback(owner: CName) -> Bool {', '    switch owner {']
+for owner in owners:
+    if byid[owner]['reload'].get('fallback'):
+        L += [f'      case n"{owner}":']
+L += ['        return true;', '    }', '    return false;', '  }', '']
+L += ['  // Whether a gun with reload clips of its own has weapon-side sets for them: magazine track sets, or gun part sets',
+      '  // (pump, barrels, shells) on shell-fed guns. Its wrapper is turned on for the reload.',
+      '  public static func ReloadMagazine(owner: CName) -> Bool {', '    switch owner {']
+for owner in owners:
+    if byid[owner]['reload'].get('magazine', True) or byid[owner]['reload'].get('parts'):
+        L += [f'      case n"{owner}":']
+L += ['        return true;', '    }', '    return false;', '  }', '']
+tubes = [o for o in owners if any('loads' in c for lay in byid[o]['reload']['layout'].values() for c in lay.values())]
+L += ['  // Shell-fed guns (layout "loads": tube, break-open): clip seconds at which the clip puts a shell into the gun, per',
+      '  // variant and clip, and which of them goes into the chamber (-1: none).',
+      '  public static func ReloadLoads(owner: CName, variant: Int32, empty: Bool) -> array<Float> {']
+
+
+def per_clip(owner, key, fmt):
+    r = byid[owner]['reload']; take = 'A' if r['weight'] == 'light' else 'B'; out = []
+    for v in (1, 2, 0):
+        a, b = (fmt(r['layout'][r['slots'][v] + take][c].get(key)) for c in ('reload', 'empty_reload'))
+        val = a if a == b else f'empty ? {b} : {a}'
+        out += [f'      if variant == {v} {{', f'        return {val};', '      }'] if v else [f'      return {val};']
+    return out
+
+
+def loads(x): return '[' + ', '.join(f'{f}.0 / {fps}.0' for f in x or []) + ']'
+
+
+for owner in tubes:
+    fb = (byid[owner]['reload'].get('fallback') or {}).get('layout')
+    q = []
+    if fb:
+        a, b = loads(fb.get('loads')), loads(fb.get('empty_loads') or fb.get('loads'))
+        q = [f'      if variant == {FALLBACK} {{', f'        return {a if a == b else f"empty ? {b} : {a}"};', '      }']
+    L += [f'    if Equals(owner, n"{owner}") {{'] + q + per_clip(owner, 'loads', loads) + ['    }']
+L += ['    let none: array<Float>;', '    return none;', '  }', '',
+      '  public static func ReloadChamber(owner: CName, variant: Int32, empty: Bool) -> Int32 {']
+for owner in tubes:
+    L += [f'    if Equals(owner, n"{owner}") {{', f'      if variant == {FALLBACK} {{', '        return -1;', '      }'] + per_clip(owner, 'chamber', lambda x: str(-1 if x is None else x)) + ['    }']
+L += ['    return -1;', '  }', '',
+      '  // Shells the clip shows going in after its hidden part (tube: a meet or a saddle catch): heard there; the ammo of',
+      '  // every shell is counted by the end of the hidden part. Clip seconds; their chamber index follows ReloadLoads.',
+      '  public static func ReloadLateLoads(owner: CName, variant: Int32, empty: Bool) -> array<Float> {']
+for owner in tubes:
+    if any(c.get('late_loads') for lay in byid[owner]['reload']['layout'].values() for c in lay.values()):
+        L += [f'    if Equals(owner, n"{owner}") {{', f'      if variant == {FALLBACK} {{', '        let none: array<Float>;', '        return none;', '      }'] + per_clip(owner, 'late_loads', loads) + ['    }']
+L += ['    let none: array<Float>;', '    return none;', '  }', '']
+# Timing report: per own clip, the shortest reload state (reload time plus end time, seconds) its opening still fits at
+# speed FALLBACK_ABOVE with the hidden part at MAX_SPEED (GorillaAkimboReload.ClipRate); below it the gun needs its
+# quick-drop fallback. Guns without one are listed. Written to WORK/timing.txt and printed.
+FALLBACK_ABOVE, MAX_SPEED, FIRE_BUFFER = 1.15, 8.0, 6.0 / 30.0
+rep = []; missing = []
+for owner in owners:
+    r = byid[owner]['reload']; take = 'A' if r['weight'] == 'light' else 'B'
+    d = manifest.path(r.get('clips', 'rreload_clips')); worst = 0.0
+    for v in (0, 1, 2):
+        for clip in ('reload', 'empty_reload'):
+            lay = r['layout'][r['slots'][v] + take][clip]
+            files = [rreload.clip_file(d, body, owner, side, r['slots'][v], take, clip) for body in manifest.bodies() for side in ('right', 'left')]
+            st = settle(owner, files, lay['length']) / fps; hs = lay['hide_start'] / fps; he = lay['hide_end'] / fps
+            # ClipRate <= FALLBACK_ABOVE  <=>  hidden >= hs / FALLBACK_ABOVE + (he - hs) / MAX_SPEED
+            need = hs / FALLBACK_ABOVE + (he - hs) / MAX_SPEED + (st - he) - FIRE_BUFFER
+            worst = max(worst, need)
+    fb = bool(r.get('fallback'))
+    rep.append(f'{owner:12s} shortest reload state {worst:.2f} s  fallback {"yes" if fb else "NO"}')
+    if not fb:
+        missing.append(owner)
+txt = chr(10).join(rep) + chr(10) + 'without a quick-drop fallback: ' + (', '.join(missing) or 'none') + chr(10)
+os.makedirs(manifest.path('work'), exist_ok=True)
+open(manifest.path('work') + '/timing.txt', 'w').write(txt); print(txt)
 L[-1] = '}'
 open(sys.argv[1], 'w', encoding='utf-8', newline='\n').write('\n'.join(L) + '\n')
 print('GorillaAkimboGuns.reds:', len(items), 'item types,', len(kinds), 'top-magazine kinds')

@@ -154,10 +154,6 @@ public abstract class GorillaAkimboGuns {
   // Reload arm clip layout in clip seconds, the numbers flick.py builds with. Magazine guns: a slow tip-up until
   // OpenEnd, down out of view by DropEnd, held there until HoldEnd, then the rise (RiseLength). Shell-by-shell guns
   // (_02 clips): down by PlainDrop.
-  public static func OpenEnd() -> Float {
-    return 1.2;
-  }
-
   public static func DropEnd() -> Float {
     return 1.5;
   }
@@ -170,14 +166,34 @@ public abstract class GorillaAkimboGuns {
     return 0.4;
   }
 
-  public static func RiseLength() -> Float {
-    return 1.1;
+  // Clip seconds at which the generic clips rise has settled (measured from the built clips).
+  public static func GenericSettle() -> Float {
+    return 137.0 / 30.0;
   }
 
   // The gun whose own reload sets a gun plays, by its audio set (guns that share a model variable share them);
   // n"None" for guns on the generic reload clips.
   public static func ReloadOwner(audio: CName) -> CName {
     switch audio {
+      case n"wea_set_senkoh":
+      case n"wea_set_senkoh_prototype":
+        return n"senkoh";
+      case n"wea_set_pulsar":
+        return n"pulsar";
+      case n"wea_set_saratoga":
+      case n"wea_set_guillotine":
+        return n"saratoga";
+      case n"wea_set_warden":
+      case n"wea_set_warden_suppressor":
+        return n"warden";
+      case n"wea_set_dian":
+        return n"dian";
+      case n"wea_set_zhuo":
+        return n"zhuo";
+      case n"wea_set_crusher":
+        return n"crusher";
+      case n"wea_set_pozhar":
+        return n"pozhar";
       case n"wea_set_ajax":
       case n"wea_set_kyubi":
         return n"ajax";
@@ -197,6 +213,102 @@ public abstract class GorillaAkimboGuns {
   // Clip seconds from which the gun, its hand and every magazine are off screen (variant: the game's random
   // reload pick 0 to 2; empty: the empty reload clip).
   public static func ReloadHideStart(owner: CName, variant: Int32, empty: Bool) -> Float {
+    if Equals(owner, n"senkoh") {
+      if variant == 3 {
+        return 12.0 / 30.0;
+      }
+      if variant == 1 {
+        return 15.0 / 30.0;
+      }
+      if variant == 2 {
+        return 27.0 / 30.0;
+      }
+      return 27.0 / 30.0;
+    }
+    if Equals(owner, n"pulsar") {
+      if variant == 3 {
+        return 12.0 / 30.0;
+      }
+      if variant == 1 {
+        return 25.0 / 30.0;
+      }
+      if variant == 2 {
+        return 17.0 / 30.0;
+      }
+      return 29.0 / 30.0;
+    }
+    if Equals(owner, n"saratoga") {
+      if variant == 3 {
+        return 12.0 / 30.0;
+      }
+      if variant == 1 {
+        return 25.0 / 30.0;
+      }
+      if variant == 2 {
+        return 30.0 / 30.0;
+      }
+      return 28.0 / 30.0;
+    }
+    if Equals(owner, n"warden") {
+      if variant == 3 {
+        return 13.0 / 30.0;
+      }
+      if variant == 1 {
+        return 37.0 / 30.0;
+      }
+      if variant == 2 {
+        return 36.0 / 30.0;
+      }
+      return 27.0 / 30.0;
+    }
+    if Equals(owner, n"dian") {
+      if variant == 3 {
+        return 12.0 / 30.0;
+      }
+      if variant == 1 {
+        return 23.0 / 30.0;
+      }
+      if variant == 2 {
+        return 26.0 / 30.0;
+      }
+      return 29.0 / 30.0;
+    }
+    if Equals(owner, n"zhuo") {
+      if variant == 3 {
+        return 12.0 / 30.0;
+      }
+      if variant == 1 {
+        return 26.0 / 30.0;
+      }
+      if variant == 2 {
+        return 30.0 / 30.0;
+      }
+      return 33.0 / 30.0;
+    }
+    if Equals(owner, n"crusher") {
+      if variant == 3 {
+        return 12.0 / 30.0;
+      }
+      if variant == 1 {
+        return 24.0 / 30.0;
+      }
+      if variant == 2 {
+        return 29.0 / 30.0;
+      }
+      return 28.0 / 30.0;
+    }
+    if Equals(owner, n"pozhar") {
+      if variant == 3 {
+        return 12.0 / 30.0;
+      }
+      if variant == 1 {
+        return 25.0 / 30.0;
+      }
+      if variant == 2 {
+        return 27.0 / 30.0;
+      }
+      return 28.0 / 30.0;
+    }
     if Equals(owner, n"ajax") {
       if variant == 1 {
         return (empty ? 15.0 : 31.0) / 30.0;
@@ -247,6 +359,102 @@ public abstract class GorillaAkimboGuns {
 
   // Clip seconds at which the hidden part ends; the fresh magazine is seated by then.
   public static func ReloadHideEnd(owner: CName, variant: Int32, empty: Bool) -> Float {
+    if Equals(owner, n"senkoh") {
+      if variant == 3 {
+        return 31.0 / 30.0;
+      }
+      if variant == 1 {
+        return 43.0 / 30.0;
+      }
+      if variant == 2 {
+        return 44.0 / 30.0;
+      }
+      return 44.0 / 30.0;
+    }
+    if Equals(owner, n"pulsar") {
+      if variant == 3 {
+        return 30.0 / 30.0;
+      }
+      if variant == 1 {
+        return 44.0 / 30.0;
+      }
+      if variant == 2 {
+        return 44.0 / 30.0;
+      }
+      return 44.0 / 30.0;
+    }
+    if Equals(owner, n"saratoga") {
+      if variant == 3 {
+        return 30.0 / 30.0;
+      }
+      if variant == 1 {
+        return 44.0 / 30.0;
+      }
+      if variant == 2 {
+        return 44.0 / 30.0;
+      }
+      return 44.0 / 30.0;
+    }
+    if Equals(owner, n"warden") {
+      if variant == 3 {
+        return 30.0 / 30.0;
+      }
+      if variant == 1 {
+        return 50.0 / 30.0;
+      }
+      if variant == 2 {
+        return 48.0 / 30.0;
+      }
+      return 50.0 / 30.0;
+    }
+    if Equals(owner, n"dian") {
+      if variant == 3 {
+        return 30.0 / 30.0;
+      }
+      if variant == 1 {
+        return (empty ? 44.0 : 43.0) / 30.0;
+      }
+      if variant == 2 {
+        return 44.0 / 30.0;
+      }
+      return (empty ? 44.0 : 43.0) / 30.0;
+    }
+    if Equals(owner, n"zhuo") {
+      if variant == 3 {
+        return 31.0 / 30.0;
+      }
+      if variant == 1 {
+        return 51.0 / 30.0;
+      }
+      if variant == 2 {
+        return 52.0 / 30.0;
+      }
+      return 50.0 / 30.0;
+    }
+    if Equals(owner, n"crusher") {
+      if variant == 3 {
+        return 31.0 / 30.0;
+      }
+      if variant == 1 {
+        return 44.0 / 30.0;
+      }
+      if variant == 2 {
+        return 44.0 / 30.0;
+      }
+      return (empty ? 45.0 : 44.0) / 30.0;
+    }
+    if Equals(owner, n"pozhar") {
+      if variant == 3 {
+        return 30.0 / 30.0;
+      }
+      if variant == 1 {
+        return (empty ? 44.0 : 43.0) / 30.0;
+      }
+      if variant == 2 {
+        return 44.0 / 30.0;
+      }
+      return 44.0 / 30.0;
+    }
     if Equals(owner, n"ajax") {
       if variant == 1 {
         return (empty ? 80.0 : 70.0) / 30.0;
@@ -297,6 +505,102 @@ public abstract class GorillaAkimboGuns {
 
   // Clip length in seconds.
   public static func ReloadLength(owner: CName, variant: Int32, empty: Bool) -> Float {
+    if Equals(owner, n"senkoh") {
+      if variant == 3 {
+        return 52.0 / 30.0;
+      }
+      if variant == 1 {
+        return 68.0 / 30.0;
+      }
+      if variant == 2 {
+        return 68.0 / 30.0;
+      }
+      return 68.0 / 30.0;
+    }
+    if Equals(owner, n"pulsar") {
+      if variant == 3 {
+        return 52.0 / 30.0;
+      }
+      if variant == 1 {
+        return 68.0 / 30.0;
+      }
+      if variant == 2 {
+        return 68.0 / 30.0;
+      }
+      return 68.0 / 30.0;
+    }
+    if Equals(owner, n"saratoga") {
+      if variant == 3 {
+        return 52.0 / 30.0;
+      }
+      if variant == 1 {
+        return 72.0 / 30.0;
+      }
+      if variant == 2 {
+        return 72.0 / 30.0;
+      }
+      return 72.0 / 30.0;
+    }
+    if Equals(owner, n"warden") {
+      if variant == 3 {
+        return 52.0 / 30.0;
+      }
+      if variant == 1 {
+        return 77.0 / 30.0;
+      }
+      if variant == 2 {
+        return 77.0 / 30.0;
+      }
+      return 77.0 / 30.0;
+    }
+    if Equals(owner, n"dian") {
+      if variant == 3 {
+        return 52.0 / 30.0;
+      }
+      if variant == 1 {
+        return 72.0 / 30.0;
+      }
+      if variant == 2 {
+        return 72.0 / 30.0;
+      }
+      return 72.0 / 30.0;
+    }
+    if Equals(owner, n"zhuo") {
+      if variant == 3 {
+        return 52.0 / 30.0;
+      }
+      if variant == 1 {
+        return 81.0 / 30.0;
+      }
+      if variant == 2 {
+        return 81.0 / 30.0;
+      }
+      return 81.0 / 30.0;
+    }
+    if Equals(owner, n"crusher") {
+      if variant == 3 {
+        return 52.0 / 30.0;
+      }
+      if variant == 1 {
+        return 72.0 / 30.0;
+      }
+      if variant == 2 {
+        return 72.0 / 30.0;
+      }
+      return 72.0 / 30.0;
+    }
+    if Equals(owner, n"pozhar") {
+      if variant == 3 {
+        return 52.0 / 30.0;
+      }
+      if variant == 1 {
+        return 72.0 / 30.0;
+      }
+      if variant == 2 {
+        return 72.0 / 30.0;
+      }
+      return 72.0 / 30.0;
+    }
     if Equals(owner, n"ajax") {
       if variant == 1 {
         return (empty ? 113.0 : 86.0) / 30.0;
@@ -343,5 +647,209 @@ public abstract class GorillaAkimboGuns {
       return 186.0 / 30.0;
     }
     return 0.0;
+  }
+
+  // Clip seconds at which the rise has settled: after it the reloading arm holds still to the end of the clip (measured
+  // from the clips, the latest over both bodies and hands).
+  public static func ReloadSettle(owner: CName, variant: Int32, empty: Bool) -> Float {
+    if Equals(owner, n"senkoh") {
+      if variant == 3 {
+        return 37.0 / 30.0;
+      }
+      if variant == 1 {
+        return (empty ? 64.0 : 56.0) / 30.0;
+      }
+      if variant == 2 {
+        return (empty ? 62.0 : 56.0) / 30.0;
+      }
+      return (empty ? 62.0 : 56.0) / 30.0;
+    }
+    if Equals(owner, n"pulsar") {
+      if variant == 3 {
+        return 37.0 / 30.0;
+      }
+      if variant == 1 {
+        return (empty ? 62.0 : 54.0) / 30.0;
+      }
+      if variant == 2 {
+        return (empty ? 62.0 : 54.0) / 30.0;
+      }
+      return (empty ? 61.0 : 54.0) / 30.0;
+    }
+    if Equals(owner, n"saratoga") {
+      if variant == 3 {
+        return 37.0 / 30.0;
+      }
+      if variant == 1 {
+        return 69.0 / 30.0;
+      }
+      if variant == 2 {
+        return 69.0 / 30.0;
+      }
+      return 68.0 / 30.0;
+    }
+    if Equals(owner, n"warden") {
+      if variant == 3 {
+        return 39.0 / 30.0;
+      }
+      if variant == 1 {
+        return (empty ? 70.0 : 62.0) / 30.0;
+      }
+      if variant == 2 {
+        return (empty ? 71.0 : 63.0) / 30.0;
+      }
+      return (empty ? 71.0 : 63.0) / 30.0;
+    }
+    if Equals(owner, n"dian") {
+      if variant == 3 {
+        return 37.0 / 30.0;
+      }
+      if variant == 1 {
+        return (empty ? 69.0 : 59.0) / 30.0;
+      }
+      if variant == 2 {
+        return (empty ? 69.0 : 59.0) / 30.0;
+      }
+      return (empty ? 68.0 : 54.0) / 30.0;
+    }
+    if Equals(owner, n"zhuo") {
+      if variant == 3 {
+        return 39.0 / 30.0;
+      }
+      if variant == 1 {
+        return 78.0 / 30.0;
+      }
+      if variant == 2 {
+        return 78.0 / 30.0;
+      }
+      return 76.0 / 30.0;
+    }
+    if Equals(owner, n"crusher") {
+      if variant == 3 {
+        return 37.0 / 30.0;
+      }
+      if variant == 1 {
+        return (empty ? 69.0 : 54.0) / 30.0;
+      }
+      if variant == 2 {
+        return (empty ? 69.0 : 54.0) / 30.0;
+      }
+      return (empty ? 68.0 : 55.0) / 30.0;
+    }
+    if Equals(owner, n"pozhar") {
+      if variant == 3 {
+        return 37.0 / 30.0;
+      }
+      if variant == 1 {
+        return (empty ? 69.0 : 54.0) / 30.0;
+      }
+      if variant == 2 {
+        return (empty ? 69.0 : 54.0) / 30.0;
+      }
+      return (empty ? 68.0 : 55.0) / 30.0;
+    }
+    if Equals(owner, n"ajax") {
+      if variant == 1 {
+        return (empty ? 100.0 : 79.0) / 30.0;
+      }
+      if variant == 2 {
+        return (empty ? 100.0 : 81.0) / 30.0;
+      }
+      return (empty ? 100.0 : 81.0) / 30.0;
+    }
+    if Equals(owner, n"copperhead") {
+      if variant == 1 {
+        return (empty ? 91.0 : 75.0) / 30.0;
+      }
+      if variant == 2 {
+        return (empty ? 89.0 : 76.0) / 30.0;
+      }
+      return (empty ? 91.0 : 76.0) / 30.0;
+    }
+    if Equals(owner, n"masamune") {
+      if variant == 1 {
+        return (empty ? 112.0 : 94.0) / 30.0;
+      }
+      if variant == 2 {
+        return (empty ? 107.0 : 96.0) / 30.0;
+      }
+      return (empty ? 109.0 : 96.0) / 30.0;
+    }
+    if Equals(owner, n"sidewinder") {
+      if variant == 1 {
+        return (empty ? 91.0 : 75.0) / 30.0;
+      }
+      if variant == 2 {
+        return (empty ? 89.0 : 77.0) / 30.0;
+      }
+      return (empty ? 91.0 : 76.0) / 30.0;
+    }
+    if Equals(owner, n"hercules") {
+      if variant == 1 {
+        return 159.0 / 30.0;
+      }
+      if variant == 2 {
+        return 159.0 / 30.0;
+      }
+      return 159.0 / 30.0;
+    }
+    return 0.0;
+  }
+
+  // Guns with a quick-drop fallback clip (variant 3 in the layout functions): played instead of the picked reload
+  // when that one would have to be sped up too much (GorillaAkimboReload.FallbackAbove).
+  public static func ReloadFallback(owner: CName) -> Bool {
+    switch owner {
+      case n"senkoh":
+      case n"pulsar":
+      case n"saratoga":
+      case n"warden":
+      case n"dian":
+      case n"zhuo":
+      case n"crusher":
+      case n"pozhar":
+        return true;
+    }
+    return false;
+  }
+
+  // Whether a gun with reload clips of its own has weapon-side sets for them: magazine track sets, or gun part sets
+  // (pump, barrels, shells) on shell-fed guns. Its wrapper is turned on for the reload.
+  public static func ReloadMagazine(owner: CName) -> Bool {
+    switch owner {
+      case n"senkoh":
+      case n"pulsar":
+      case n"saratoga":
+      case n"warden":
+      case n"dian":
+      case n"zhuo":
+      case n"crusher":
+      case n"pozhar":
+      case n"ajax":
+      case n"copperhead":
+      case n"masamune":
+      case n"sidewinder":
+      case n"hercules":
+        return true;
+    }
+    return false;
+  }
+
+  // Shell-fed guns (layout "loads": tube, break-open): clip seconds at which the clip puts a shell into the gun, per
+  // variant and clip, and which of them goes into the chamber (-1: none).
+  public static func ReloadLoads(owner: CName, variant: Int32, empty: Bool) -> array<Float> {
+    let none: array<Float>;
+    return none;
+  }
+
+  public static func ReloadChamber(owner: CName, variant: Int32, empty: Bool) -> Int32 {
+    return -1;
+  }
+
+  // Shells the clip shows going in after its hidden part (tube: a meet or a saddle catch): heard there; the ammo of
+  // every shell is counted by the end of the hidden part. Clip seconds; their chamber index follows ReloadLoads.
+  public static func ReloadLateLoads(owner: CName, variant: Int32, empty: Bool) -> array<Float> {
+    let none: array<Float>;
+    return none;
   }
 }

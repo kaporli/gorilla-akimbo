@@ -1,11 +1,20 @@
 """Generates GorillaAkimboSounds.reds: each gun's own reload sound events (from its two-handed
-reload clips), keyed by the weapon record's audio name. usage: gensounds.py <arm dir> <out .reds>"""
+reload clips), keyed by the weapon record's audio name. usage: gensounds.py <arm dir> <out .reds> [<report>]
+
+Guns with reload clips of their own whose gun parts were time-mapped onto the clip (the SMG and shotgun picks: the
+clip spec has _part_frames or _gun_map) get their sounds re-timed onto each clip: Own(owner, variant, empty). Each
+game sound goes through a piecewise linear map from game frames to clip frames whose anchors are the game's
+magazine-out sound on the clip's release, its magazine-in sound on the clip's seat, the gun-part anchors of the clip
+(cocking piece, handle) and both ends (sound_anchors). Tube guns
+and break-open guns (reload.sounds) get theirs at the clip's marks (reload.sounds.marks); their shell sounds
+play with each shell (OwnShell). The report lists every sound with its game and clip frame and the anchors."""
 import glob, json, os, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import manifest
 
 ARM, OUT = sys.argv[1], sys.argv[2]
+REPORT = sys.argv[3] if len(sys.argv) > 3 else None
 # anim set (male) -> audio names that use it: weapons.json (arm_set, audio)
 SETS = {}
 for _p, _audios in manifest.sound_sets():
@@ -32,11 +41,14 @@ def fallback_lines():
     return out + [ret(last, '    ')]
 
 
-def events(path):
+def events(path, frames=None):
+    """{clip name: [(seconds, sound event)]}; frames: a dict filled with each clip's frame count."""
     d = json.load(open(path, encoding='utf-8'))
     out = {}
     for e in d['Data']['RootChunk']['animations']:
         name = e['Data']['animation']['Data']['name']['$value']
+        if frames is not None:
+            frames[name] = int(round(e['Data']['animation']['Data']['duration'] * 30)) + 1
         evs = (e['Data'].get('events') or {}).get('Data') or {}
         lst = []
         for x in evs.get('events', []):
@@ -87,20 +99,134 @@ for a in sorted(table):
 lines += ['    }', '  }', '']
 
 
-def mag_out(lst):
-    # When the magazine (or a double-barrel's shells) leaves the gun: its first mag-out, eject or open sound.
-    for key in ('mag_out', 'eject', 'open'):
-        for t, n in lst:
-            if key in n:
-                return t
-    return 0.5
+# ---- guns with reload clips of their own whose gun parts were re-timed onto the clip ------------------------------
+import rreload
+
+FPS = 30.0
 
 
-lines += ['  // Clip seconds into the reload at which the magazine (or the spent shells) leaves the gun.',
-          '  public static func MagOut(audio: CName, empty: Bool) -> Float {', '    switch audio {']
-for a in sorted(table):
-    reload, emp = table[a]
-    lines += [f'      case n"{a}":', f'        return empty ? {mag_out(emp):.3f} : {mag_out(reload):.3f};']
-lines += ['    }', '    return 0.5;', '  }', '}', '']
+def ends(e, *tails):
+    return any(e.endswith(t) for t in tails)
+
+
+def sound_anchors(src, spec, lay, n, gun_frames):
+    """[(game frame, clip frame)], increasing in both: the game's magazine-out sound on the clip's magazine release
+    (layout mag_out), its last magazine-in sound before the next handle sound on the seat (layout seated), the gun-part
+    anchors of the clip (_gun_anchors: cocking piece, handle) before the release and after the seat, both ends."""
+    fr = [(t * FPS, e) for t, e in src]
+    out = next((f for f, e in fr if ends(e, 'mag_out_start', 'mag_out', 'mag_out_empty')), None)
+    hand = next((f for f, e in fr if ('handle' in e or 'bolt' in e) and (out is None or f > out)), 1e9)
+    seat = [f for f, e in fr if ends(e, 'mag_in', 'mag_in_empty', 'mag_hit') and f < hand and (out is None or f > out)]
+    A = [(0.0, 0.0)]
+    ga = [(float(g), float(c)) for c, g in (spec.get('_gun_anchors') or [])]
+    if out is not None:
+        A += [(g, c) for g, c in ga if 0 < g < out and 0 < c < lay['mag_out']] + [(out, float(lay['mag_out']))]
+    if seat:
+        A += [(seat[-1], float(lay['seated']))]
+        A += [(g, c) for g, c in ga if g > seat[-1] and c > lay['seated']]
+    else:
+        A += [(g, c) for g, c in ga if g > A[-1][0] and c > A[-1][1]]
+    A += [(gun_frames - 1.0, n - 1.0)]
+    B = [A[0]]
+    for g, c in A[1:]:
+        if g > B[-1][0] and c > B[-1][1]: B.append((g, c))
+    return B
+
+
+def to_clip(s, A):
+    """Clip frame of game frame s, piecewise linear through the anchors (held at the ends)."""
+    if s <= A[0][0]: return A[0][1]
+    for (g0, c0), (g1, c1) in zip(A, A[1:]):
+        if s <= g1: return c0 + (s - g0) * (c1 - c0) / (g1 - g0)
+    return A[-1][1]
+
+
+arm_json = {}
+
+
+def game_events(g):
+    """{clip: [(seconds, event)]}, {clip: frames} of the gun's own arm set (its two-handed reload clips)."""
+    stem = os.path.basename(g['arm_set'].replace(chr(92), '/'))[:-len('.anims')]
+    if stem not in arm_json:
+        found = glob.glob(os.path.join(ARM, '**', stem + '.anims.json'), recursive=True)
+        if not found:
+            raise SystemExit(f'missing {stem}.anims.json under {ARM}: run build.sh extract')
+        fr = {}
+        arm_json[stem] = (events(found[0], fr), fr)
+    return arm_json[stem]
+
+
+own, shell, rep = {}, {}, []
+for g in rreload.owners():
+    r = g['reload']; take = rreload.TAKE[r['weight']]; d = manifest.path(r.get('clips', 'rreload_clips'))
+    tab = {}
+    for v, pick in enumerate(r['slots']):
+        for empty, clip in ((False, 'reload'), (True, 'empty_reload')):
+            spec = json.load(open(rreload.clip_file(d, 'pma', g['id'], 'right', pick, take, clip, '.json')))
+            n = spec['frames']; lay = r['layout'][pick + take][clip]
+            if r.get('sounds'):
+                # tube and break-open guns: each sound at a mark of the clip (the spec's marks, the layout's own)
+                mk = dict(spec.get('_marks') or {}); mk.update(lay.get('marks') or {}); S = r['sounds']
+                lst = [(mk[m] + off, e) for m, off, e in S['marks'] if m in mk]
+                for f, e in sorted(lst):
+                    rep.append(f"{g['id']:10s} v{v} {pick}{take} {clip:12s} {e:52s} mark -> clip f{f}")
+                tab[(v, empty)] = [(f / FPS, e) for f, e in sorted(lst)]
+                shell[g['id']] = (S['shell'], S.get('chamber') or S['shell'])
+                continue
+            if not (spec.get('_part_frames') or spec.get('_gun_map')):
+                break
+            ev, fr = game_events(g); gc = spec['_gun_clip']; src = ev.get(gc) or []
+            A = sound_anchors(src, spec, lay, n, fr.get(gc, n))
+            lst = []
+            for t, e in src:
+                s = t * FPS; f = to_clip(s, A); lst.append((f, e))
+                rep.append(f"{g['id']:10s} v{v} {pick}{take} {clip:12s} {e:52s} game {gc} f{s:5.1f} -> clip f{f:5.1f}")
+            rep.append(f"{g['id']:10s} v{v} {pick}{take} {clip:12s} anchors (game, clip) {[(round(a), round(b)) for a, b in A]}, layout release f{lay['mag_out']} seat f{lay['seated']} handle f{lay['handle']} hidden f{lay['hide_start']}-{lay['hide_end']}")
+            if any(b[0] < a[0] for a, b in zip(lst, lst[1:])) or any(not 0 <= f <= n - 1 for f, _ in lst):
+                raise SystemExit(f'gensounds: {g["id"]} {pick} {clip}: re-timed sounds out of order or outside the clip')
+            tab[(v, empty)] = [(f / FPS, e) for f, e in lst]
+    fb = (r.get('fallback') or {}).get('layout')
+    if len(tab) == 6 and fb:
+        # quick-drop fallback (variant 3): the magazine (or pump) sounds out of view, the grab as the gun settles
+        hs, he = fb['hide_start'], fb['hide_end']
+        for empty, clip in ((False, 'reload'), (True, 'empty_reload')):
+            if r.get('sounds'):
+                lst = [(fb[k] + off, e) for k, off, e in r['sounds']['fallback']]
+            else:
+                ev, _ = game_events(g); src = [(t * FPS, e) for t, e in (ev.get(clip) or ev.get('reload') or [])]
+                out = next((e for f, e in src if ends(e, 'mag_out', 'mag_out_empty')), None) or next((e for f, e in src if 'mag_out' in e), None)
+                seat_ = [e for f, e in src if ends(e, 'mag_in', 'mag_in_empty', 'mag_hit')]
+                hand = [e for f, e in src if any(k in e for k in ('handle_release', 'bolt_release', '_load'))] if empty else []
+                grab = [e for f, e in src if e.endswith('grab') and 'mag' not in e]
+                lst = [(hs + 1, out)] + ([(he - 1, seat_[-1])] if seat_ else []) + ([(he, hand[-1])] if hand else []) + ([(he + 4, grab[-1])] if grab else [])
+                lst = [(f, e) for f, e in lst if e]
+            for f, e in lst:
+                rep.append(f"{g['id']:10s} v3 fallback {clip:12s} {e:52s} -> clip f{f} (hidden f{hs}-{he})")
+            tab[(3, empty)] = [(f / FPS, e) for f, e in lst]
+    if len(tab) >= 6:
+        own[g['id']] = tab
+
+lines += ['  // Guns with reload clips of their own whose gun parts were re-timed onto the clip: the gun\'s reload sounds at',
+          '  // the clip seconds of the clip playing (variant: the game\'s random pick, 3 the quick-drop fallback). False when the',
+          '  // gun has no such table.',
+          '  public static func Own(owner: CName, variant: Int32, empty: Bool, times: script_ref<array<Float>>, names: script_ref<array<CName>>) -> Bool {',
+          '    switch owner {']
+for gid in own:
+    lines += [f'      case n"{gid}":']
+    for v in ((3, 1, 2, 0) if (3, False) in own[gid] else (1, 2, 0)):
+        a, b = own[gid][(v, False)], own[gid][(v, True)]
+        body = [f'Deref(times) = empty ? {arr(b, 0)} : {arr(a, 0)};', f'Deref(names) = empty ? {arr(b, 1)} : {arr(a, 1)};']
+        if v:
+            lines += [f'        if variant == {v} {{'] + ['          ' + x for x in body] + ['          return true;', '        }']
+        else:
+            lines += ['        ' + x for x in body] + ['        return true;']
+lines += ['    }', '    return false;', '  }', '',
+          '  // Tube guns with reload clips of their own: the sound of a shell going into the tube, or into the chamber.',
+          '  public static func OwnShell(owner: CName, chamber: Bool) -> CName {', '    switch owner {']
+for gid, (a, b) in shell.items():
+    lines += [f'      case n"{gid}":', f'        return chamber ? n"{b}" : n"{a}";']
+lines += ['    }', '    return n"None";', '  }', '}', '']
 open(OUT, 'w', encoding='utf-8', newline='\n').write('\n'.join(lines))
-print(len(table), 'audio names ->', OUT)
+if REPORT:
+    open(REPORT, 'w').write('\n'.join(rep) + '\n')
+print(len(table), 'audio names,', len(own), 'own clip tables ->', OUT)

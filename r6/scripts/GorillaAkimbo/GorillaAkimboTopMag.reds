@@ -58,12 +58,6 @@ public abstract class GorillaAkimboTopMag {
     return GorillaAkimboGuns.TopMagHoldEnd(kind);
   }
 
-  // Seconds into the reload at which the gun's own animation reaches gun seconds t (for its sounds). The gun's
-  // animation runs at the arms' speed.
-  public static func GunTime(kind: Int32, speed: Float, t: Float) -> Float {
-    return t / speed;
-  }
-
   // The long gun in the other hand, by its sound set: n"None" for any other gun. Beside these the clips are lupper,
   // axe and hang, so the magazine leaves along a different hit.
   public static func LongPartner(weapon: ref<WeaponObject>) -> CName {
@@ -278,12 +272,14 @@ private let m_gorillaTopMagKind: Int32;
 @addField(ReloadEvents)
 private let m_gorillaTopMagPair: Bool;
 
-// The clip's own speed, and how far it has played (clip seconds), for the hold.
-@addField(ReloadEvents)
-private let m_gorillaTopMagSpeed: Float;
-
+// How far the clip has played (clip seconds), for the hand-back.
 @addField(ReloadEvents)
 private let m_gorillaTopMagClip: Float;
+
+// When the reload state ends (real seconds into it): the game's reload time plus end time, later only when a joined
+// gun's reload ends later (GorillaTopMagJoin).
+@addField(ReloadEvents)
+private let m_gorillaTopMagStateEnd: Float;
 
 // Set once the arms were handed back to the dual-wield idle, a few frames before the clip ends.
 @addField(ReloadEvents)
@@ -302,12 +298,10 @@ private let m_gorillaJoinShellTimes: array<Float>;
 @addField(ReloadEvents)
 private let m_gorillaJoinShellCounts: array<Int32>;
 
-@addField(ReloadEvents)
-private let m_gorillaJoinDone: Float;
 
-// Sets up a two-handed top-magazine reload before the game's own OnEnter: no extra reload time, the clip speed
-// that seats the new magazine as the ammo lands, the reload state kept until the clip ends, and the gun's own
-// reload sounds at that speed. Returns false when the reload isn't one.
+// Sets up a two-handed top-magazine reload before the game's own OnEnter: the clip timed by the shared engine
+// (GorillaAkimboReload.ClipSpeed) to the game's reload state, and the gun's own reload sounds along it. Returns false
+// when the reload isn't one.
 @addMethod(ReloadEvents)
 private final func GorillaTopMagPrepare(weapon: ref<WeaponObject>, scriptInterface: ref<StateGameScriptInterface>) -> Bool {
   let owner = scriptInterface.executionOwner;
@@ -323,22 +317,31 @@ private final func GorillaTopMagPrepare(weapon: ref<WeaponObject>, scriptInterfa
   }
   this.m_gorillaTopMagKind = kind;
   let system = GorillaAkimboReloadSystem.Get(weapon.GetGame());
-  system.Clear(weapon.GetItemID(), n"reload");
+  system.Clear(weapon, n"reload");
   GorillaAkimboBody.Apply(weapon, owner);
   let stats = scriptInterface.GetStatsSystem();
   let id = Cast<StatsObjectID>(weapon.GetEntityID());
   let empty = weapon.IsMagazineEmpty();
   let duration = stats.GetStatValue(id, empty ? gamedataStatType.EmptyReloadTime : gamedataStatType.ReloadTime);
-  // A pair plays at one speed for both guns, so the slower gun's ammo lands with the later seat.
+  // A pair plays one clip for both guns, timed to the slower gun.
   let slowest = duration;
   if this.m_gorillaTopMagPair {
     slowest = MaxF(duration, GorillaAkimboTopMag.Duration(GorillaAkimboTopMag.Weapon(owner, !left)));
   }
-  let speed = ClampF(GorillaAkimboTopMag.Seated(kind) / MaxF(slowest, 0.05), 0.3, GorillaAkimboReload.MaxSpeed());
-  let extra = GorillaAkimboTopMag.Length(kind) / speed - duration - stats.GetStatValue(id, empty ? gamedataStatType.EmptyReloadEndTime : gamedataStatType.ReloadEndTime);
-  if extra > 0.0 {
-    system.Add(weapon, n"reload", gamedataStatType.ReloadEndTime, gameStatModifierType.Additive, extra);
-    system.Add(weapon, n"reload", gamedataStatType.EmptyReloadEndTime, gameStatModifierType.Additive, extra);
+  // The shared timing: the reload state keeps the game's length, the visible parts play at speed 1 and the
+  // out-of-view hold is stretched or cut. The clip's settle is its hand-back, as the state ends (buffer 0): ending the
+  // state before the hand-back hands the magazine and the left hand back mid-clip and the magazine floats (seen
+  // 2026-11-15). These guns have no quick-drop clip; a reload too short for theirs is logged.
+  let stateEnd = slowest + stats.GetStatValue(id, empty ? gamedataStatType.EmptyReloadEndTime : gamedataStatType.ReloadEndTime);
+  let hs = GorillaAkimboTopMag.HoldStart(kind);
+  let he = GorillaAkimboTopMag.HoldEnd(kind);
+  this.m_gorillaClipOpening = hs;
+  this.m_gorillaClipHoldEnd = he;
+  this.m_gorillaTopMagStateEnd = stateEnd;
+  this.m_gorillaClipHidden = GorillaAkimboReload.HiddenEnd(stateEnd, he, GorillaAkimboTopMag.Length(kind) - GorillaAkimboTopMag.HandBack(), 0.0);
+  let speed = GorillaAkimboReload.ClipSpeed(0.0, hs, he, this.m_gorillaClipHidden);
+  if GorillaAkimboReload.ClipRate(hs, he, this.m_gorillaClipHidden) > GorillaAkimboReload.FallbackAbove() {
+    FTLog("GorillaAkimbo: top-magazine reload too short for its clip (opening speed " + FloatToString(speed) + "), no quick-drop fallback");
   }
   this.m_animReloadData.amountToReload = 0;
   this.m_animReloadData.loopDuration = stats.GetStatValue(id, gamedataStatType.ReloadTime);
@@ -348,7 +351,6 @@ private final func GorillaTopMagPrepare(weapon: ref<WeaponObject>, scriptInterfa
   this.m_animReloadDataDirty = true;
   this.m_animReloadSpeedDirty = true;
   this.m_gorillaSpeed = speed;
-  this.m_gorillaTopMagSpeed = speed;
   this.m_gorillaTopMagClip = 0.0;
   this.m_gorillaTopMagHandedBack = false;
   this.m_gorillaJoin = false;
@@ -362,7 +364,7 @@ private final func GorillaTopMagPrepare(weapon: ref<WeaponObject>, scriptInterfa
   ArrayClear(this.m_gorillaSoundNames);
   let i = 0;
   while i < ArraySize(times) {
-    ArrayPush(this.m_gorillaSoundTimes, GorillaAkimboTopMag.GunTime(kind, speed, times[i]));
+    ArrayPush(this.m_gorillaSoundTimes, GorillaAkimboReload.ClipTime(times[i], hs, he, this.m_gorillaClipHidden));
     ArrayPush(this.m_gorillaSoundNames, names[i]);
     i += 1;
   }
@@ -427,7 +429,7 @@ private final func GorillaTopMagStart(scriptInterface: ref<StateGameScriptInterf
       GorillaAkimboSounds.Get(GorillaAkimboReload.Audio(other.GetWeaponRecord(), GorillaAkimboReload.Magazine()), otherEmpty, times, names);
       let i = 0;
       while i < ArraySize(times) {
-        GorillaAkimboTopMag.InsertSound(this.m_gorillaSoundTimes, this.m_gorillaSoundNames, GorillaAkimboTopMag.GunTime(this.m_gorillaTopMagKind, this.m_gorillaTopMagSpeed, times[i]), names[i]);
+        GorillaAkimboTopMag.InsertSound(this.m_gorillaSoundTimes, this.m_gorillaSoundNames, GorillaAkimboReload.ClipTime(times[i], this.m_gorillaClipOpening, this.m_gorillaClipHoldEnd, this.m_gorillaClipHidden), names[i]);
         i += 1;
       }
     }
@@ -507,9 +509,10 @@ private final func GorillaTopMagFinishOther(topMag: ref<GorillaAkimboTopMagSyste
 }
 
 // The other gun (an SMG or shotgun, not a top-magazine gun) reloads in the same down time when its reload was asked
-// for or it ran empty before the guns are down: its ammo starts going in once both guns are out of view, and they
-// stay down until it is all in (a shell-by-shell shotgun's last shell), then come up together. Its own reload state
-// isn't used. Called at the start and on each update until the guns are down.
+// for or it ran empty before the guns are down. Its reload takes its own game time from when it was asked (its ammo
+// lands then, its sounds play out of view), and the guns come up together: the reload state lasts until the later of
+// the two guns' game reload ends, and the out-of-view hold is re-timed to that (never longer than the slower gun's
+// own reload). Its own reload state isn't used. Called at the start and on each update until the guns are down.
 @addMethod(ReloadEvents)
 private final func GorillaTopMagJoin(scriptInterface: ref<StateGameScriptInterface>) {
   let kind = this.m_gorillaTopMagKind;
@@ -532,20 +535,21 @@ private final func GorillaTopMagJoin(scriptInterface: ref<StateGameScriptInterfa
   let passLengths: array<Float>;
   let otherKind = GorillaAkimboReload.Prepare(other, owner, shellTimes, shellCounts, passStarts, passLengths);
   // Prepare's stat changes are for the gun's own reload state.
-  GorillaAkimboReloadSystem.Get(owner.GetGame()).Clear(other.GetItemID(), n"reload");
+  GorillaAkimboReloadSystem.Get(owner.GetGame()).Clear(other, n"reload");
   if otherKind == 0 || ArraySize(passStarts) == 0 {
     return;
   }
   let n = ArraySize(passStarts);
   let total = passStarts[n - 1] + passLengths[n - 1];
   let now = this.GetInStateTime();
-  let start = now + MaxF(GorillaAkimboTopMag.Down(kind) - this.m_gorillaTopMagClip, 0.0) / MaxF(this.m_gorillaTopMagSpeed, 0.05);
+  let start = now;
+  let heard = MaxF(now, GorillaAkimboReload.ClipTime(GorillaAkimboTopMag.Down(kind), this.m_gorillaClipOpening, this.m_gorillaClipHoldEnd, this.m_gorillaClipHidden));
   let times: array<Float>;
   let names: array<CName>;
   GorillaAkimboReload.Sounds(other, other.GetWeaponRecord(), otherKind, passStarts, passLengths, times, names);
   let i = 0;
   while i < ArraySize(times) {
-    GorillaAkimboTopMag.InsertSound(this.m_gorillaSoundTimes, this.m_gorillaSoundNames, start + times[i], names[i]);
+    GorillaAkimboTopMag.InsertSound(this.m_gorillaSoundTimes, this.m_gorillaSoundNames, MaxF(heard, start + times[i]), names[i]);
     i += 1;
   }
   if otherKind == GorillaAkimboReload.Shells() {
@@ -566,16 +570,19 @@ private final func GorillaTopMagJoin(scriptInterface: ref<StateGameScriptInterfa
   }
   this.m_gorillaJoin = true;
   this.m_gorillaJoinOther = other;
-  this.m_gorillaJoinDone = start + total;
   topMag.SetPending(!left, false);
-  // The reload state, and the block on firing, last as much longer as the guns are held down.
-  let hold = this.m_gorillaJoinDone - (now + (GorillaAkimboTopMag.HoldEnd(kind) - this.m_gorillaTopMagClip) / MaxF(this.m_gorillaTopMagSpeed, 0.05));
-  if hold > 0.0 {
+  // Both guns come up together when the later of the two game reloads ends: this one's, or the joined gun's (its
+  // reload time from when it was asked plus its own end time).
+  let otherEnd = start + total + GorillaAkimboReload.EndTime(other, other.IsMagazineEmpty());
+  let extra = otherEnd - this.m_gorillaTopMagStateEnd;
+  if extra > 0.0 {
     let weapon = this.GetWeaponObject(scriptInterface);
     let system = GorillaAkimboReloadSystem.Get(owner.GetGame());
-    system.Add(weapon, n"reload", gamedataStatType.ReloadEndTime, gameStatModifierType.Additive, hold);
-    system.Add(weapon, n"reload", gamedataStatType.EmptyReloadEndTime, gameStatModifierType.Additive, hold);
-    topMag.busyUntil += hold;
+    system.Add(weapon, n"reload", gamedataStatType.ReloadEndTime, gameStatModifierType.Additive, extra);
+    system.Add(weapon, n"reload", gamedataStatType.EmptyReloadEndTime, gameStatModifierType.Additive, extra);
+    topMag.busyUntil += extra;
+    this.m_gorillaTopMagStateEnd = otherEnd;
+    this.m_gorillaClipHidden = GorillaAkimboReload.HiddenEnd(otherEnd, this.m_gorillaClipHoldEnd, GorillaAkimboTopMag.Length(kind) - GorillaAkimboTopMag.HandBack(), 0.0);
   }
 }
 
@@ -592,22 +599,20 @@ private final func GorillaTopMagUpdate(timeDelta: Float, scriptInterface: ref<St
     this.GorillaTopMagFinishOther(topMag);
   }
   this.GorillaTopMagJoin(scriptInterface);
-  if !this.m_gorillaJoin {
-    return;
-  }
-  let other = this.m_gorillaJoinOther;
-  while ArraySize(this.m_gorillaJoinShellTimes) > 0 && now >= this.m_gorillaJoinShellTimes[0] {
-    if IsDefined(other) {
-      GorillaAkimboReload.LoadPass(other, scriptInterface.executionOwner, this.m_gorillaJoinShellCounts[0]);
+  if this.m_gorillaJoin {
+    let other = this.m_gorillaJoinOther;
+    while ArraySize(this.m_gorillaJoinShellTimes) > 0 && now >= this.m_gorillaJoinShellTimes[0] {
+      if IsDefined(other) {
+        GorillaAkimboReload.LoadPass(other, scriptInterface.executionOwner, this.m_gorillaJoinShellCounts[0]);
+      }
+      ArrayErase(this.m_gorillaJoinShellTimes, 0);
+      ArrayErase(this.m_gorillaJoinShellCounts, 0);
     }
-    ArrayErase(this.m_gorillaJoinShellTimes, 0);
-    ArrayErase(this.m_gorillaJoinShellCounts, 0);
   }
-  // Out of view, the clip slows so it leaves the hold as the other gun's ammo is all in.
-  let speed = this.m_gorillaTopMagSpeed;
-  let clip = this.m_gorillaTopMagClip;
-  if clip >= GorillaAkimboTopMag.HoldStart(kind) && clip < GorillaAkimboTopMag.HoldEnd(kind) && this.m_gorillaJoinDone > now {
-    speed = ClampF((GorillaAkimboTopMag.HoldEnd(kind) - clip) / (this.m_gorillaJoinDone - now), 0.02, this.m_gorillaTopMagSpeed);
+  // The shared timing (a join re-times the hidden part); the rise always at speed 1.
+  let speed = GorillaAkimboReload.ClipSpeed(now, this.m_gorillaClipOpening, this.m_gorillaClipHoldEnd, this.m_gorillaClipHidden);
+  if this.m_gorillaTopMagClip >= GorillaAkimboTopMag.HoldEnd(kind) {
+    speed = 1.0;
   }
   if AbsF(speed - this.m_gorillaSpeed) > 0.001 {
     this.m_gorillaSpeed = speed;
@@ -626,7 +631,10 @@ private final func GorillaTopMagUpdate(timeDelta: Float, scriptInterface: ref<St
 protected func OnExit(stateContext: ref<StateContext>, scriptInterface: ref<StateGameScriptInterface>) -> Void {
   wrappedMethod(stateContext, scriptInterface);
   GorillaAkimboTopMagSystem.Get(scriptInterface.GetGame()).SetReloading(this.IsLeftWeaponLogic(), false);
-  this.GorillaOwnEnd();
+  // The magazine set stays on after a finished reload: the state can outlive the clip (ReloadEndTime), and turning
+  // the set off then hands the magazine back to the game's two-handed track, which moves it. The next reload's
+  // OnEnter or a forced exit turns it off.
+  this.m_gorillaOwn = n"None";
   if this.m_gorillaTopMag {
     this.GorillaTopMagEnd(stateContext, scriptInterface);
   }

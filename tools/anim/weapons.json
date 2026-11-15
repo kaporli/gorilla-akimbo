@@ -18,6 +18,9 @@
   "raised_clips": {"env": "RAISEDCLIPS", "default": "C:/Modding/anim-work/raised/production/clips"},
   "rreload_clips": {"env": "RRELOADCLIPS", "default": "C:/Modding/anim-work/rifle-reloads/production/clips"},
   "rreload_gamefiles": {"env": "RRELOADGAMEFILES", "default": "C:/Modding/_tools/gamefiles/ga-reloads"},
+  "smg_reload_clips": {"env": "SMGRELOADCLIPS", "default": "C:/Modding/anim-work/smg-shotgun/production/clips"},
+  "smg_reload_gamefiles": {"env": "SMGRELOADGAMEFILES", "default": "C:/Modding/_tools/gamefiles/ga-reloads;C:/Modding/_tools/gamefiles/wanim3"},
+  "smg_fallback_clips": {"env": "SMGFALLBACKCLIPS", "default": "C:/Modding/anim-work/smg-shotgun/production/fallback"},
   "work": {"env": "WORK", "default": "C:/Modding/gg-work/build"},
   "reference": {"env": "REF", "default": "C:/Modding/gorilla-grip"},
   "anim_work": {"env": "ANIMWORK", "default": "C:/Modding/anim-work"},
@@ -254,7 +257,8 @@
    "parts": ["w_smg__senkoh_lx__base1_01", "w_smg__senkoh_lx__base1_01_rail_01"],
    "length": "short",
    "lowered": {"family": "v1", "pose": "v1_senkoh_lx", "tune": [0, 0.07, 0.0]},
-   "partner": {"shingen": ["rear_short", "grip_std", "top_low"], "borg": ["rear_short", "grip_std", "top_low"]}
+   "partner": {"shingen": ["rear_short", "grip_std", "top_low"], "borg": ["rear_short", "grip_std", "top_low"]},
+   "reload": {"category": "grip", "picks": ["SG08", "SG13", "SG12"], "weight": "light", "slots": ["SG08", "SG13", "SG12"], "clips": "smg_reload_clips", "archive": "GorillaAkimboSmgShotgun", "magazine": {"set": "base\\animations\\weapon\\firearms\\smg\\senkoh_lx\\w_smg__senkoh_lx__mag_std.anims", "weapon_set": "base\\animations\\weapon\\firearms\\smg\\senkoh_lx\\w_smg__senkoh_lx__base1.anims", "components": ["Magazine", "MagazineReload"], "builder": "rmagset2", "gamefiles": "smg_reload_gamefiles"}, "layout": {"SG08A": {"reload": {"hide_start": 27, "hide_end": 44, "mag_out": 18, "seated": 38, "length": 68, "handle": null, "keys": 68}, "empty_reload": {"hide_start": 27, "hide_end": 44, "mag_out": 18, "seated": 38, "length": 68, "handle": 53, "keys": 68}}, "SG13A": {"reload": {"hide_start": 15, "hide_end": 43, "mag_out": 18, "seated": 38, "length": 68, "handle": null, "keys": 68}, "empty_reload": {"hide_start": 15, "hide_end": 43, "mag_out": 18, "seated": 38, "length": 68, "handle": 53, "keys": 68}}, "SG12A": {"reload": {"hide_start": 27, "hide_end": 44, "mag_out": 18, "seated": 38, "length": 68, "handle": null, "keys": 68}, "empty_reload": {"hide_start": 27, "hide_end": 44, "mag_out": 18, "seated": 38, "length": 68, "handle": 53, "keys": 68}}}, "fallback": {"clips": "smg_fallback_clips", "layout": {"hide_start": 12, "hide_end": 31, "mag_out": 12, "seated": 21, "length": 52, "handle": null, "keys": 52, "swap": 21}}}
   },
   {
    "id": "pulsar",
@@ -267,7 +271,8 @@
    "mesh": "w_smg__darra_pulsar",
    "length": "short",
    "lowered": {"family": "v1", "pose": "v1_darra_pulsar", "tune": [0, 0.02, 0.0]},
-   "partner": {"shingen": ["rear_std", "grip_long", "top_std"], "borg": ["rear_std", "grip_long", "top_std"]}
+   "partner": {"shingen": ["rear_std", "grip_long", "top_std"], "borg": ["rear_std", "grip_long", "top_std"]},
+   "reload": {"category": "bullpup", "picks": ["SB43", "SB39", "SB38"], "weight": "light", "slots": ["SB43", "SB39", "SB38"], "clips": "smg_reload_clips", "archive": "GorillaAkimboSmgShotgun", "magazine": {"set": "base\\animations\\weapon\\firearms\\smg\\darra_pulsar\\w_smg__darra_pulsar__mag_std.anims", "weapon_set": "base\\animations\\weapon\\firearms\\smg\\darra_pulsar\\w_smg__darra_pulsar__base1.anims", "components": ["Magazine", "MagazineReload"], "builder": "rmagset2", "gamefiles": "smg_reload_gamefiles"}, "layout": {"SB43A": {"reload": {"hide_start": 29, "hide_end": 44, "mag_out": 18, "seated": 38, "length": 68, "handle": null, "keys": 68}, "empty_reload": {"hide_start": 29, "hide_end": 44, "mag_out": 18, "seated": 38, "length": 68, "handle": 53, "keys": 68}}, "SB39A": {"reload": {"hide_start": 25, "hide_end": 44, "mag_out": 18, "seated": 38, "length": 68, "handle": null, "keys": 68}, "empty_reload": {"hide_start": 25, "hide_end": 44, "mag_out": 18, "seated": 38, "length": 68, "handle": 53, "keys": 68}}, "SB38A": {"reload": {"hide_start": 17, "hide_end": 44, "mag_out": 18, "seated": 38, "length": 68, "handle": null, "keys": 68}, "empty_reload": {"hide_start": 17, "hide_end": 44, "mag_out": 18, "seated": 38, "length": 68, "handle": 53, "keys": 68}}}, "fallback": {"clips": "smg_fallback_clips", "layout": {"hide_start": 12, "hide_end": 30, "mag_out": 12, "seated": 21, "length": 52, "handle": null, "keys": 52, "swap": 21}}}
   },
   {
    "id": "saratoga",
@@ -281,7 +286,8 @@
    "parts": ["w_smg__militech_saratoga__base1_01", "w_smg__militech_saratoga__base1_01_ironsight_01", "w_smg__militech_saratoga__base1_01_stock_01"],
    "length": "short",
    "lowered": {"family": "v1", "pose": "v1_militech_saratoga", "tune": [0, 0.04, 0.0]},
-   "partner": {"shingen": ["rear_std", "grip_short", "top_std"], "borg": ["rear_std", "grip_short", "top_std"]}
+   "partner": {"shingen": ["rear_std", "grip_short", "top_std"], "borg": ["rear_std", "grip_short", "top_std"]},
+   "reload": {"category": "smg_front", "picks": ["SF13", "SF35", "SF40"], "weight": "light", "slots": ["SF13", "SF35", "SF40"], "clips": "smg_reload_clips", "archive": "GorillaAkimboSmgShotgun", "magazine": {"set": "base\\animations\\weapon\\firearms\\smg\\militech_saratoga\\w_smg__militech_saratoga__mag_std.anims", "weapon_set": "base\\animations\\weapon\\firearms\\smg\\militech_saratoga\\w_smg__militech_saratoga__base1.anims", "components": ["Magazine", "MagazineReload"], "builder": "rmagset2", "gamefiles": "smg_reload_gamefiles"}, "layout": {"SF13A": {"reload": {"hide_start": 28, "hide_end": 44, "mag_out": 20, "seated": 38, "length": 72, "handle": 54, "keys": 73}, "empty_reload": {"hide_start": 28, "hide_end": 44, "mag_out": 20, "seated": 38, "length": 72, "handle": 54, "keys": 73}}, "SF35A": {"reload": {"hide_start": 25, "hide_end": 44, "mag_out": 11, "seated": 38, "length": 72, "handle": 54, "keys": 73}, "empty_reload": {"hide_start": 25, "hide_end": 44, "mag_out": 11, "seated": 38, "length": 72, "handle": 54, "keys": 73}}, "SF40A": {"reload": {"hide_start": 30, "hide_end": 44, "mag_out": 18, "seated": 38, "length": 72, "handle": 54, "keys": 73}, "empty_reload": {"hide_start": 30, "hide_end": 44, "mag_out": 18, "seated": 38, "length": 72, "handle": 54, "keys": 73}}}, "fallback": {"clips": "smg_fallback_clips", "layout": {"hide_start": 12, "hide_end": 30, "mag_out": 12, "seated": 21, "length": 52, "handle": null, "keys": 52, "swap": 21}}}
   },
   {
    "id": "warden",
@@ -295,7 +301,8 @@
    "parts": ["w_smg__krausser_warden__base1_01", "w_smg__krausser_warden__base1_02"],
    "length": "short",
    "lowered": {"family": "v1", "pose": "v1_krausser_warden", "tune": [0, 0.02, 0.0]},
-   "partner": {"shingen": ["rear_long", "grip_long", "top_tall"], "borg": ["rear_long", "grip_long", "top_tall"]}
+   "partner": {"shingen": ["rear_long", "grip_long", "top_tall"], "borg": ["rear_long", "grip_long", "top_tall"]},
+   "reload": {"category": "top", "picks": ["ST38", "ST40", "ST32"], "weight": "heavy", "slots": ["ST38", "ST40", "ST32"], "clips": "smg_reload_clips", "archive": "GorillaAkimboSmgShotgun", "magazine": {"set": "ep1\\animations\\weapon\\firearms\\smg\\krausser_warden\\w_smg__krausser_warden__mag_std.anims", "weapon_set": "ep1\\animations\\weapon\\firearms\\smg\\krausser_warden\\w_smg__krausser_warden__base1.anims", "components": ["Magazine", "MagazineReload"], "builder": "rmagset2", "gamefiles": "smg_reload_gamefiles"}, "layout": {"ST38B": {"reload": {"hide_start": 27, "hide_end": 50, "mag_out": 21, "seated": 43, "length": 77, "handle": null, "keys": 80}, "empty_reload": {"hide_start": 27, "hide_end": 50, "mag_out": 21, "seated": 43, "length": 77, "handle": 61, "keys": 80}}, "ST40B": {"reload": {"hide_start": 37, "hide_end": 50, "mag_out": 21, "seated": 43, "length": 77, "handle": null, "keys": 80}, "empty_reload": {"hide_start": 37, "hide_end": 50, "mag_out": 21, "seated": 43, "length": 77, "handle": 61, "keys": 80}}, "ST32B": {"reload": {"hide_start": 36, "hide_end": 48, "mag_out": 21, "seated": 43, "length": 77, "handle": null, "keys": 80}, "empty_reload": {"hide_start": 36, "hide_end": 48, "mag_out": 21, "seated": 43, "length": 77, "handle": 61, "keys": 80}}}, "fallback": {"clips": "smg_fallback_clips", "layout": {"hide_start": 13, "hide_end": 30, "mag_out": 13, "seated": 21, "length": 52, "handle": null, "keys": 52, "swap": 21}}}
   },
   {
    "id": "borg",
@@ -323,7 +330,8 @@
    "parts": ["w_special__kangtao_dian__base1_01", "w_special__kangtao_dian__base1_02", "w_special__kangtao_dian__rcv1_01"],
    "length": "short",
    "lowered": {"family": "v1", "pose": "v1_kangtao_dian", "tune": [0, -0.05, -0.06]},
-   "partner": {"shingen": ["rear_std", "grip_std", "top_std"], "borg": ["rear_long", "grip_std", "top_std"]}
+   "partner": {"shingen": ["rear_std", "grip_std", "top_std"], "borg": ["rear_long", "grip_std", "top_std"]},
+   "reload": {"category": "smg_front", "picks": ["SF13", "SF35", "SF40"], "weight": "light", "slots": ["SF13", "SF35", "SF40"], "clips": "smg_reload_clips", "archive": "GorillaAkimboSmgShotgun", "magazine": {"set": "base\\animations\\weapon\\firearms\\special\\kangtao_dian\\w_special__kangtao_dian__mag_std.anims", "weapon_set": "base\\animations\\weapon\\firearms\\special\\kangtao_dian\\w_special__kangtao_dian__rcv1.anims", "components": ["Magazine", "MagazineReload"], "builder": "rmagset2", "gamefiles": "smg_reload_gamefiles"}, "layout": {"SF13A": {"reload": {"hide_start": 29, "hide_end": 43, "mag_out": 20, "seated": 38, "length": 72, "handle": null, "keys": 73}, "empty_reload": {"hide_start": 29, "hide_end": 44, "mag_out": 20, "seated": 38, "length": 72, "handle": 54, "keys": 73}}, "SF35A": {"reload": {"hide_start": 23, "hide_end": 43, "mag_out": 11, "seated": 38, "length": 72, "handle": null, "keys": 73}, "empty_reload": {"hide_start": 23, "hide_end": 44, "mag_out": 11, "seated": 38, "length": 72, "handle": 54, "keys": 73}}, "SF40A": {"reload": {"hide_start": 26, "hide_end": 44, "mag_out": 18, "seated": 38, "length": 72, "handle": null, "keys": 73}, "empty_reload": {"hide_start": 26, "hide_end": 44, "mag_out": 18, "seated": 38, "length": 72, "handle": 54, "keys": 73}}}, "fallback": {"clips": "smg_fallback_clips", "layout": {"hide_start": 12, "hide_end": 30, "mag_out": 12, "seated": 21, "length": 52, "handle": null, "keys": 52, "swap": 21}}}
   },
   {
    "id": "smart_corp_rifle",
@@ -334,6 +342,17 @@
    "length": "short",
    "lowered": {"family": "v1", "pose": "v1"},
    "note": "Model variable of an SMG arm set in the player entity; no mesh, no sound table of its own."
+  },
+  {
+   "id": "guillotine",
+   "name": "Guillotine",
+   "type": "smg",
+   "item_type": "Wea_SubmachineGun",
+   "vars": [],
+   "audio": ["wea_set_guillotine"],
+   "length": "short",
+   "reload": {"category": "smg_front", "picks": ["SF13", "SF35", "SF40"], "weight": "light", "shares": "saratoga"},
+   "note": "No model variable of its own: its record's friendlyName is w_submachinegun_militech_saratoga (base_guillotine.tweak), so it plays the Saratoga's arm sets; its appearance plays the Saratoga's magazine set (w_smg__militech_saratoga__mag_std.anims) on Magazine and MagazineReload. Its reload sounds come from the Saratoga (no arm set of its own). Lowered and Shingen partner sets: the Saratoga sets (same variable)."
   },
   {
    "id": "generic_smg",
@@ -357,7 +376,8 @@
    "length": "long",
    "long_partner": "carnage",
    "lowered": {"family": "v2", "pose": "v2"},
-   "partner": {"shingen": ["rear_long", "grip_short", "top_std"], "borg": ["rear_long", "grip_short", "top_std"]}
+   "partner": {"shingen": ["rear_long", "grip_short", "top_std"], "borg": ["rear_long", "grip_short", "top_std"]},
+   "reload": {"category": "tube", "picks": ["TU21", "TU22", "TU23"], "weight": "light", "slots": ["TU21", "TU22", "TU23"], "clips": "smg_reload_clips", "archive": "GorillaAkimboSmgShotgun", "magazine": null, "parked": true, "layout": {"TU21A": {"reload": {"hide_start": 12, "hide_end": 23, "mag_out": 1, "seated": 17, "length": 49, "handle": 37, "keys": 49, "loads": [14], "late_loads": [28], "load_kinds": ["press", "toss"], "chamber": null}, "empty_reload": {"hide_start": 12, "hide_end": 23, "mag_out": 1, "seated": 17, "length": 49, "handle": 37, "keys": 49, "loads": [14], "late_loads": [28], "load_kinds": ["press", "toss"], "chamber": null}}, "TU22A": {"reload": {"hide_start": 12, "hide_end": 23, "mag_out": 1, "seated": 17, "length": 58, "handle": 46, "keys": 60, "loads": [14], "late_loads": [37], "load_kinds": ["press", "saddle"], "chamber": 1}, "empty_reload": {"hide_start": 12, "hide_end": 23, "mag_out": 1, "seated": 17, "length": 58, "handle": 46, "keys": 60, "loads": [14], "late_loads": [37], "load_kinds": ["press", "saddle"], "chamber": 1}}, "TU23A": {"reload": {"hide_start": 12, "hide_end": 27, "mag_out": 1, "seated": 20, "length": 46, "handle": 34, "keys": 48, "loads": [13, 16, 19], "late_loads": [], "load_kinds": ["sweep", "sweep", "sweep"], "chamber": null}, "empty_reload": {"hide_start": 12, "hide_end": 27, "mag_out": 1, "seated": 20, "length": 46, "handle": 34, "keys": 48, "loads": [13, 16, 19], "late_loads": [], "load_kinds": ["sweep", "sweep", "sweep"], "chamber": null}}}, "sounds": {"marks": [["open", 0, "w_gun_shotgun_power_carnage_pump_open"], ["rack_start", 0, "w_gun_shotgun_power_carnage_move"], ["hit", 0, "w_gun_shotgun_power_carnage_pump_close"], ["hit", 5, "w_gun_shotgun_power_carnage_grab"]], "shell": "w_gun_shotgun_power_carnage_shell_in", "chamber": "w_gun_shotgun_power_carnage_shell_in_barrel", "fallback": [["hide_start", 1, "w_gun_shotgun_power_carnage_pump_open"], ["hide_end", 0, "w_gun_shotgun_power_carnage_pump_close"], ["hide_end", 4, "w_gun_shotgun_power_carnage_grab"]]}, "fallback": {"clips": "smg_fallback_clips", "layout": {"hide_start": 12, "hide_end": 30, "mag_out": 12, "seated": 21, "length": 52, "handle": null, "keys": 52, "loads": [21], "empty_loads": [20, 22], "swap": 21}}}
   },
   {
    "id": "tactician",
@@ -372,7 +392,8 @@
    "length": "long",
    "long_partner": "tactician",
    "lowered": {"family": "v2", "pose": "v2"},
-   "partner": {"shingen": ["rear_std", "grip_short", "top_low"], "borg": ["rear_std", "grip_short", "top_low"]}
+   "partner": {"shingen": ["rear_std", "grip_short", "top_low"], "borg": ["rear_std", "grip_short", "top_low"]},
+   "reload": {"category": "tube", "picks": ["TU21", "TU22", "TU23"], "weight": "light", "slots": ["TU21", "TU22", "TU23"], "clips": "smg_reload_clips", "archive": "GorillaAkimboSmgShotgun", "magazine": null, "parked": true, "layout": {"TU21A": {"reload": {"hide_start": 11, "hide_end": 22, "mag_out": 1, "seated": 17, "length": 48, "handle": 36, "keys": 48, "loads": [13], "late_loads": [27], "load_kinds": ["press", "toss"], "chamber": null}, "empty_reload": {"hide_start": 11, "hide_end": 22, "mag_out": 1, "seated": 17, "length": 48, "handle": 36, "keys": 48, "loads": [13], "late_loads": [27], "load_kinds": ["press", "toss"], "chamber": null}}, "TU22A": {"reload": {"hide_start": 11, "hide_end": 23, "mag_out": 1, "seated": 17, "length": 58, "handle": 46, "keys": 60, "loads": [13], "late_loads": [37], "load_kinds": ["press", "saddle"], "chamber": 1}, "empty_reload": {"hide_start": 11, "hide_end": 23, "mag_out": 1, "seated": 17, "length": 58, "handle": 46, "keys": 60, "loads": [13], "late_loads": [37], "load_kinds": ["press", "saddle"], "chamber": 1}}, "TU23A": {"reload": {"hide_start": 11, "hide_end": 27, "mag_out": 1, "seated": 20, "length": 46, "handle": 34, "keys": 48, "loads": [12, 15, 18], "late_loads": [], "load_kinds": ["sweep", "sweep", "sweep"], "chamber": null}, "empty_reload": {"hide_start": 11, "hide_end": 27, "mag_out": 1, "seated": 20, "length": 46, "handle": 34, "keys": 48, "loads": [12, 15, 18], "late_loads": [], "load_kinds": ["sweep", "sweep", "sweep"], "chamber": null}}}, "sounds": {"marks": [["open", 0, "w_gun_shotgun_power_tactician_load_open"], ["rack_start", 0, "w_gun_shotgun_power_tactician_move"], ["hit", 0, "w_gun_shotgun_power_tactician_load_close"], ["hit", 5, "w_gun_shotgun_power_tactician_grab"]], "shell": "w_gun_shotgun_power_tactician_shell_in", "chamber": "w_gun_shotgun_power_tactician_shell_in_empty", "fallback": [["hide_start", 1, "w_gun_shotgun_power_tactician_load_open"], ["hide_end", 0, "w_gun_shotgun_power_tactician_load_close"], ["hide_end", 4, "w_gun_shotgun_power_tactician_grab"]]}, "fallback": {"clips": "smg_fallback_clips", "layout": {"hide_start": 12, "hide_end": 31, "mag_out": 12, "seated": 21, "length": 52, "handle": null, "keys": 52, "loads": [21], "empty_loads": [20, 22], "swap": 21}}}
   },
   {
    "id": "zhuo",
@@ -387,7 +408,8 @@
    "length": "long",
    "long_partner": "zhuo",
    "lowered": {"family": "v2", "pose": "v2"},
-   "partner": {"shingen": ["rear_short", "grip_short", "top_low"], "borg": ["rear_short", "grip_short", "top_low"]}
+   "partner": {"shingen": ["rear_short", "grip_short", "top_low"], "borg": ["rear_short", "grip_short", "top_low"]},
+   "reload": {"category": "smg_front", "picks": ["SF13", "SF35", "SF40"], "weight": "heavy", "slots": ["SF13", "SF35", "SF40"], "clips": "smg_reload_clips", "archive": "GorillaAkimboSmgShotgun", "magazine": {"set": "base\\animations\\weapon\\firearms\\special\\kangtao_zhuo\\w_special__kangtao_zhuo__mag_std.anims", "weapon_set": "base\\animations\\weapon\\firearms\\special\\kangtao_zhuo\\w_special__kangtao_zhuo__rcv1.anims", "components": ["magazine", "magazine_reload"], "builder": "rmagset2", "gamefiles": "smg_reload_gamefiles"}, "layout": {"SF13B": {"reload": {"hide_start": 33, "hide_end": 50, "mag_out": 23, "seated": 43, "length": 81, "handle": 61, "keys": 81}, "empty_reload": {"hide_start": 33, "hide_end": 50, "mag_out": 23, "seated": 43, "length": 81, "handle": 61, "keys": 81}}, "SF35B": {"reload": {"hide_start": 26, "hide_end": 51, "mag_out": 13, "seated": 43, "length": 81, "handle": 61, "keys": 81}, "empty_reload": {"hide_start": 26, "hide_end": 51, "mag_out": 13, "seated": 43, "length": 81, "handle": 61, "keys": 81}}, "SF40B": {"reload": {"hide_start": 30, "hide_end": 52, "mag_out": 21, "seated": 43, "length": 81, "handle": 61, "keys": 81}, "empty_reload": {"hide_start": 30, "hide_end": 52, "mag_out": 21, "seated": 43, "length": 81, "handle": 61, "keys": 81}}}, "fallback": {"clips": "smg_fallback_clips", "layout": {"hide_start": 12, "hide_end": 31, "mag_out": 12, "seated": 21, "length": 52, "handle": null, "keys": 52, "swap": 21}}}
   },
   {
    "id": "crusher",
@@ -401,7 +423,8 @@
    "parts": ["w_revolver__militech_crusher__base1_01", "w_revolver__militech_crusher__base1_01_inside"],
    "length": "short",
    "lowered": {"family": "v1", "pose": "v1_militech_crusher", "tune": [0, 0.06, 0.0]},
-   "partner": {"shingen": ["rear_short", "grip_std", "top_low"], "borg": ["rear_short", "grip_std", "top_low"]}
+   "partner": {"shingen": ["rear_short", "grip_std", "top_low"], "borg": ["rear_short", "grip_std", "top_low"]},
+   "reload": {"category": "smg_front", "picks": ["SF13", "SF35", "SF40"], "weight": "light", "slots": ["SF13", "SF35", "SF40"], "clips": "smg_reload_clips", "archive": "GorillaAkimboSmgShotgun", "magazine": {"set": "base\\animations\\weapon\\firearms\\revolver\\militech_crusher\\w_revolver__militech_crusher__mag_std.anims", "weapon_set": "base\\animations\\weapon\\firearms\\revolver\\militech_crusher\\w_revolver__militech_crusher__base1.anims", "components": ["Magazine", "MagazineReload"], "builder": "rmagset2", "gamefiles": "smg_reload_gamefiles"}, "layout": {"SF13A": {"reload": {"hide_start": 28, "hide_end": 44, "mag_out": 20, "seated": 38, "length": 72, "handle": null, "keys": 73}, "empty_reload": {"hide_start": 28, "hide_end": 45, "mag_out": 20, "seated": 38, "length": 72, "handle": 54, "keys": 73}}, "SF35A": {"reload": {"hide_start": 24, "hide_end": 44, "mag_out": 11, "seated": 38, "length": 72, "handle": null, "keys": 73}, "empty_reload": {"hide_start": 24, "hide_end": 44, "mag_out": 11, "seated": 38, "length": 72, "handle": 54, "keys": 73}}, "SF40A": {"reload": {"hide_start": 29, "hide_end": 44, "mag_out": 18, "seated": 38, "length": 72, "handle": null, "keys": 73}, "empty_reload": {"hide_start": 29, "hide_end": 44, "mag_out": 18, "seated": 38, "length": 72, "handle": 54, "keys": 73}}}, "fallback": {"clips": "smg_fallback_clips", "layout": {"hide_start": 12, "hide_end": 31, "mag_out": 12, "seated": 21, "length": 52, "handle": null, "keys": 52, "swap": 21}}}
   },
   {
    "id": "pozhar",
@@ -415,7 +438,8 @@
    "parts": ["w_rifle_precision__techtronika_pozhar__base1_01", "w_rifle_precision__techtronika_pozhar__base1_01_cap", "w_rifle_precision__techtronika_pozhar__base1_02", "w_rifle_precision__techtronika_pozhar__base1_02_cap"],
    "length": "short",
    "lowered": {"family": "v1", "pose": "v1_techtronika_pozhar", "tune": [0, 0.05, 0.0]},
-   "partner": {"shingen": ["rear_short", "grip_short", "top_low"], "borg": ["rear_short", "grip_short", "top_low"]}
+   "partner": {"shingen": ["rear_short", "grip_short", "top_low"], "borg": ["rear_short", "grip_short", "top_low"]},
+   "reload": {"category": "smg_front", "picks": ["SF13", "SF35", "SF40"], "weight": "light", "slots": ["SF13", "SF35", "SF40"], "clips": "smg_reload_clips", "archive": "GorillaAkimboSmgShotgun", "magazine": {"set": "base\\animations\\weapon\\firearms\\rifle_precision\\techtronika_pozhar\\w_rifle_precision__techtronika_pozhar__mag_std.anims", "weapon_set": "base\\animations\\weapon\\firearms\\rifle_precision\\techtronika_pozhar\\w_rifle_precision__techtronika_pozhar__base1.anims", "components": ["Magazine", "MagazineReload"], "builder": "rmagset2", "gamefiles": "smg_reload_gamefiles"}, "layout": {"SF13A": {"reload": {"hide_start": 28, "hide_end": 44, "mag_out": 20, "seated": 38, "length": 72, "handle": null, "keys": 73}, "empty_reload": {"hide_start": 28, "hide_end": 44, "mag_out": 20, "seated": 38, "length": 72, "handle": 54, "keys": 73}}, "SF35A": {"reload": {"hide_start": 25, "hide_end": 43, "mag_out": 11, "seated": 38, "length": 72, "handle": null, "keys": 73}, "empty_reload": {"hide_start": 25, "hide_end": 44, "mag_out": 11, "seated": 38, "length": 72, "handle": 54, "keys": 73}}, "SF40A": {"reload": {"hide_start": 27, "hide_end": 44, "mag_out": 18, "seated": 38, "length": 72, "handle": null, "keys": 73}, "empty_reload": {"hide_start": 27, "hide_end": 44, "mag_out": 18, "seated": 38, "length": 72, "handle": 54, "keys": 73}}}, "fallback": {"clips": "smg_fallback_clips", "layout": {"hide_start": 12, "hide_end": 30, "mag_out": 12, "seated": 21, "length": 52, "handle": null, "keys": 52, "swap": 21}}}
   },
   {
    "id": "igla",
@@ -430,7 +454,8 @@
    "length": "long",
    "long_partner": "igla",
    "lowered": {"family": "v2", "pose": "v2"},
-   "partner": {"shingen": ["rear_short", "grip_short", "top_low"], "borg": ["rear_short", "grip_std", "top_low"]}
+   "partner": {"shingen": ["rear_short", "grip_short", "top_low"], "borg": ["rear_short", "grip_std", "top_low"]},
+   "reload": {"category": "break", "picks": ["BR17", "BR20", "BR18"], "weight": "light", "slots": ["BR17", "BR20", "BR18"], "clips": "smg_reload_clips", "archive": "GorillaAkimboSmgShotgun", "magazine": null, "parked": true, "layout": {"BR17A": {"reload": {"hide_start": 13, "hide_end": 42, "mag_out": 1, "seated": 38, "length": 66, "handle": null, "keys": 66, "marks": {"lever": 2, "eject": 6, "seat": 38, "shut": 54}, "loads": [38], "chamber": null}, "empty_reload": {"hide_start": 13, "hide_end": 42, "mag_out": 1, "seated": 38, "length": 66, "handle": null, "keys": 66, "marks": {"lever": 2, "eject": 6, "seat": 38, "shut": 54}, "loads": [38, 39], "chamber": null}}, "BR20A": {"reload": {"hide_start": 13, "hide_end": 44, "mag_out": 1, "seated": 38, "length": 66, "handle": null, "keys": 66, "marks": {"lever": 2, "eject": 8, "seat": 38, "shut": 54}, "loads": [38], "chamber": null}, "empty_reload": {"hide_start": 13, "hide_end": 44, "mag_out": 1, "seated": 38, "length": 66, "handle": null, "keys": 66, "marks": {"lever": 2, "eject": 8, "seat": 38, "shut": 54}, "loads": [38, 39], "chamber": null}}, "BR18A": {"reload": {"hide_start": 14, "hide_end": 44, "mag_out": 1, "seated": 38, "length": 66, "handle": null, "keys": 66, "marks": {"lever": 2, "eject": 7, "seat": 38, "shut": 54}, "loads": [38], "chamber": null}, "empty_reload": {"hide_start": 14, "hide_end": 44, "mag_out": 1, "seated": 38, "length": 66, "handle": null, "keys": 66, "marks": {"lever": 2, "eject": 7, "seat": 38, "shut": 54}, "loads": [38, 39], "chamber": null}}}, "sounds": {"marks": [["lever", 0, "w_gun_shotgun_power_igla_top_lever"], ["eject", 0, "w_gun_shotgun_power_igla_open_eject"], ["shut", 0, "w_gun_shotgun_power_igla_close"], ["shut", 5, "w_gun_shotgun_power_igla_grab"]], "shell": "w_gun_shotgun_power_igla_shell_insert", "chamber": null, "fallback": [["hide_start", 1, "w_gun_shotgun_power_igla_open_eject"], ["hide_end", 0, "w_gun_shotgun_power_igla_close"], ["hide_end", 4, "w_gun_shotgun_power_igla_grab"]]}, "fallback": {"clips": "smg_fallback_clips", "layout": {"hide_start": 12, "hide_end": 31, "mag_out": 12, "seated": 21, "length": 52, "handle": null, "keys": 52, "loads": [21], "empty_loads": [20, 22], "swap": 21}}}
   },
   {
    "id": "palica",
@@ -444,7 +469,8 @@
    "parts": ["w_shotgun_dual__rostovic_palica__base1_01", "w_shotgun_dual__rostovic_satara__rcv1_01"],
    "length": "short",
    "lowered": {"family": "v1", "pose": "v1_rostovic_palica", "tune": [0, 0.06, 0.0]},
-   "partner": {"shingen": ["rear_short", "grip_short", "top_low"], "borg": ["rear_short", "grip_std", "top_low"]}
+   "partner": {"shingen": ["rear_short", "grip_short", "top_low"], "borg": ["rear_short", "grip_std", "top_low"]},
+   "reload": {"category": "break", "picks": ["BR17", "BR20", "BR18"], "weight": "light", "slots": ["BR17", "BR20", "BR18"], "clips": "smg_reload_clips", "archive": "GorillaAkimboSmgShotgun", "magazine": null, "parked": true, "layout": {"BR17A": {"reload": {"hide_start": 13, "hide_end": 46, "mag_out": 1, "seated": 38, "length": 66, "handle": null, "keys": 66, "marks": {"lever": 2, "eject": 6, "seat": 38, "shut": 53}, "loads": [38], "chamber": null}, "empty_reload": {"hide_start": 13, "hide_end": 46, "mag_out": 1, "seated": 38, "length": 66, "handle": null, "keys": 66, "marks": {"lever": 2, "eject": 6, "seat": 38, "shut": 53}, "loads": [38, 39], "chamber": null}}, "BR20A": {"reload": {"hide_start": 13, "hide_end": 47, "mag_out": 1, "seated": 38, "length": 66, "handle": null, "keys": 66, "marks": {"lever": 2, "eject": 8, "seat": 38, "shut": 53}, "loads": [38], "chamber": null}, "empty_reload": {"hide_start": 13, "hide_end": 47, "mag_out": 1, "seated": 38, "length": 66, "handle": null, "keys": 66, "marks": {"lever": 2, "eject": 8, "seat": 38, "shut": 53}, "loads": [38, 39], "chamber": null}}, "BR18A": {"reload": {"hide_start": 14, "hide_end": 49, "mag_out": 1, "seated": 38, "length": 66, "handle": null, "keys": 66, "marks": {"lever": 2, "eject": 7, "seat": 38, "shut": 54}, "loads": [38], "chamber": null}, "empty_reload": {"hide_start": 14, "hide_end": 49, "mag_out": 1, "seated": 38, "length": 66, "handle": null, "keys": 66, "marks": {"lever": 2, "eject": 7, "seat": 38, "shut": 54}, "loads": [38, 39], "chamber": null}}}, "sounds": {"marks": [["eject", 0, "w_gun_shotgun_smart_palica_open"], ["shut", 0, "w_gun_shotgun_smart_palica_close"]], "shell": "w_gun_shotgun_smart_palica_shell_in", "chamber": null, "fallback": [["hide_start", 1, "w_gun_shotgun_smart_palica_open"], ["hide_end", 0, "w_gun_shotgun_smart_palica_close"]]}, "fallback": {"clips": "smg_fallback_clips", "layout": {"hide_start": 12, "hide_end": 31, "mag_out": 12, "seated": 21, "length": 52, "handle": null, "keys": 52, "loads": [21], "empty_loads": [20, 22], "swap": 21}}}
   },
   {
    "id": "testera",
@@ -459,7 +485,8 @@
    "length": "long",
    "long_partner": "testera",
    "lowered": {"family": "v2", "pose": "v2"},
-   "partner": {"shingen": ["rear_short", "grip_short", "top_low"], "borg": ["rear_short", "grip_std", "top_low"]}
+   "partner": {"shingen": ["rear_short", "grip_short", "top_low"], "borg": ["rear_short", "grip_std", "top_low"]},
+   "reload": {"category": "break", "picks": ["BR17", "BR20", "BR18"], "weight": "heavy", "slots": ["BR17", "BR20", "BR18"], "clips": "smg_reload_clips", "archive": "GorillaAkimboSmgShotgun", "magazine": null, "parked": true, "layout": {"BR17B": {"reload": {"hide_start": 18, "hide_end": 52, "mag_out": 1, "seated": 43, "length": 75, "handle": null, "keys": 75, "marks": {"lever": 3, "eject": 9, "seat": 43, "shut": 60}, "loads": [43], "chamber": null}, "empty_reload": {"hide_start": 18, "hide_end": 52, "mag_out": 1, "seated": 43, "length": 75, "handle": null, "keys": 75, "marks": {"lever": 3, "eject": 9, "seat": 43, "shut": 60}, "loads": [43], "chamber": null}}, "BR20B": {"reload": {"hide_start": 15, "hide_end": 62, "mag_out": 1, "seated": 43, "length": 75, "handle": null, "keys": 75, "marks": {"lever": 3, "eject": 12, "seat": 43, "shut": 61}, "loads": [43], "chamber": null}, "empty_reload": {"hide_start": 15, "hide_end": 62, "mag_out": 1, "seated": 43, "length": 75, "handle": null, "keys": 75, "marks": {"lever": 3, "eject": 12, "seat": 43, "shut": 61}, "loads": [43], "chamber": null}}, "BR18B": {"reload": {"hide_start": 19, "hide_end": 55, "mag_out": 1, "seated": 43, "length": 75, "handle": null, "keys": 75, "marks": {"lever": 3, "eject": 9, "seat": 43, "shut": 62}, "loads": [43], "chamber": null}, "empty_reload": {"hide_start": 19, "hide_end": 55, "mag_out": 1, "seated": 43, "length": 75, "handle": null, "keys": 75, "marks": {"lever": 3, "eject": 9, "seat": 43, "shut": 62}, "loads": [43], "chamber": null}}}, "sounds": {"marks": [["lever", 0, "w_gun_shotgun_power_testera_top_lever"], ["eject", 0, "w_gun_shotgun_power_testera_eject"], ["shut", 0, "w_gun_shotgun_power_testera_close"], ["shut", 5, "w_gun_shotgun_power_testera_grab"]], "shell": "w_gun_shotgun_power_testera_shell_in_double", "chamber": null, "fallback": [["hide_start", 1, "w_gun_shotgun_power_testera_eject"], ["hide_end", 0, "w_gun_shotgun_power_testera_close"], ["hide_end", 4, "w_gun_shotgun_power_testera_grab"]]}, "fallback": {"clips": "smg_fallback_clips", "layout": {"hide_start": 12, "hide_end": 31, "mag_out": 12, "seated": 21, "length": 52, "handle": null, "keys": 52, "loads": [21], "empty_loads": [20, 22], "swap": 21}}}
   },
   {
    "id": "satara",
@@ -476,7 +503,8 @@
    "long_partner_vars": [],
    "lowered": {"family": "v2", "pose": "v2"},
    "partner": {"shingen": ["rear_short", "grip_short", "top_low"], "borg": ["rear_short", "grip_std", "top_low"]},
-   "note": "Its long-partner clip set is keyed on the base variable (generic_shotgun_dual), not on this variable."
+   "note": "Its long-partner clip set is keyed on the base variable (generic_shotgun_dual), not on this variable.",
+   "reload": {"category": "break", "picks": ["BR17", "BR20", "BR18"], "weight": "heavy", "slots": ["BR17", "BR20", "BR18"], "clips": "smg_reload_clips", "archive": "GorillaAkimboSmgShotgun", "magazine": null, "parked": true, "layout": {"BR17B": {"reload": {"hide_start": 18, "hide_end": 49, "mag_out": 1, "seated": 43, "length": 75, "handle": null, "keys": 75, "marks": {"lever": 3, "eject": 9, "seat": 43, "shut": 60}, "loads": [43], "chamber": null}, "empty_reload": {"hide_start": 18, "hide_end": 49, "mag_out": 1, "seated": 43, "length": 75, "handle": null, "keys": 75, "marks": {"lever": 3, "eject": 9, "seat": 43, "shut": 60}, "loads": [43, 44], "chamber": null}}, "BR20B": {"reload": {"hide_start": 16, "hide_end": 53, "mag_out": 1, "seated": 43, "length": 75, "handle": null, "keys": 75, "marks": {"lever": 3, "eject": 10, "seat": 43, "shut": 62}, "loads": [43], "chamber": null}, "empty_reload": {"hide_start": 16, "hide_end": 53, "mag_out": 1, "seated": 43, "length": 75, "handle": null, "keys": 75, "marks": {"lever": 3, "eject": 10, "seat": 43, "shut": 62}, "loads": [43, 44], "chamber": null}}, "BR18B": {"reload": {"hide_start": 19, "hide_end": 50, "mag_out": 1, "seated": 43, "length": 75, "handle": null, "keys": 75, "marks": {"lever": 3, "eject": 9, "seat": 43, "shut": 63}, "loads": [43], "chamber": null}, "empty_reload": {"hide_start": 19, "hide_end": 50, "mag_out": 1, "seated": 43, "length": 75, "handle": null, "keys": 75, "marks": {"lever": 3, "eject": 9, "seat": 43, "shut": 63}, "loads": [43, 44], "chamber": null}}}, "sounds": {"marks": [["lever", 0, "w_gun_shotgun_tech_satara_top_lever"], ["eject", 0, "w_gun_shotgun_tech_satara_open"], ["shut", 0, "w_gun_shotgun_tech_satara_close"], ["shut", 8, "w_gun_shotgun_tech_satara_armed"]], "shell": "w_gun_shotgun_tech_satara_shell_in", "chamber": null, "fallback": [["hide_start", 1, "w_gun_shotgun_tech_satara_open"], ["hide_end", 0, "w_gun_shotgun_tech_satara_close"], ["hide_end", 6, "w_gun_shotgun_tech_satara_armed"]]}, "fallback": {"clips": "smg_fallback_clips", "layout": {"hide_start": 12, "hide_end": 31, "mag_out": 12, "seated": 21, "length": 52, "handle": null, "keys": 52, "loads": [21], "empty_loads": [20, 22], "swap": 21}}}
   },
   {
    "id": "generic_shotgun",

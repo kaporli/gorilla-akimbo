@@ -35,6 +35,7 @@ The **Double Trouble** perk only pairs Power pistols and revolvers. With it, Tec
   ![The Body scaling settings and the Body Attuned block on the Gorilla Arms tooltip](screenshots/body-scaling.png)
 
 - **One-handed reload animations**, for male and female V. The gun tips up while its magazine drops, goes down out of view, and rises once its ammo is in. Shell-fed shotguns go straight down.
+- **SMG reloads made for each SMG's magazine**, three picks per gun, for the Senkoh, Pulsar, Saratoga, Guillotine, Warden, Dian, Zhuo, Crusher and Pozhar, each with its own magazine animation.
 - **Assault rifle reloads made for each rifle's magazine**, three picks per rifle: front-magazine rifles throw the magazine out, shove it out forward or leave it behind and are driven onto a fresh one at the belt, the Masamune throws its magazine out with a nod or a corkscrew roll, or heaves the rifle off it, the Hercules pops its latch and throws or drops the cassette. The magazine has its own animation in each.
 
   ![Rifle reloads: Copperhead, Masamune, Hercules, Ajax](research/showcase/rifle-reloads.gif)
@@ -132,6 +133,8 @@ archive/pc/mod/GorillaAkimboLowered.archive
 archive/pc/mod/GorillaAkimboLowered.archive.xl
 archive/pc/mod/GorillaAkimboRifles.archive
 archive/pc/mod/GorillaAkimboRifles.archive.xl
+archive/pc/mod/GorillaAkimboSmgShotgun.archive
+archive/pc/mod/GorillaAkimboSmgShotgun.archive.xl
 r6/config/modkeybinds/GorillaAkimbo.json
 r6/input/GorillaAkimbo.xml
 r6/scripts/GorillaAkimbo/GorillaAkimbo.reds

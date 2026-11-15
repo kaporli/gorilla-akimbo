@@ -7,7 +7,8 @@ usage: gate.py [--guns id,id] [--bodies pma,pwa] [--clips <dir>] [--only area,ar
             built anim sets are skipped then
   --only    areas: clips (end pose, unchanged frames, frame count), sets (SIMD buffers, frame counts of the built
             sets), lowered, raised (raised pose clips, the reload and top-magazine clips that end in them), topmag,
-            magtrack. Not run by default: roundtrip (built sets exported back to glb and
+            magtrack, parts (shell-fed guns with drafted part motion have a part set; part set clips pass their
+            rebuild check). Not run by default: roundtrip (built sets exported back to glb and
             compared with the glbs they were imported from; one set of each kind, every set with --roundtrip-all).
             A wrongly encoded track (a constant quaternion with w < 0 once was) shows there.
 The built sets are read from WORK/sets (build.sh all first). Results also go to WORK/check/report.txt.
@@ -20,7 +21,7 @@ from glb import Glb
 from fk import Clip
 
 manifest = common.manifest
-AREAS = ('clips', 'sets', 'lowered', 'raised', 'topmag', 'magtrack')   # 'roundtrip' only when named in --only
+AREAS = ('clips', 'sets', 'lowered', 'raised', 'topmag', 'magtrack', 'parts')   # 'roundtrip' only when named in --only
 JOBS = int(os.environ.get('JOBS', '4'))
 T = manifest.load()['checks']
 
@@ -305,6 +306,29 @@ def check_rreload(bodies):
     return load('reload').run(bodies, jobs=JOBS)
 
 
+def check_parts():
+    """Shell-fed guns: a gun whose own reload clips have drafted gun part motion (_objects.json, _phys.json) must have
+    a gun part set (reload.parts, rpartset.py), and every built part set clip must pass its rebuild check
+    (WORK/rreload_mag/partcheck.txt, written by build.sh rreload)."""
+    sys.path.insert(0, common.ANIM)
+    import rreload
+    rows = []
+    for g in manifest.guns():
+        if not (g.get('reload') or {}).get('slots'): continue
+        d = rreload.drafted_parts(g)
+        if d:
+            m = rreload.missing_parts(g)
+            rows.append(row('parts: drafted part motion has a part set', g['id'], len(m), 0, 'draft files without a set', not m,
+                            f'{len(d)} draft files' + (f', e.g. {os.path.basename(m[0])}' if m else '')))
+    rep = f'{work()}/rreload_mag/partcheck.txt'
+    if rreload.parts_plan():
+        lines = open(rep).read().splitlines() if os.path.exists(rep) else []
+        badl = [l for l in lines if l.startswith('BAD')]
+        rows.append(row('parts: part set clips rebuilt from their keys', (badl[0][:120] if badl else rep), len(badl) if lines else -1, 0, 'bad clips',
+                        bool(lines) and not badl, f'{len(lines)} clips'))
+    return rows
+
+
 def worst_rows(rows):
     """One row per check: the worst item (a failing one first), with the number of items and of failures."""
     by = {}
@@ -342,7 +366,8 @@ if __name__ == '__main__':
                 'lowered': lambda: check_lowered(guns, bodies), 'raised': lambda: load('raised').run(guns, bodies, work=work(), jobs=JOBS),
                 'topmag': lambda: check_topmag(clips, guns, bodies, picked),
                 'magtrack': lambda: check_magtrack(clips_arg, bodies),
-                'roundtrip': lambda: check_roundtrip('--roundtrip-all' in argv), 'rreload': lambda: check_rreload(bodies)}[area]()
+                'roundtrip': lambda: check_roundtrip('--roundtrip-all' in argv), 'rreload': lambda: check_rreload(bodies),
+                'parts': check_parts}[area]()
         json.dump(rows, open(out_json, 'w'))
         sys.exit(0)
     areas = [a for a in (only.split(',') if only else AREAS) if not (a in ('sets', 'roundtrip') and clips_arg)]

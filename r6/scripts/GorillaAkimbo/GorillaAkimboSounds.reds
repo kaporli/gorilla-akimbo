@@ -153,60 +153,171 @@ public abstract class GorillaAkimboSounds {
     }
   }
 
-  // Clip seconds into the reload at which the magazine (or the spent shells) leaves the gun.
-  public static func MagOut(audio: CName, empty: Bool) -> Float {
-    switch audio {
-      case n"wea_set_ajax":
-        return empty ? 1.500 : 0.467;
-      case n"wea_set_borg4a":
-        return empty ? 0.900 : 0.933;
-      case n"wea_set_carnage":
-        return empty ? 0.367 : 0.500;
-      case n"wea_set_copperhead":
-        return empty ? 0.433 : 0.433;
-      case n"wea_set_crusher":
-        return empty ? 0.300 : 0.300;
-      case n"wea_set_dian":
-        return empty ? 0.367 : 0.333;
-      case n"wea_set_hercules":
-        return empty ? 0.500 : 0.500;
-      case n"wea_set_igla":
-        return empty ? 0.167 : 0.133;
-      case n"wea_set_kyubi":
-        return empty ? 1.500 : 0.467;
-      case n"wea_set_masamune":
-        return empty ? 0.767 : 0.733;
-      case n"wea_set_palica":
-        return empty ? 0.133 : 0.100;
-      case n"wea_set_pozhar":
-        return empty ? 0.633 : 0.633;
-      case n"wea_set_pulsar":
-        return empty ? 0.433 : 0.433;
-      case n"wea_set_saratoga":
-        return empty ? 0.467 : 0.300;
-      case n"wea_set_satara":
-        return empty ? 0.100 : 0.100;
-      case n"wea_set_senkoh":
-        return empty ? 0.333 : 0.433;
-      case n"wea_set_senkoh_prototype":
-        return empty ? 0.333 : 0.433;
-      case n"wea_set_shingen":
-        return empty ? 0.667 : 0.633;
-      case n"wea_set_sidewinder":
-        return empty ? 0.067 : 0.067;
-      case n"wea_set_tactician":
-        return empty ? 0.033 : 0.500;
-      case n"wea_set_testera":
-        return empty ? 0.267 : 0.267;
-      case n"wea_set_umbra":
-        return empty ? 0.433 : 0.433;
-      case n"wea_set_warden":
-        return empty ? 0.767 : 0.800;
-      case n"wea_set_warden_suppressor":
-        return empty ? 0.767 : 0.800;
-      case n"wea_set_zhuo":
-        return empty ? 0.567 : 0.567;
+  // Guns with reload clips of their own whose gun parts were re-timed onto the clip: the gun's reload sounds at
+  // the clip seconds of the clip playing (variant: the game's random pick, 3 the quick-drop fallback). False when the
+  // gun has no such table.
+  public static func Own(owner: CName, variant: Int32, empty: Bool, times: script_ref<array<Float>>, names: script_ref<array<CName>>) -> Bool {
+    switch owner {
+      case n"senkoh":
+        if variant == 3 {
+          Deref(times) = empty ? [0.433, 1.000, 1.167] : [0.433, 1.000, 1.167];
+          Deref(names) = empty ? [n"w_gun_smg_tech_senkoh_mag_out", n"w_gun_smg_tech_senkoh_mag_in", n"w_gun_smg_tech_senkoh_grab"] : [n"w_gun_smg_tech_senkoh_mag_out", n"w_gun_smg_tech_senkoh_mag_in", n"w_gun_smg_tech_senkoh_grab"];
+          return true;
+        }
+        if variant == 1 {
+          Deref(times) = empty ? [0.180, 0.600, 1.017, 1.267, 1.715, 1.974] : [0.600, 1.267, 1.606, 1.920];
+          Deref(names) = empty ? [n"w_gun_smg_tech_senkoh_mag_new_grab", n"w_gun_smg_tech_senkoh_mag_out", n"w_gun_smg_tech_senkoh_mag_rattle", n"w_gun_smg_tech_senkoh_mag_in", n"w_gun_smg_tech_senkoh_move", n"w_gun_smg_tech_senkoh_grab"] : [n"w_gun_smg_tech_senkoh_mag_out", n"w_gun_smg_tech_senkoh_mag_in", n"w_gun_smg_tech_senkoh_move", n"w_gun_smg_tech_senkoh_grab"];
+          return true;
+        }
+        if variant == 2 {
+          Deref(times) = empty ? [0.180, 0.600, 1.017, 1.267, 1.715, 1.974] : [0.600, 1.267, 1.606, 1.920];
+          Deref(names) = empty ? [n"w_gun_smg_tech_senkoh_mag_new_grab", n"w_gun_smg_tech_senkoh_mag_out", n"w_gun_smg_tech_senkoh_mag_rattle", n"w_gun_smg_tech_senkoh_mag_in", n"w_gun_smg_tech_senkoh_move", n"w_gun_smg_tech_senkoh_grab"] : [n"w_gun_smg_tech_senkoh_mag_out", n"w_gun_smg_tech_senkoh_mag_in", n"w_gun_smg_tech_senkoh_move", n"w_gun_smg_tech_senkoh_grab"];
+          return true;
+        }
+        Deref(times) = empty ? [0.180, 0.600, 1.017, 1.267, 1.715, 1.974] : [0.600, 1.267, 1.606, 1.920];
+        Deref(names) = empty ? [n"w_gun_smg_tech_senkoh_mag_new_grab", n"w_gun_smg_tech_senkoh_mag_out", n"w_gun_smg_tech_senkoh_mag_rattle", n"w_gun_smg_tech_senkoh_mag_in", n"w_gun_smg_tech_senkoh_move", n"w_gun_smg_tech_senkoh_grab"] : [n"w_gun_smg_tech_senkoh_mag_out", n"w_gun_smg_tech_senkoh_mag_in", n"w_gun_smg_tech_senkoh_move", n"w_gun_smg_tech_senkoh_grab"];
+        return true;
+      case n"pulsar":
+        if variant == 3 {
+          Deref(times) = empty ? [0.433, 0.967, 1.000, 1.133] : [0.433, 0.967, 1.133];
+          Deref(names) = empty ? [n"w_gun_smg_power_pulsar_mag_out", n"w_gun_smg_power_pulsar_mag_in", n"w_gun_smg_power_pulsar_handle_release", n"w_gun_smg_power_pulsar_grab"] : [n"w_gun_smg_power_pulsar_mag_out", n"w_gun_smg_power_pulsar_mag_in", n"w_gun_smg_power_pulsar_grab"];
+          return true;
+        }
+        if variant == 1 {
+          Deref(times) = empty ? [0.600, 0.641, 0.845, 1.022, 1.063, 1.267, 1.739, 1.823, 1.965] : [0.600, 0.641, 0.886, 1.022, 1.063, 1.267, 1.911];
+          Deref(names) = empty ? [n"w_gun_smg_power_pulsar_mag_out_start", n"w_gun_smg_power_pulsar_mag_out", n"w_gun_smg_power_pulsar_mag_new_grab", n"w_gun_smg_power_pulsar_mag_rattle", n"w_gun_smg_power_pulsar_mag_in_start", n"w_gun_smg_power_pulsar_mag_in", n"w_gun_smg_power_pulsar_handle_pull", n"w_gun_smg_power_pulsar_handle_release", n"w_gun_smg_power_pulsar_grab"] : [n"w_gun_smg_power_pulsar_mag_out_start", n"w_gun_smg_power_pulsar_mag_out", n"w_gun_smg_power_pulsar_mag_new_grab", n"w_gun_smg_power_pulsar_mag_rattle", n"w_gun_smg_power_pulsar_mag_in_start", n"w_gun_smg_power_pulsar_mag_in", n"w_gun_smg_power_pulsar_grab"];
+          return true;
+        }
+        if variant == 2 {
+          Deref(times) = empty ? [0.600, 0.641, 0.845, 1.022, 1.063, 1.267, 1.739, 1.823, 1.965] : [0.600, 0.641, 0.886, 1.022, 1.063, 1.267, 1.911];
+          Deref(names) = empty ? [n"w_gun_smg_power_pulsar_mag_out_start", n"w_gun_smg_power_pulsar_mag_out", n"w_gun_smg_power_pulsar_mag_new_grab", n"w_gun_smg_power_pulsar_mag_rattle", n"w_gun_smg_power_pulsar_mag_in_start", n"w_gun_smg_power_pulsar_mag_in", n"w_gun_smg_power_pulsar_handle_pull", n"w_gun_smg_power_pulsar_handle_release", n"w_gun_smg_power_pulsar_grab"] : [n"w_gun_smg_power_pulsar_mag_out_start", n"w_gun_smg_power_pulsar_mag_out", n"w_gun_smg_power_pulsar_mag_new_grab", n"w_gun_smg_power_pulsar_mag_rattle", n"w_gun_smg_power_pulsar_mag_in_start", n"w_gun_smg_power_pulsar_mag_in", n"w_gun_smg_power_pulsar_grab"];
+          return true;
+        }
+        Deref(times) = empty ? [0.600, 0.641, 0.845, 1.022, 1.063, 1.267, 1.739, 1.823, 1.965] : [0.600, 0.641, 0.886, 1.022, 1.063, 1.267, 1.911];
+        Deref(names) = empty ? [n"w_gun_smg_power_pulsar_mag_out_start", n"w_gun_smg_power_pulsar_mag_out", n"w_gun_smg_power_pulsar_mag_new_grab", n"w_gun_smg_power_pulsar_mag_rattle", n"w_gun_smg_power_pulsar_mag_in_start", n"w_gun_smg_power_pulsar_mag_in", n"w_gun_smg_power_pulsar_handle_pull", n"w_gun_smg_power_pulsar_handle_release", n"w_gun_smg_power_pulsar_grab"] : [n"w_gun_smg_power_pulsar_mag_out_start", n"w_gun_smg_power_pulsar_mag_out", n"w_gun_smg_power_pulsar_mag_new_grab", n"w_gun_smg_power_pulsar_mag_rattle", n"w_gun_smg_power_pulsar_mag_in_start", n"w_gun_smg_power_pulsar_mag_in", n"w_gun_smg_power_pulsar_grab"];
+        return true;
+      case n"saratoga":
+        if variant == 3 {
+          Deref(times) = empty ? [0.433, 0.967, 1.000, 1.133] : [0.433, 0.967, 1.133];
+          Deref(names) = empty ? [n"w_gun_smg_power_saratoga_mag_out", n"w_gun_smg_power_saratoga_mag_in", n"w_gun_smg_power_saratoga_handle_release", n"w_gun_smg_power_saratoga_grab"] : [n"w_gun_smg_power_saratoga_mag_out", n"w_gun_smg_power_saratoga_mag_in", n"w_gun_smg_power_saratoga_grab"];
+          return true;
+        }
+        if variant == 1 {
+          Deref(times) = empty ? [0.200, 0.367, 1.067, 1.267, 1.286, 1.590, 1.705, 1.724, 2.052] : [0.086, 0.367, 1.122, 1.267, 1.285, 1.763, 2.146];
+          Deref(names) = empty ? [n"w_gun_smg_power_saratoga_handle_pull", n"w_gun_smg_power_saratoga_mag_out", n"w_gun_smg_power_saratoga_mag_new_grab", n"w_gun_smg_power_saratoga_mag_in", n"w_gun_smg_power_saratoga_mag_rattle", n"w_gun_smg_power_saratoga_move", n"w_gun_smg_power_saratoga_hit", n"w_gun_smg_power_saratoga_handle_release", n"w_gun_smg_power_saratoga_grab"] : [n"w_gun_smg_power_saratoga_handle_pull", n"w_gun_smg_power_saratoga_mag_out", n"w_gun_smg_power_saratoga_mag_new_grab", n"w_gun_smg_power_saratoga_mag_in", n"w_gun_smg_power_saratoga_mag_rattle", n"w_gun_smg_power_saratoga_handle_release", n"w_gun_smg_power_saratoga_grab"];
+          return true;
+        }
+        if variant == 2 {
+          Deref(times) = empty ? [0.200, 0.600, 1.119, 1.267, 1.286, 1.590, 1.705, 1.724, 2.052] : [0.086, 0.600, 1.159, 1.267, 1.285, 1.763, 2.146];
+          Deref(names) = empty ? [n"w_gun_smg_power_saratoga_handle_pull", n"w_gun_smg_power_saratoga_mag_out", n"w_gun_smg_power_saratoga_mag_new_grab", n"w_gun_smg_power_saratoga_mag_in", n"w_gun_smg_power_saratoga_mag_rattle", n"w_gun_smg_power_saratoga_move", n"w_gun_smg_power_saratoga_hit", n"w_gun_smg_power_saratoga_handle_release", n"w_gun_smg_power_saratoga_grab"] : [n"w_gun_smg_power_saratoga_handle_pull", n"w_gun_smg_power_saratoga_mag_out", n"w_gun_smg_power_saratoga_mag_new_grab", n"w_gun_smg_power_saratoga_mag_in", n"w_gun_smg_power_saratoga_mag_rattle", n"w_gun_smg_power_saratoga_handle_release", n"w_gun_smg_power_saratoga_grab"];
+          return true;
+        }
+        Deref(times) = empty ? [0.200, 0.667, 1.133, 1.267, 1.286, 1.590, 1.705, 1.724, 2.052] : [0.086, 0.667, 1.170, 1.267, 1.285, 1.763, 2.146];
+        Deref(names) = empty ? [n"w_gun_smg_power_saratoga_handle_pull", n"w_gun_smg_power_saratoga_mag_out", n"w_gun_smg_power_saratoga_mag_new_grab", n"w_gun_smg_power_saratoga_mag_in", n"w_gun_smg_power_saratoga_mag_rattle", n"w_gun_smg_power_saratoga_move", n"w_gun_smg_power_saratoga_hit", n"w_gun_smg_power_saratoga_handle_release", n"w_gun_smg_power_saratoga_grab"] : [n"w_gun_smg_power_saratoga_handle_pull", n"w_gun_smg_power_saratoga_mag_out", n"w_gun_smg_power_saratoga_mag_new_grab", n"w_gun_smg_power_saratoga_mag_in", n"w_gun_smg_power_saratoga_mag_rattle", n"w_gun_smg_power_saratoga_handle_release", n"w_gun_smg_power_saratoga_grab"];
+        return true;
+      case n"warden":
+        if variant == 3 {
+          Deref(times) = empty ? [0.467, 0.967, 1.000] : [0.467, 0.967];
+          Deref(names) = empty ? [n"w_gun_warden_mag_out", n"w_gun_warden_mag_hit", n"w_gun_warden_bolt_release"] : [n"w_gun_warden_mag_out", n"w_gun_warden_mag_hit"];
+          return true;
+        }
+        if variant == 1 {
+          Deref(times) = empty ? [0.016, 0.218, 0.700, 1.002, 1.189, 1.433, 1.548, 1.890, 2.005, 2.158, 2.346, 2.408] : [0.029, 0.408, 0.408, 0.700, 0.993, 1.199, 1.433, 1.596, 1.596, 1.922, 2.207, 2.411];
+          Deref(names) = empty ? [n"w_gun_warden_move", n"w_gun_warden_mag_unlock", n"w_gun_warden_mag_out", n"w_gun_warden_mag_grab", n"w_gun_warden_mag_in", n"w_gun_warden_mag_hit", n"w_gun_warden_mag_in_steam", n"w_gun_warden_bolt_release", n"w_gun_warden_servo_reload", n"w_gun_warden_move", n"w_gun_warden_grab_handle", n"w_gun_warden_ui_full_reload"] : [n"w_gun_warden_move", n"w_gun_warden_mag_unlock", n"w_gun_warden_mag_unlock_ui_reload", n"w_gun_warden_mag_out", n"w_gun_warden_mag_grab", n"w_gun_warden_mag_in", n"w_gun_warden_mag_hit", n"w_gun_warden_mag_in_steam", n"w_gun_warden_servo_reload", n"w_gun_warden_move", n"w_gun_warden_grab_handle", n"w_gun_warden_ui_reload"];
+          return true;
+        }
+        if variant == 2 {
+          Deref(times) = empty ? [0.016, 0.218, 0.700, 1.002, 1.189, 1.433, 1.548, 1.890, 2.005, 2.158, 2.346, 2.408] : [0.029, 0.408, 0.408, 0.700, 0.993, 1.199, 1.433, 1.596, 1.596, 1.922, 2.207, 2.411];
+          Deref(names) = empty ? [n"w_gun_warden_move", n"w_gun_warden_mag_unlock", n"w_gun_warden_mag_out", n"w_gun_warden_mag_grab", n"w_gun_warden_mag_in", n"w_gun_warden_mag_hit", n"w_gun_warden_mag_in_steam", n"w_gun_warden_bolt_release", n"w_gun_warden_servo_reload", n"w_gun_warden_move", n"w_gun_warden_grab_handle", n"w_gun_warden_ui_full_reload"] : [n"w_gun_warden_move", n"w_gun_warden_mag_unlock", n"w_gun_warden_mag_unlock_ui_reload", n"w_gun_warden_mag_out", n"w_gun_warden_mag_grab", n"w_gun_warden_mag_in", n"w_gun_warden_mag_hit", n"w_gun_warden_mag_in_steam", n"w_gun_warden_servo_reload", n"w_gun_warden_move", n"w_gun_warden_grab_handle", n"w_gun_warden_ui_reload"];
+          return true;
+        }
+        Deref(times) = empty ? [0.016, 0.218, 0.700, 1.002, 1.189, 1.433, 1.548, 1.890, 2.005, 2.158, 2.346, 2.408] : [0.029, 0.408, 0.408, 0.700, 0.993, 1.199, 1.433, 1.596, 1.596, 1.922, 2.207, 2.411];
+        Deref(names) = empty ? [n"w_gun_warden_move", n"w_gun_warden_mag_unlock", n"w_gun_warden_mag_out", n"w_gun_warden_mag_grab", n"w_gun_warden_mag_in", n"w_gun_warden_mag_hit", n"w_gun_warden_mag_in_steam", n"w_gun_warden_bolt_release", n"w_gun_warden_servo_reload", n"w_gun_warden_move", n"w_gun_warden_grab_handle", n"w_gun_warden_ui_full_reload"] : [n"w_gun_warden_move", n"w_gun_warden_mag_unlock", n"w_gun_warden_mag_unlock_ui_reload", n"w_gun_warden_mag_out", n"w_gun_warden_mag_grab", n"w_gun_warden_mag_in", n"w_gun_warden_mag_hit", n"w_gun_warden_mag_in_steam", n"w_gun_warden_servo_reload", n"w_gun_warden_move", n"w_gun_warden_grab_handle", n"w_gun_warden_ui_reload"];
+        return true;
+      case n"dian":
+        if variant == 3 {
+          Deref(times) = empty ? [0.433, 0.967, 1.000, 1.133] : [0.433, 0.967, 1.133];
+          Deref(names) = empty ? [n"w_gun_smg_smart_dian_mag_out_empty", n"w_gun_smg_smart_dian_mag_in_empty", n"w_gun_smg_smart_dian_load", n"w_gun_smg_smart_dian_grab"] : [n"w_gun_smg_smart_dian_mag_out", n"w_gun_smg_smart_dian_mag_in", n"w_gun_smg_smart_dian_grab"];
+          return true;
+        }
+        if variant == 1 {
+          Deref(times) = empty ? [0.050, 0.367, 1.267, 1.722, 1.989, 2.134] : [0.037, 0.367, 1.267, 1.796, 1.859];
+          Deref(names) = empty ? [n"w_gun_smg_smart_dian_move", n"w_gun_smg_smart_dian_mag_out_empty", n"w_gun_smg_smart_dian_mag_in_empty", n"w_gun_smg_smart_dian_load", n"w_gun_smg_smart_dian_move", n"w_gun_smg_smart_dian_grab"] : [n"w_gun_smg_smart_dian_move", n"w_gun_smg_smart_dian_mag_out", n"w_gun_smg_smart_dian_mag_in", n"w_gun_smg_smart_dian_move", n"w_gun_smg_smart_dian_grab"];
+          return true;
+        }
+        if variant == 2 {
+          Deref(times) = empty ? [0.050, 0.600, 1.267, 1.722, 1.989, 2.134] : [0.060, 0.600, 1.267, 1.796, 1.859];
+          Deref(names) = empty ? [n"w_gun_smg_smart_dian_move", n"w_gun_smg_smart_dian_mag_out_empty", n"w_gun_smg_smart_dian_mag_in_empty", n"w_gun_smg_smart_dian_load", n"w_gun_smg_smart_dian_move", n"w_gun_smg_smart_dian_grab"] : [n"w_gun_smg_smart_dian_move", n"w_gun_smg_smart_dian_mag_out", n"w_gun_smg_smart_dian_mag_in", n"w_gun_smg_smart_dian_move", n"w_gun_smg_smart_dian_grab"];
+          return true;
+        }
+        Deref(times) = empty ? [0.050, 0.667, 1.267, 1.722, 1.989, 2.134] : [0.067, 0.667, 1.267, 1.796, 1.859];
+        Deref(names) = empty ? [n"w_gun_smg_smart_dian_move", n"w_gun_smg_smart_dian_mag_out_empty", n"w_gun_smg_smart_dian_mag_in_empty", n"w_gun_smg_smart_dian_load", n"w_gun_smg_smart_dian_move", n"w_gun_smg_smart_dian_grab"] : [n"w_gun_smg_smart_dian_move", n"w_gun_smg_smart_dian_mag_out", n"w_gun_smg_smart_dian_mag_in", n"w_gun_smg_smart_dian_move", n"w_gun_smg_smart_dian_grab"];
+        return true;
+      case n"zhuo":
+        if variant == 3 {
+          Deref(times) = empty ? [0.433, 1.000, 1.167] : [0.433, 1.000, 1.167];
+          Deref(names) = empty ? [n"w_gun_shotgun_smart_zhuo_mag_out_empty", n"w_gun_shotgun_smart_zhuo_mag_in_empty", n"w_gun_shotgun_smart_zhuo_grab"] : [n"w_gun_shotgun_smart_zhuo_mag_out", n"w_gun_shotgun_smart_zhuo_mag_in", n"w_gun_shotgun_smart_zhuo_grab"];
+          return true;
+        }
+        if variant == 1 {
+          Deref(times) = empty ? [0.146, 0.433, 1.086, 1.433, 2.252, 2.448] : [0.029, 0.433, 1.076, 1.433, 2.077, 2.317];
+          Deref(names) = empty ? [n"w_gun_shotgun_smart_zhuo_mag_open", n"w_gun_shotgun_smart_zhuo_mag_out_empty", n"w_gun_shotgun_smart_zhuo_mag_new_grab", n"w_gun_shotgun_smart_zhuo_mag_in_empty", n"w_gun_shotgun_smart_zhuo_move", n"w_gun_shotgun_smart_zhuo_grab"] : [n"w_gun_shotgun_smart_zhuo_mag_open", n"w_gun_shotgun_smart_zhuo_mag_out", n"w_gun_shotgun_smart_zhuo_mag_new_grab", n"w_gun_shotgun_smart_zhuo_mag_in", n"w_gun_shotgun_smart_zhuo_move", n"w_gun_shotgun_smart_zhuo_grab"];
+          return true;
+        }
+        if variant == 2 {
+          Deref(times) = empty ? [0.146, 0.700, 1.178, 1.433, 2.252, 2.448] : [0.029, 0.700, 1.171, 1.433, 2.077, 2.317];
+          Deref(names) = empty ? [n"w_gun_shotgun_smart_zhuo_mag_open", n"w_gun_shotgun_smart_zhuo_mag_out_empty", n"w_gun_shotgun_smart_zhuo_mag_new_grab", n"w_gun_shotgun_smart_zhuo_mag_in_empty", n"w_gun_shotgun_smart_zhuo_move", n"w_gun_shotgun_smart_zhuo_grab"] : [n"w_gun_shotgun_smart_zhuo_mag_open", n"w_gun_shotgun_smart_zhuo_mag_out", n"w_gun_shotgun_smart_zhuo_mag_new_grab", n"w_gun_shotgun_smart_zhuo_mag_in", n"w_gun_shotgun_smart_zhuo_move", n"w_gun_shotgun_smart_zhuo_grab"];
+          return true;
+        }
+        Deref(times) = empty ? [0.146, 0.767, 1.201, 1.433, 2.252, 2.448] : [0.029, 0.767, 1.195, 1.433, 2.077, 2.317];
+        Deref(names) = empty ? [n"w_gun_shotgun_smart_zhuo_mag_open", n"w_gun_shotgun_smart_zhuo_mag_out_empty", n"w_gun_shotgun_smart_zhuo_mag_new_grab", n"w_gun_shotgun_smart_zhuo_mag_in_empty", n"w_gun_shotgun_smart_zhuo_move", n"w_gun_shotgun_smart_zhuo_grab"] : [n"w_gun_shotgun_smart_zhuo_mag_open", n"w_gun_shotgun_smart_zhuo_mag_out", n"w_gun_shotgun_smart_zhuo_mag_new_grab", n"w_gun_shotgun_smart_zhuo_mag_in", n"w_gun_shotgun_smart_zhuo_move", n"w_gun_shotgun_smart_zhuo_grab"];
+        return true;
+      case n"crusher":
+        if variant == 3 {
+          Deref(times) = empty ? [0.433, 1.000, 1.033, 1.167] : [0.433, 1.000, 1.167];
+          Deref(names) = empty ? [n"w_gun_revol_power_crusher_mag_out", n"w_gun_revol_power_crusher_mag_in", n"w_gun_revol_power_crusher_handle_release", n"w_gun_revol_power_crusher_grab"] : [n"w_gun_revol_power_crusher_mag_out", n"w_gun_revol_power_crusher_mag_in", n"w_gun_revol_power_crusher_grab"];
+          return true;
+        }
+        if variant == 1 {
+          Deref(times) = empty ? [0.367, 1.188, 1.267, 1.749, 1.976, 2.269] : [0.367, 1.188, 1.267, 2.000];
+          Deref(names) = empty ? [n"w_gun_revol_power_crusher_mag_out", n"w_gun_revol_power_crusher_mag_rattle", n"w_gun_revol_power_crusher_mag_in", n"w_gun_revol_power_crusher_handle_pull", n"w_gun_revol_power_crusher_handle_release", n"w_gun_revol_power_crusher_grab"] : [n"w_gun_revol_power_crusher_mag_out", n"w_gun_revol_power_crusher_mag_rattle", n"w_gun_revol_power_crusher_mag_in", n"w_gun_revol_power_crusher_grab"];
+          return true;
+        }
+        if variant == 2 {
+          Deref(times) = empty ? [0.600, 1.209, 1.267, 1.749, 1.976, 2.269] : [0.600, 1.209, 1.267, 2.000];
+          Deref(names) = empty ? [n"w_gun_revol_power_crusher_mag_out", n"w_gun_revol_power_crusher_mag_rattle", n"w_gun_revol_power_crusher_mag_in", n"w_gun_revol_power_crusher_handle_pull", n"w_gun_revol_power_crusher_handle_release", n"w_gun_revol_power_crusher_grab"] : [n"w_gun_revol_power_crusher_mag_out", n"w_gun_revol_power_crusher_mag_rattle", n"w_gun_revol_power_crusher_mag_in", n"w_gun_revol_power_crusher_grab"];
+          return true;
+        }
+        Deref(times) = empty ? [0.667, 1.214, 1.267, 1.749, 1.976, 2.269] : [0.667, 1.214, 1.267, 2.000];
+        Deref(names) = empty ? [n"w_gun_revol_power_crusher_mag_out", n"w_gun_revol_power_crusher_mag_rattle", n"w_gun_revol_power_crusher_mag_in", n"w_gun_revol_power_crusher_handle_pull", n"w_gun_revol_power_crusher_handle_release", n"w_gun_revol_power_crusher_grab"] : [n"w_gun_revol_power_crusher_mag_out", n"w_gun_revol_power_crusher_mag_rattle", n"w_gun_revol_power_crusher_mag_in", n"w_gun_revol_power_crusher_grab"];
+        return true;
+      case n"pozhar":
+        if variant == 3 {
+          Deref(times) = empty ? [0.433, 0.967, 1.000, 1.133] : [0.433, 0.967, 1.133];
+          Deref(names) = empty ? [n"w_gun_rifle_power_pozhar_mag_out", n"w_gun_rifle_power_pozhar_mag_in", n"w_gun_rifle_power_pozhar_handle_release", n"w_gun_rifle_power_pozhar_grab"] : [n"w_gun_rifle_power_pozhar_mag_out", n"w_gun_rifle_power_pozhar_mag_in", n"w_gun_rifle_power_pozhar_grab"];
+          return true;
+        }
+        if variant == 1 {
+          Deref(times) = empty ? [0.232, 0.367, 0.648, 0.835, 1.173, 1.267, 1.777, 1.934, 2.098] : [0.212, 0.367, 0.565, 0.853, 1.159, 1.267, 1.752];
+          Deref(names) = empty ? [n"w_gun_rifle_power_pozhar_mag_grab", n"w_gun_rifle_power_pozhar_mag_out", n"w_gun_rifle_power_pozhar_mag_new_grab", n"w_gun_rifle_power_pozhar_mag_flip", n"w_gun_rifle_power_pozhar_mag_rattle", n"w_gun_rifle_power_pozhar_mag_in", n"w_gun_rifle_power_pozhar_handle_pull", n"w_gun_rifle_power_pozhar_handle_release", n"w_gun_rifle_power_pozhar_grab"] : [n"w_gun_rifle_power_pozhar_mag_grab", n"w_gun_rifle_power_pozhar_mag_out", n"w_gun_rifle_power_pozhar_mag_new_grab", n"w_gun_rifle_power_pozhar_mag_flip", n"w_gun_rifle_power_pozhar_mag_rattle", n"w_gun_rifle_power_pozhar_mag_in", n"w_gun_rifle_power_pozhar_grab"];
+          return true;
+        }
+        if variant == 2 {
+          Deref(times) = empty ? [0.379, 0.600, 0.808, 0.947, 1.197, 1.267, 1.777, 1.934, 2.098] : [0.347, 0.600, 0.747, 0.960, 1.187, 1.267, 1.752];
+          Deref(names) = empty ? [n"w_gun_rifle_power_pozhar_mag_grab", n"w_gun_rifle_power_pozhar_mag_out", n"w_gun_rifle_power_pozhar_mag_new_grab", n"w_gun_rifle_power_pozhar_mag_flip", n"w_gun_rifle_power_pozhar_mag_rattle", n"w_gun_rifle_power_pozhar_mag_in", n"w_gun_rifle_power_pozhar_handle_pull", n"w_gun_rifle_power_pozhar_handle_release", n"w_gun_rifle_power_pozhar_grab"] : [n"w_gun_rifle_power_pozhar_mag_grab", n"w_gun_rifle_power_pozhar_mag_out", n"w_gun_rifle_power_pozhar_mag_new_grab", n"w_gun_rifle_power_pozhar_mag_flip", n"w_gun_rifle_power_pozhar_mag_rattle", n"w_gun_rifle_power_pozhar_mag_in", n"w_gun_rifle_power_pozhar_grab"];
+          return true;
+        }
+        Deref(times) = empty ? [0.421, 0.667, 0.854, 0.979, 1.204, 1.267, 1.777, 1.934, 2.098] : [0.386, 0.667, 0.799, 0.991, 1.195, 1.267, 1.752];
+        Deref(names) = empty ? [n"w_gun_rifle_power_pozhar_mag_grab", n"w_gun_rifle_power_pozhar_mag_out", n"w_gun_rifle_power_pozhar_mag_new_grab", n"w_gun_rifle_power_pozhar_mag_flip", n"w_gun_rifle_power_pozhar_mag_rattle", n"w_gun_rifle_power_pozhar_mag_in", n"w_gun_rifle_power_pozhar_handle_pull", n"w_gun_rifle_power_pozhar_handle_release", n"w_gun_rifle_power_pozhar_grab"] : [n"w_gun_rifle_power_pozhar_mag_grab", n"w_gun_rifle_power_pozhar_mag_out", n"w_gun_rifle_power_pozhar_mag_new_grab", n"w_gun_rifle_power_pozhar_mag_flip", n"w_gun_rifle_power_pozhar_mag_rattle", n"w_gun_rifle_power_pozhar_mag_in", n"w_gun_rifle_power_pozhar_grab"];
+        return true;
     }
-    return 0.5;
+    return false;
+  }
+
+  // Tube guns with reload clips of their own: the sound of a shell going into the tube, or into the chamber.
+  public static func OwnShell(owner: CName, chamber: Bool) -> CName {
+    switch owner {
+    }
+    return n"None";
   }
 }
