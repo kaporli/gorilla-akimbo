@@ -1,0 +1,24 @@
+{
+  "_about": "Default battery of ga ingame. Ops: equip, stats, dummy, fire, reload, shot, wait, cmd, key. {R} and {L} in setup lines are the pair's records.",
+  "save": "ManualSave-62",
+  "expect_level": 51,
+  "spot": {"x": 61, "y": 688, "z": 107, "yaw": 0},
+  "display": {"monitor": 2, "resolution": "2560x1440", "hdr": "None"},
+  "mods": {"probe": "GA Ingame Probe", "overlay": "GA Ingame Build", "release": "Gorilla Akimbo (custom)"},
+  "load": {"continue": [0.1025, 0.471], "clicks": 2, "pause": 4, "space": true},
+  "load_timeout": 300,
+  "setup": ["give Items.AdvancedStrongArmsEpic 1", "eq Items.AdvancedStrongArmsEpic 0"],
+  "battery": [
+    {"op": "equip"},
+    {"op": "shot", "name": "drawn"},
+    {"op": "stats", "tag": "idle"},
+    {"op": "dummy", "dist": 6, "civ_radius": 20},
+    {"op": "fire", "hand": "RMB", "n": 6},
+    {"op": "fire", "hand": "LMB", "n": 6},
+    {"op": "reload", "stance": "lowered", "secs": 6},
+    {"op": "shot", "name": "after_lowered_reload"},
+    {"op": "reload", "stance": "raised", "secs": 6},
+    {"op": "shot", "name": "after_raised_reload"},
+    {"op": "cmd", "text": "mags\nundummy"}
+  ]
+}

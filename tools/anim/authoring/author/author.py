@@ -13,11 +13,13 @@ spec:
              optional 4th element {vin, vout, rin, rout}: tangents per frame arriving at / leaving the key (L04)
   shakes     {side: [{f, move, rot, hz, decay}]} damped oscillation; type "kick": {f, move, rot, attack, release, lag}
              recoil (fast attack, smooth return, peak 1)
-  bumps      {side: [{f: [f0,f1,f2,f3], move}]} world translation, smoothstep in f0..f1, held to f2, out to f3 (author_p)
+  bumps      {side: [{f: [f0,f1,f2,f3], move[, profile: 'minjerk']}]} world translation, smoothstep (or minimum jerk) in f0..f1, held to f2, out to f3 (author_p)
   turns      {side: [{f: [f0,f1,f2,f3], rot: [x,y,z], about: [x,y,z]}]} world rotation (rotation vector, degrees) of
              the gun about one of its points (gun-local), after keys, shakes and bumps; window as bumps
   twist_share  share of the hand twist put into the forearm bone (author10)
   shoulder   {side: [{f: [f0,f1,f2,f3], move}]} shoulder offset, windows as bumps (author_a)
+  shoulder_base  {side: [x,y,z]} constant translation of the IK shoulder origin from the template (metres).
+             Retargets a stance's shoulder without moving the authored gun path or changing bone lengths.
   pole, swivel  {side: [[f, deg], ...]} elbow swivel about the shoulder-hand axis (author_a pole, author_h swivel;
              the value may be deg or [deg])
   elbow      {side: [[f, [x,y,z]], ...]} pole bias in world axes (v02)
@@ -38,12 +40,13 @@ from fk import Clip, qmul, qinv, qrot
 
 spec = src = names = idx = tc = rest = N = None
 SIDES = {}
+TH = {}   # (side, frame): the clavicle turn (rad) the reach cap asks for, soft specs
 DIAG = {}   # (side, frame): (hand twist about the forearm in degrees, swing in degrees)
 ELB = {}    # (side, frame): (elbow angle, reach ratio, shoulder joint move, shoulder shift); reach specs only
 
 
 def src_path(sp):
-    return sp.get('src') or common.reload_glb(sp.get('body', 'pma'), 'right')
+    return common.mp(sp.get('src')) if sp.get('src') else common.reload_glb(sp.get('body', 'pma'), 'right')
 
 
 def setup(sp):
@@ -111,13 +114,14 @@ def aim(d, up):
     return np.stack([x, y, np.cross(x, y)], 1)
 
 
-def bump_w(fw, f):
-    """Window weight: smoothstep in over f0..f1, 1 to f2, out over f2..f3."""
+def bump_w(fw, f, profile=None):
+    """Window weight: smoothstep (profile 'minjerk': 10t^3 - 15t^4 + 6t^5) in over f0..f1, 1 to f2, out over f2..f3."""
     a0, a1, a2, a3 = fw
+    sm = (lambda t: t * t * t * (t * (6 * t - 15) + 10)) if profile == 'minjerk' else (lambda t: t * t * (3 - 2 * t))
     if f <= a0 or f >= a3: return 0.0
-    if f < a1: t = (f - a0) / (a1 - a0); return t * t * (3 - 2 * t)
+    if f < a1: return sm((f - a0) / (a1 - a0))
     if f <= a2: return 1.0
-    t = (a3 - f) / (a3 - a2); return t * t * (3 - 2 * t)
+    return sm((a3 - f) / (a3 - a2))
 
 
 def gun_pose(S, f):
@@ -145,7 +149,7 @@ def gun_pose(S, f):
         rk = np.zeros_like(de); rr = np.array(sh.get('rot', [0, 0, 0]), float); rk[:len(rr)] = rr
         de = de + rk * k2
     for b in spec.get('bumps', {}).get(S, []):
-        dp = dp + np.array(b['move']) * bump_w(b['f'], f)
+        dp = dp + np.array(b['move']) * bump_w(b['f'], f, b.get('profile'))
     g0, q0 = rest[SIDES[S][0][4]]
     gp, gq = g0 + dp, qmul(q0, qeuler(*de))
     for t in spec.get('turns', {}).get(S, []):
@@ -164,21 +168,26 @@ def solve(f):
     soft = 'reach' in spec or 'protract_max' in spec
     for S, (ch, helpers) in SIDES.items():
         sh, ua, fa, hd, gn = ch
-        gp, gq = gun_pose(S, f)
         g0, q0 = rest[gn]; hp0, hq0 = rest[hd]
-        hq = qmul(gq, qmul(qinv(q0), hq0)); hp = gp + qrot(gq, qrot(qinv(q0), hp0 - g0))
+        hf = spec.get('hand_frames', {}).get(S)
+        if hf is not None:      # hand and gun separate (a tossed gun): per-frame world poses [x, y, z, qx, qy, qz, qw]; the weapon joint is written relative to the hand
+            gf = spec['gun_frames'][S]; gp, gq = np.array(gf[f][:3], float), np.array(gf[f][3:], float); hp, hq = np.array(hf[f][:3], float), np.array(hf[f][3:], float)
+        else:
+            gp, gq = gun_pose(S, f)
+            hq = qmul(gq, qmul(qinv(q0), hq0)); hp = gp + qrot(gq, qrot(qinv(q0), hp0 - g0))
         S0, E0 = rest[ua][0], rest[fa][0]
         a = np.linalg.norm(E0 - S0); b = np.linalg.norm(hp0 - E0)
+        base = np.array(spec.get('shoulder_base', {}).get(S, [0, 0, 0]), float)
         shift = np.zeros(3)
         for bb in spec.get('shoulder', {}).get(S, []):
             shift = shift + np.array(bb['move']) * bump_w(bb['f'], f)
-        Sp = S0 + shift; d = np.linalg.norm(hp - Sp); qcl = None
+        Sp = S0 + base + shift; d = np.linalg.norm(hp - Sp); qcl = None; Sp_pre = Sp
         if soft:
             # above r0 the clavicle turns about its root to carry the arm joint toward the hand; the elbow keeps a bend
             r0, rmax = spec.get('reach', [0.9, 0.975]); r = d / (a + b)
             if r > r0:
                 re = r0 + (rmax - r0) * math.tanh((r - r0) / (rmax - r0)); want = re * (a + b)
-                Cr = rest[sh][0]; v = Sp - Cr; t = hp - Cr
+                Cr = rest[sh][0] + base; v = Sp - Cr; t = hp - Cr
                 n = np.cross(v, t); n /= np.linalg.norm(n)
                 def at(th):
                     h = th / 2; q = np.array([*(n * math.sin(h)), math.cos(h)]); return q, Cr + qrot(q, v)
@@ -188,6 +197,17 @@ def solve(f):
                     if np.linalg.norm(hp - at(mid)[1]) > want: lo_ = mid
                     else: hi_ = mid
                 qcl, Sp = at(hi_); d = np.linalg.norm(hp - Sp)
+                TH[(S, f)] = hi_
+            cp = spec.get('clav_plan')
+            if cp:      # clav_plan: the clavicle turn of the last frame is reached in the ramp (hidden frames) and held after it: no clavicle turn on the visible rise
+                tend = TH.get((S, N - 1), 0.0); w = 1.0 if f >= cp['ramp'][1] else (0.0 if f <= cp['ramp'][0] else lowmj((f - cp['ramp'][0]) / float(cp['ramp'][1] - cp['ramp'][0])))
+                if f < cp['ramp'][0]: pass
+                else:
+                    Cr = rest[sh][0] + base; v = Sp_pre - Cr; t = hp - Cr; nn = np.cross(v, t)
+                    th = tend * w if f < cp['ramp'][1] else tend
+                    if th > 1e-12 and np.linalg.norm(nn) > 1e-9:
+                        nn = nn / np.linalg.norm(nn); h = th / 2; qcl = np.array([*(nn * math.sin(h)), math.cos(h)]); Sp = Cr + qrot(qcl, v); d = np.linalg.norm(hp - Sp)
+                    else: qcl = None; Sp = Sp_pre; d = np.linalg.norm(hp - Sp)
         lk = spec.get('lock', 0.995) if soft else 0.995
         if d > (a + b) * lk:
             u = (hp - Sp) / d; ex = u * (d - (a + b) * lk); shift = shift + ex; Sp = Sp + ex; d = (a + b) * lk
@@ -223,16 +243,23 @@ def solve(f):
         share = spec.get('twist_share', 0.0)
         if share:
             h = tw * share / 2; qfa = qmul(np.array([*(uf * math.sin(h)), math.cos(h)]), qfa)
-        world = {sh: (rest[sh][0] + shift, rest[sh][1] if qcl is None else qmul(qcl, rest[sh][1])),
+        world = {sh: (rest[sh][0] + base + shift, rest[sh][1] if qcl is None else qmul(qcl, rest[sh][1])),
                  ua: (Sp, qmul(quat_of(Rua), rest[ua][1])), fa: (Ep, qfa), hd: (hp, hq)}
         for hj in helpers:
             jp, jq = rest[hj]
             world[hj] = (hp + qrot(hq, qrot(qinv(hq0), jp - hp0)), qmul(hq, qmul(qinv(hq0), jq)))
-        for n in [sh, ua, fa, hd] + helpers:
+        if hf is not None: world[gn] = (gp, gq)
+        for jn, qs in (spec.get('finger_frames', {}).get(S) or {}).items():      # finger tracks: local rotation per frame, translation from the template
+            if jn in idx: loc[idx[jn]] = (tc.local(idx[jn], 0)[0], np.array(qs[f], float))
+        for n in [sh, ua, fa, hd] + helpers + ([gn] if hf is not None else []):
             pw = W[tc.par[n]]; t, q = world[n]
             loc[n] = (qrot(qinv(pw[1]), t - pw[0]), qmul(qinv(pw[1]), q))
             W[n] = world[n]
     return loc
+
+
+def lowmj(t):
+    t = min(1.0, max(0.0, t)); return t * t * t * (t * (6 * t - 15) + 10)
 
 
 def build(sp, out=None):
@@ -240,6 +267,8 @@ def build(sp, out=None):
     setup(sp)
     out = out or sp['out']
     g = Glb(src_path(sp))
+    TH.clear()
+    if spec.get('clav_plan'): solve(N - 1)      # the clavicle turn of the last frame (TH) before the ramp is solved
     frames = [solve(f) for f in range(N)]
     times = np.arange(N) / 30.0
     t_in = g.add_acc(times, 'SCALAR'); t_one = g.add_acc(np.array([0.0]), 'SCALAR')

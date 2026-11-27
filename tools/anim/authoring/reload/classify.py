@@ -1,6 +1,7 @@
 """Classification table of every magazine-fed gun the mod handles, from the gun's own reload animation and mesh.
 
-usage: classify.py [--out dir]      writes classify.json and classify.md there (default <OUT>/classify)
+usage: classify.py [--out dir] [--guns id,id]   writes classify.json and classify.md there (default <OUT>/classify)
+  --guns   only these guns, any gun of the manifest (default: the GUNS list below)
 Per gun and clip (reload, empty_reload): magazine position against the grip (gun axes), exit direction and speed,
 frames (out, clear, far, near, seated), gun parts that move after the seat (handle, bolt), clip length.
 Position: front = in front of the grip under the receiver, rear = behind the grip (bullpup), top = above the bore,
@@ -64,7 +65,8 @@ def row(gid):
 
 if __name__ == '__main__':
     argv = sys.argv[1:]; out = common.opt(argv, '--out') or renv.OUT + '/classify'; os.makedirs(out, exist_ok=True)
-    rows = [row(g) for g in GUNS]; json.dump(rows, open(out + '/classify.json', 'w'), indent=1)
+    picked = common.opt(argv, '--guns')
+    rows = [row(g) for g in (picked.split(',') if picked else GUNS)]; json.dump(rows, open(out + '/classify.json', 'w'), indent=1)
     L = ['| gun | type | magazine | clip | frames | out | clear | seated | leaves (cm/f) | after the seat |', '|---|---|---|---|---|---|---|---|---|---|']
     for r in rows:
         if 'note' in r: L.append(f"| {r['name']} | {r['type']} | {r.get('position', '')} | | | | | | | {r['note']} |"); continue

@@ -1,7 +1,8 @@
 """Weight class of each rifle from its mesh: bulk, not length. A light gun gets the snappy take (A) of each pick, a
 heavy gun the heavy take (B).
 
-usage: weight.py <out png> [--json out.json]
+usage: weight.py <out png> [--json out.json] [--guns id,id]
+  --guns   only these guns (any gun with a mesh and a magazine; default: the GUNS list below)
 Per gun (body parts and seated magazine, gun axes): length, height, width (95 % of the vertices, so a sight post or
 a cable does not count), side area (cm^2 of the side silhouette on a 5 mm grid), top area, bulk = side area x mean
 width (litres: the volume of the silhouette extruded to the gun's mean width), bulk per length.
@@ -53,7 +54,8 @@ def measure(gid):
     mw = float(np.mean(w)) * 100; bulk = side * mw / 1000.0; L = float(A[:, 2].max() - A[:, 2].min())
     r = {'gun': gid, 'name': common.gun(gid)['name'], 'length_cm': round(L * 100, 1), 'height_cm': round(float(hi[1] - lo[1]) * 100, 1), 'width_cm': round(float(hi[0] - lo[0]) * 100, 1),
          'mean_width_cm': round(mw, 1), 'side_area_cm2': round(side), 'top_area_cm2': round(top), 'bulk_l': round(bulk, 1), 'bulk_per_m': round(bulk / L, 1)}
-    r['class'] = OWNER.get(gid) or ('heavy' if bulk > BULK_HEAVY or mw > WIDTH_HEAVY else 'light'); r['by'] = 'owner' if gid in OWNER else 'proposed'
+    r['proposed'] = 'heavy' if bulk > BULK_HEAVY or mw > WIDTH_HEAVY else 'light'
+    r['class'] = OWNER.get(gid) or r['proposed']; r['by'] = 'owner' if gid in OWNER else 'proposed'
     return r, V, M
 
 
@@ -84,4 +86,6 @@ def main(out, jo=None):
 
 
 if __name__ == '__main__':
-    argv = sys.argv[1:]; jo = common.opt(argv, '--json'); main(argv[0], jo)
+    argv = sys.argv[1:]; jo = common.opt(argv, '--json'); picked = common.opt(argv, '--guns')
+    if picked: GUNS[:] = picked.split(',')
+    main(argv[0], jo)

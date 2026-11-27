@@ -17,7 +17,7 @@ view: the script may fast-forward that part (layout hide_start..hide_end).
 """
 import os, sys, json, subprocess
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import renv, common, manifest
+import nativelow as NL, renv, common, manifest
 import numpy as np
 import author, rlib, rlib2, magtrack2, magtrack3, timing, rarmset
 from rlib import K
@@ -430,8 +430,8 @@ MIR_P = np.array([-1, 1, 1]); MIR_R = np.array([1, -1, -1])
 
 
 def owners():
-    """Guns that own a model variable and have reload slots: [(gun id, reload entry)]."""
-    return [(g['id'], g['reload']) for g in manifest.guns(all_=True) if g.get('reload', {}).get('slots')]
+    """Rifle guns (reload.clips is rreload_clips) that have reload slots: [(gun id, reload entry)]."""
+    return [(g['id'], g['reload']) for g in manifest.guns(all_=True) if g.get('reload', {}).get('slots') and g['reload'].get('clips', 'rreload_clips') == 'rreload_clips']      # the rifle clips (prod.py); SMG, shotgun and top-magazine guns have their own generators
 
 
 def clips_of(gid):
@@ -457,21 +457,44 @@ def plan(guns=None, picks=None, clips=None, sides=None, bodies=None):
 def stem(gid, pick, take, clip, side): return f'{gid}_{side}_{pick}{take}_{clip}'
 
 
+class TLSpring(rlib2.TL):
+    """GA_SPRING=1: the hand target path goes through the gun's mass-spring model (r3lib.spring with the arm spring of the gun, as the SMG top family builds its clips), so every move after the magazine is seated ramps and settles
+    instead of following the target exactly (the insertion path before it stays as generated); kicks are ignored (the spring makes every rebound), the muzzle drag is off."""
+    def __init__(self, ctx, lag=1.0, drag=1.0, drag_max=7.0):
+        super().__init__(ctx, lag, 0.0, drag_max)
+
+    def kick(self, *a, **k): return self
+
+    def arrays(self):
+        import r3lib
+        P, R = super().arrays(); S = r3lib.spring_of(self.c); se = int(self.c.T['seated']); Ps = P.copy(); Rs = R.copy()
+        Ps[se:] = r3lib.spring(P[se:], S['wp'], S['z'], {}); Rs[se:] = r3lib.spring(R[se:], S['wr'], S['z'], {})      # only the motion after the magazine is seated (the insertion path stays as generated; the gun is at rest on the seat)
+        Ps[0] = 0; Rs[0] = 0; Ps[-1] = P[-1]; Rs[-1] = R[-1]
+        return Ps, Rs
+
+
 def build(gid, pick, take, clip, side, body, out=None, quiet=False):
     import rgate
     out = out or manifest.path('rreload_clips'); d = f'{out}/{body}'; os.makedirs(d, exist_ok=True); name = stem(gid, pick, take, clip, side)
-    S = side.capitalize(); P = dict(TAKES[take]); c = Ctx(gid, body, clip, P, S); tl = rlib2.TL(c, P['lag'], P['drag']); m = PICKS[pick][1](c, tl)
+    S = side.capitalize(); P = dict(TAKES[take]); c = Ctx(gid, body, clip, P, S); tl = (TLSpring if os.environ.get('GA_SPRING') else rlib2.TL)(c, P['lag'], P['drag'])
+    c.take = take      # the arm spring label (r3lib.spring_of)
+    if NL.NATIVE: Lp, Lr, note = NL.prepare(tl, c, gid, body, c.T['seated'], lambda: m)      # native lowered mode (nativelow.py)
+    m = PICKS[pick][1](c, tl)
     Pk, Rk = tl.arrays(); kicks = [dict(k) for k in tl.kicks]
+    if NL.NATIVE: kicks = tl.native_kicks(kicks)
     if S == 'Left':
         Pk = Pk * MIR_P; Rk = Rk * MIR_R
         for k in kicks: k['move'] = list(np.array(k['move'], float) * MIR_P); k['rot'] = list(np.array(k['rot'], float) * MIR_R)
-    keys = [K(f, Pk[f], Rk[f]) for f in range(c.N)]; keys[0] = K(0); keys[-1] = K(c.N - 1)
+    keys = [K(f, Pk[f], Rk[f]) for f in range(c.N)]; keys[0] = K(0, Pk[0], Rk[0]) if NL.NATIVE else K(0); keys[-1] = K(c.N - 1, Pk[-1], Rk[-1]) if NL.NATIVE else K(c.N - 1)
     for sh in kicks: sh['release'] = round(min(sh.get('release', 6.0), max((c.N - 1 - sh['f']) / 11.0, 0.3)), 2)
     spec = {'_draft': name, '_name': f'{PICKS[pick][0]}, take {take}', '_doc': ' '.join((PICKS[pick][1].__doc__ or '').split()), '_gun': gid, '_left_gun': gid, '_body': body, '_side': S,
             '_gun_clip': clip, '_pick': pick, '_take': take, '_timing': c.T, '_params': {k: v for k, v in c.P.items()}, '_marks': tl.marks, '_mag': m['mag'], '_two_arm': False, '_round': 3,
             'src': c.rest, 'template': 'idle', 'clip': 'reload_draft', 'frames': c.N, 'keys': {S: keys, ('Left' if S == 'Right' else 'Right'): [K(0)]},
             'shakes': {S: kicks}, 'reach': [0.93, 0.985], 'twist_share': 0.6, 'pole_tilt': POLE_TILT, 'out': f'{d}/{name}.glb'}
+    if os.environ.get('GA_SPRING'): spec['_spring'] = True
+    if NL.NATIVE: NL.shoulder_base(spec, gid, body)
     author.build(spec, spec['out'])
+    if NL.NATIVE: NL.finish(spec, c, m, gid, body, S, name, out, manifest.path('rreload_clips')); spec['_clearance'] = note
     g = Glb(spec['out']); cl = Clip(g, 'reload_draft'); i = g.names.index('Weapon' + S); G = [cl.world(f)[i] for f in range(c.N)]
     track = magtrack3.build(gid, clip, [(np.array(t), np.array(q)) for t, q in G], m['mag']); spec['_track'] = f'{d}/{name}_track.json'
     json.dump(track, open(spec['_track'], 'w')); json.dump(spec, open(f'{d}/{name}.json', 'w'), indent=1)
@@ -480,10 +503,10 @@ def build(gid, pick, take, clip, side, body, out=None, quiet=False):
     return spec, o
 
 
-def layout(out=None):
+def layout(out=None, guns=None):
     """Layout per gun, pick and clip: the window every hand and body shares (latest hide_start, earliest hide_end)."""
     out = out or manifest.path('rreload_clips'); lay = {}; rows = []; fails = []
-    for gid, pick, take, clip, side, body in plan():
+    for gid, pick, take, clip, side, body in plan(guns):
         p = f'{out}/{body}/{stem(gid, pick, take, clip, side)}_gate.json'
         if not os.path.exists(p): fails.append(f'missing {p}'); continue
         o = json.load(open(p)); Lr = o['layout']; Lr['keys'] = rarmset.good_keys(Lr['length']); e = lay.setdefault(gid, {}).setdefault(pick + take, {}).setdefault(clip, dict(Lr))
@@ -491,6 +514,7 @@ def layout(out=None):
         else: e['hide_start'] = max(e['hide_start'], Lr['hide_start']); e['hide_end'] = min(e['hide_end'], Lr['hide_end'])
         if o['fails']: fails.append(f"{body} {o['clip']}: {o['fails']}")
     for gid, r in owners():
+        if guns and gid not in guns: continue
         for pick in r['picks']:
             if len(clips_of(gid)) == 1 and gid in lay: lay[gid][pick + WEIGHT_TAKE[r['weight']]]['empty_reload'] = lay[gid][pick + WEIGHT_TAKE[r['weight']]]['reload']
     json.dump(lay, open(f'{out}/layout.json', 'w'), indent=1)
@@ -515,7 +539,7 @@ if __name__ == '__main__':
         for gid, pick, take, clip, side, body in pl:
             p = f"{out or manifest.path('rreload_clips')}/{body}/{stem(gid, pick, take, clip, side)}"
             o = rgate.gate(p + '.json'); json.dump(o, open(p + '_gate.json', 'w'), indent=1); print(body, rgate.line(o), flush=True)
-    elif cmd == 'layout': layout(out)
+    elif cmd == 'layout': layout(out, guns)
     elif cmd == 'build':
         if jobs > 1:
             procs = []

@@ -1,0 +1,1695 @@
+{
+ "_note": "History of draft ideas the owner rejected or that a pick covers. Not a refusal: the rejected drafts were badly executed, not banned techniques, and the owner may like them done well. `ga drafts` prints the old draft id and archive path when a new draft's name matches a `match` phrase, and lists the pair in the round's DRAFTS.md and drafts.json so the old draft can be shown next to the new one. One row per old draft. kind: recycled (BRIEF-NEW-TECHNIQUES.md list, owner 2026-11-13: shown in some batch and rejected as recycled; applies to a new draft of any family), picked (a pick covers it; same family only), rejected (owner rejected the round; same family only). `match`: normalised phrases (lower case, words only) looked for in a draft name as whole words. `family`, `round`, `draft`, `draft_name`: where the old draft was found (its name matched `match` in the generator's catalog; a name match, not a recorded fact). `archive`: folder of that round under paths.anim_work (the archived copy is on the NAS under Modding/gorilla-akimbo/anim-work, and locally for some rounds); null where no old draft in the registered rounds matches. Owner review of the matches pending.",
+ "entries": [
+  {
+   "idea": "wind-up chop",
+   "kind": "recycled",
+   "match": [
+    "wind up chop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 1,
+   "draft": "SF09",
+   "draft_name": "Wind-up chop",
+   "archive": "smg-shotgun/round1-front"
+  },
+  {
+   "idea": "wind-up chop",
+   "kind": "recycled",
+   "match": [
+    "wind up chop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 2,
+   "draft": "SF11",
+   "draft_name": "Wind-up chop",
+   "archive": "smg-shotgun/round2-front"
+  },
+  {
+   "idea": "wind-up chop",
+   "kind": "recycled",
+   "match": [
+    "wind up chop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "grip",
+   "round": 1,
+   "draft": "SG01",
+   "draft_name": "Wind-up chop",
+   "archive": "smg-shotgun/round1-grip"
+  },
+  {
+   "idea": "wind-up chop",
+   "kind": "recycled",
+   "match": [
+    "wind up chop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "bullpup",
+   "round": 1,
+   "draft": "SB01",
+   "draft_name": "Wind-up chop",
+   "archive": "smg-shotgun/round1-bullpup"
+  },
+  {
+   "idea": "low chop",
+   "kind": "recycled",
+   "match": [
+    "low chop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 2,
+   "draft": "SF13",
+   "draft_name": "Low chop",
+   "archive": "smg-shotgun/round2-front"
+  },
+  {
+   "idea": "high chop",
+   "kind": "recycled",
+   "match": [
+    "high chop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 2,
+   "draft": "SF12",
+   "draft_name": "High chop",
+   "archive": "smg-shotgun/round2-front"
+  },
+  {
+   "idea": "high chop",
+   "kind": "recycled",
+   "match": [
+    "high chop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "grip",
+   "round": 1,
+   "draft": "SG02",
+   "draft_name": "High chop",
+   "archive": "smg-shotgun/round1-grip"
+  },
+  {
+   "idea": "cant chop (in or out)",
+   "kind": "recycled",
+   "match": [
+    "cant in chop",
+    "cant out chop",
+    "cant chop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 2,
+   "draft": "SF14",
+   "draft_name": "Cant-out chop",
+   "archive": "smg-shotgun/round2-front"
+  },
+  {
+   "idea": "cant chop (in or out)",
+   "kind": "recycled",
+   "match": [
+    "cant in chop",
+    "cant out chop",
+    "cant chop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 2,
+   "draft": "SF15",
+   "draft_name": "Cant-in chop",
+   "archive": "smg-shotgun/round2-front"
+  },
+  {
+   "idea": "cant chop (in or out)",
+   "kind": "recycled",
+   "match": [
+    "cant in chop",
+    "cant out chop",
+    "cant chop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "grip",
+   "round": 1,
+   "draft": "SG03",
+   "draft_name": "Cant-in chop",
+   "archive": "smg-shotgun/round1-grip"
+  },
+  {
+   "idea": "cant chop (in or out)",
+   "kind": "recycled",
+   "match": [
+    "cant in chop",
+    "cant out chop",
+    "cant chop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "grip",
+   "round": 1,
+   "draft": "SG04",
+   "draft_name": "Cant-out chop",
+   "archive": "smg-shotgun/round1-grip"
+  },
+  {
+   "idea": "cant chop (in or out)",
+   "kind": "recycled",
+   "match": [
+    "cant in chop",
+    "cant out chop",
+    "cant chop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "bullpup",
+   "round": 1,
+   "draft": "SB03",
+   "draft_name": "Cant-in chop",
+   "archive": "smg-shotgun/round1-bullpup"
+  },
+  {
+   "idea": "cross-body chop",
+   "kind": "recycled",
+   "match": [
+    "cross body chop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "grip",
+   "round": 1,
+   "draft": "SG09",
+   "draft_name": "Cross-body chop",
+   "archive": "smg-shotgun/round1-grip"
+  },
+  {
+   "idea": "cross-body chop",
+   "kind": "recycled",
+   "match": [
+    "cross body chop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "bullpup",
+   "round": 1,
+   "draft": "SB09",
+   "draft_name": "Cross-body chop",
+   "archive": "smg-shotgun/round1-bullpup"
+  },
+  {
+   "idea": "out-front chop",
+   "kind": "recycled",
+   "match": [
+    "out front chop",
+    "reach out chop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 2,
+   "draft": "SF17",
+   "draft_name": "Out-front chop",
+   "archive": "smg-shotgun/round2-front"
+  },
+  {
+   "idea": "out-front chop",
+   "kind": "recycled",
+   "match": [
+    "out front chop",
+    "reach out chop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "grip",
+   "round": 1,
+   "draft": "SG05",
+   "draft_name": "Reach-out chop",
+   "archive": "smg-shotgun/round1-grip"
+  },
+  {
+   "idea": "out-front chop",
+   "kind": "recycled",
+   "match": [
+    "out front chop",
+    "reach out chop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "bullpup",
+   "round": 1,
+   "draft": "SB05",
+   "draft_name": "Reach-out chop",
+   "archive": "smg-shotgun/round1-bullpup"
+  },
+  {
+   "idea": "wrist chop",
+   "kind": "recycled",
+   "match": [
+    "wrist chop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 2,
+   "draft": "SF18",
+   "draft_name": "Wrist chop",
+   "archive": "smg-shotgun/round2-front"
+  },
+  {
+   "idea": "twist chop",
+   "kind": "recycled",
+   "match": [
+    "twist chop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 2,
+   "draft": "SF19",
+   "draft_name": "Twist chop",
+   "archive": "smg-shotgun/round2-front"
+  },
+  {
+   "idea": "hip-back chop",
+   "kind": "recycled",
+   "match": [
+    "hip back chop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 2,
+   "draft": "SF20",
+   "draft_name": "Hip-back chop",
+   "archive": "smg-shotgun/round2-front"
+  },
+  {
+   "idea": "nod throw",
+   "kind": "recycled",
+   "match": [
+    "nod throw"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 1,
+   "draft": "SF01",
+   "draft_name": "Nod throw",
+   "archive": "smg-shotgun/round1-front"
+  },
+  {
+   "idea": "nod throw",
+   "kind": "recycled",
+   "match": [
+    "nod throw"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "masamune",
+   "round": 3,
+   "draft": "M11",
+   "draft_name": "Nod throw, yank",
+   "archive": "rifle-reloads/round3-masamune"
+  },
+  {
+   "idea": "muzzle-up shove",
+   "kind": "recycled",
+   "match": [
+    "muzzle up shove"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 1,
+   "draft": "SF07",
+   "draft_name": "Muzzle-up shove",
+   "archive": "smg-shotgun/round1-front"
+  },
+  {
+   "idea": "muzzle-up shove",
+   "kind": "recycled",
+   "match": [
+    "muzzle up shove"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "grip",
+   "round": 1,
+   "draft": "SG06",
+   "draft_name": "Muzzle-up shove",
+   "archive": "smg-shotgun/round1-grip"
+  },
+  {
+   "idea": "muzzle-up shove",
+   "kind": "recycled",
+   "match": [
+    "muzzle up shove"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "bullpup",
+   "round": 1,
+   "draft": "SB04",
+   "draft_name": "Muzzle-up shove",
+   "archive": "smg-shotgun/round1-bullpup"
+  },
+  {
+   "idea": "muzzle-up shove",
+   "kind": "recycled",
+   "match": [
+    "muzzle up shove"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "front",
+   "round": 3,
+   "draft": "F16",
+   "draft_name": "Muzzle-up shove",
+   "archive": "rifle-reloads/round3-front"
+  },
+  {
+   "idea": "tip-up drop",
+   "kind": "recycled",
+   "match": [
+    "tip up drop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 1,
+   "draft": "SF03",
+   "draft_name": "Tip-up drop",
+   "archive": "smg-shotgun/round1-front"
+  },
+  {
+   "idea": "tip-up drop",
+   "kind": "recycled",
+   "match": [
+    "tip up drop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "front",
+   "round": 3,
+   "draft": "F12",
+   "draft_name": "Tip-up drop, hip seat",
+   "archive": "rifle-reloads/round3-front"
+  },
+  {
+   "idea": "tip-up drop",
+   "kind": "recycled",
+   "match": [
+    "tip up drop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "hercules",
+   "round": 3,
+   "draft": "H12",
+   "draft_name": "Tip-up drop, whip shut",
+   "archive": "rifle-reloads/round3-hercules"
+  },
+  {
+   "idea": "shake loose",
+   "kind": "recycled",
+   "match": [
+    "shake loose"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 1,
+   "draft": "SF02",
+   "draft_name": "Shake loose",
+   "archive": "smg-shotgun/round1-front"
+  },
+  {
+   "idea": "shake loose",
+   "kind": "recycled",
+   "match": [
+    "shake loose"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "masamune",
+   "round": 1,
+   "draft": "M02",
+   "draft_name": "Shake loose, punch",
+   "archive": "rifle-reloads/masamune"
+  },
+  {
+   "idea": "shake loose",
+   "kind": "recycled",
+   "match": [
+    "shake loose"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "masamune",
+   "round": 2,
+   "draft": "M02",
+   "draft_name": "Shake loose, punch",
+   "archive": "rifle-reloads/round2"
+  },
+  {
+   "idea": "tilt and shake",
+   "kind": "recycled",
+   "match": [
+    "tilt and shake",
+    "tilt shake"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 3,
+   "draft": "SF23",
+   "draft_name": "Tilt and shake",
+   "archive": "smg-shotgun/round3-front"
+  },
+  {
+   "idea": "tilt and shake",
+   "kind": "recycled",
+   "match": [
+    "tilt and shake",
+    "tilt shake"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "grip",
+   "round": 2,
+   "draft": "SG14",
+   "draft_name": "Tilt and shake",
+   "archive": "smg-shotgun/round2-grip"
+  },
+  {
+   "idea": "tilt and shake",
+   "kind": "recycled",
+   "match": [
+    "tilt and shake",
+    "tilt shake"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "bullpup",
+   "round": 3,
+   "draft": "SB43",
+   "draft_name": "Tilt-shake, rear rig",
+   "archive": "smg-shotgun/round3-bullpup"
+  },
+  {
+   "idea": "rattle",
+   "kind": "recycled",
+   "match": [
+    "rattle"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "grip",
+   "round": 2,
+   "draft": "SG19",
+   "draft_name": "Rattle",
+   "archive": "smg-shotgun/round2-grip"
+  },
+  {
+   "idea": "rattle",
+   "kind": "recycled",
+   "match": [
+    "rattle"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "bullpup",
+   "round": 2,
+   "draft": "SB13",
+   "draft_name": "Rattle",
+   "archive": "smg-shotgun/round2-bullpup"
+  },
+  {
+   "idea": "rattle",
+   "kind": "recycled",
+   "match": [
+    "rattle"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "top",
+   "round": 2,
+   "draft": "ST20",
+   "draft_name": "Rattle off",
+   "archive": "smg-shotgun/round2-top"
+  },
+  {
+   "idea": "thigh hook",
+   "kind": "recycled",
+   "match": [
+    "thigh hook"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 1,
+   "draft": "SF04",
+   "draft_name": "Thigh hook",
+   "archive": "smg-shotgun/round1-front"
+  },
+  {
+   "idea": "thigh hook",
+   "kind": "recycled",
+   "match": [
+    "thigh hook"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "front",
+   "round": 3,
+   "draft": "F17",
+   "draft_name": "Thigh hook, uppercut",
+   "archive": "rifle-reloads/round3-front"
+  },
+  {
+   "idea": "chest snap",
+   "kind": "recycled",
+   "match": [
+    "chest snap"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 1,
+   "draft": "SF05",
+   "draft_name": "Chest snap",
+   "archive": "smg-shotgun/round1-front"
+  },
+  {
+   "idea": "backswing",
+   "kind": "recycled",
+   "match": [
+    "backswing"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 1,
+   "draft": "SF06",
+   "draft_name": "Backswing",
+   "archive": "smg-shotgun/round1-front"
+  },
+  {
+   "idea": "backswing",
+   "kind": "recycled",
+   "match": [
+    "backswing"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 3,
+   "draft": "SF27",
+   "draft_name": "Pendulum backswing",
+   "archive": "smg-shotgun/round3-front"
+  },
+  {
+   "idea": "pendulum",
+   "kind": "recycled",
+   "match": [
+    "pendulum"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 3,
+   "draft": "SF27",
+   "draft_name": "Pendulum backswing",
+   "archive": "smg-shotgun/round3-front"
+  },
+  {
+   "idea": "pendulum",
+   "kind": "recycled",
+   "match": [
+    "pendulum"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "front",
+   "round": 1,
+   "draft": "F07",
+   "draft_name": "Tip-up, pendulum",
+   "archive": "rifle-reloads/front"
+  },
+  {
+   "idea": "pendulum",
+   "kind": "recycled",
+   "match": [
+    "pendulum"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "front",
+   "round": 3,
+   "draft": "F15",
+   "draft_name": "Pendulum, rear pouch",
+   "archive": "rifle-reloads/round3-front"
+  },
+  {
+   "idea": "pendulum",
+   "kind": "recycled",
+   "match": [
+    "pendulum"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "masamune",
+   "round": 1,
+   "draft": "M07",
+   "draft_name": "Tip-up slide, pendulum",
+   "archive": "rifle-reloads/masamune"
+  },
+  {
+   "idea": "pendulum",
+   "kind": "recycled",
+   "match": [
+    "pendulum"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "masamune",
+   "round": 3,
+   "draft": "M13",
+   "draft_name": "Cant and slide, pendulum",
+   "archive": "rifle-reloads/round3-masamune"
+  },
+  {
+   "idea": "pendulum",
+   "kind": "recycled",
+   "match": [
+    "pendulum"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "hercules",
+   "round": 1,
+   "draft": "H07",
+   "draft_name": "Tip-up slide, pendulum",
+   "archive": "rifle-reloads/hercules"
+  },
+  {
+   "idea": "cant-in and cant-out drop",
+   "kind": "recycled",
+   "match": [
+    "cant in drop",
+    "cant out drop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 1,
+   "draft": "SF08",
+   "draft_name": "Cant-in drop",
+   "archive": "smg-shotgun/round1-front"
+  },
+  {
+   "idea": "cant-in and cant-out drop",
+   "kind": "recycled",
+   "match": [
+    "cant in drop",
+    "cant out drop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "front",
+   "round": 3,
+   "draft": "F20",
+   "draft_name": "Cant-in drop",
+   "archive": "rifle-reloads/round3-front"
+  },
+  {
+   "idea": "drop stop",
+   "kind": "recycled",
+   "match": [
+    "drop stop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 1,
+   "draft": "SF10",
+   "draft_name": "Drop stop",
+   "archive": "smg-shotgun/round1-front"
+  },
+  {
+   "idea": "drop stop",
+   "kind": "recycled",
+   "match": [
+    "drop stop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "grip",
+   "round": 1,
+   "draft": "SG07",
+   "draft_name": "Drop stop",
+   "archive": "smg-shotgun/round1-grip"
+  },
+  {
+   "idea": "drop stop",
+   "kind": "recycled",
+   "match": [
+    "drop stop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "bullpup",
+   "round": 1,
+   "draft": "SB07",
+   "draft_name": "Drop stop",
+   "archive": "smg-shotgun/round1-bullpup"
+  },
+  {
+   "idea": "press-and-drop",
+   "kind": "recycled",
+   "match": [
+    "press and drop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 3,
+   "draft": "SF21",
+   "draft_name": "Press-and-drop",
+   "archive": "smg-shotgun/round3-front"
+  },
+  {
+   "idea": "press-and-drop",
+   "kind": "recycled",
+   "match": [
+    "press and drop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "grip",
+   "round": 2,
+   "draft": "SG11",
+   "draft_name": "Press and drop",
+   "archive": "smg-shotgun/round2-grip"
+  },
+  {
+   "idea": "press-and-drop",
+   "kind": "recycled",
+   "match": [
+    "press and drop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "bullpup",
+   "round": 2,
+   "draft": "SB15",
+   "draft_name": "Press and drop",
+   "archive": "smg-shotgun/round2-bullpup"
+  },
+  {
+   "idea": "snap drop",
+   "kind": "recycled",
+   "match": [
+    "snap drop"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "grip",
+   "round": 2,
+   "draft": "SG17",
+   "draft_name": "Snap drop",
+   "archive": "smg-shotgun/round2-grip"
+  },
+  {
+   "idea": "jerk up",
+   "kind": "recycled",
+   "match": [
+    "jerk up"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "grip",
+   "round": 2,
+   "draft": "SG15",
+   "draft_name": "Jerk up",
+   "archive": "smg-shotgun/round2-grip"
+  },
+  {
+   "idea": "jerk up",
+   "kind": "recycled",
+   "match": [
+    "jerk up"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "bullpup",
+   "round": 2,
+   "draft": "SB16",
+   "draft_name": "Jerk up",
+   "archive": "smg-shotgun/round2-bullpup"
+  },
+  {
+   "idea": "jerk away",
+   "kind": "recycled",
+   "match": [
+    "jerk away"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 3,
+   "draft": "SF29",
+   "draft_name": "Jerk away",
+   "archive": "smg-shotgun/round3-front"
+  },
+  {
+   "idea": "side flick",
+   "kind": "recycled",
+   "match": [
+    "side flick"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "grip",
+   "round": 2,
+   "draft": "SG12",
+   "draft_name": "Side flick",
+   "archive": "smg-shotgun/round2-grip"
+  },
+  {
+   "idea": "side flick",
+   "kind": "recycled",
+   "match": [
+    "side flick"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "bullpup",
+   "round": 2,
+   "draft": "SB17",
+   "draft_name": "Side flick",
+   "archive": "smg-shotgun/round2-bullpup"
+  },
+  {
+   "idea": "side flick",
+   "kind": "recycled",
+   "match": [
+    "side flick"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "front",
+   "round": 1,
+   "draft": "F02",
+   "draft_name": "Side flick, punch rack",
+   "archive": "rifle-reloads/front"
+  },
+  {
+   "idea": "side flick",
+   "kind": "recycled",
+   "match": [
+    "side flick"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "front",
+   "round": 2,
+   "draft": "F02",
+   "draft_name": "Side flick, punch rack",
+   "archive": "rifle-reloads/round2"
+  },
+  {
+   "idea": "side fling",
+   "kind": "recycled",
+   "match": [
+    "side fling"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 3,
+   "draft": "SF24",
+   "draft_name": "Side fling",
+   "archive": "smg-shotgun/round3-front"
+  },
+  {
+   "idea": "forward jab",
+   "kind": "recycled",
+   "match": [
+    "forward jab"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "grip",
+   "round": 2,
+   "draft": "SG18",
+   "draft_name": "Forward jab",
+   "archive": "smg-shotgun/round2-grip"
+  },
+  {
+   "idea": "forward jab",
+   "kind": "recycled",
+   "match": [
+    "forward jab"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "bullpup",
+   "round": 2,
+   "draft": "SB20",
+   "draft_name": "Forward jab",
+   "archive": "smg-shotgun/round2-bullpup"
+  },
+  {
+   "idea": "double pump",
+   "kind": "recycled",
+   "match": [
+    "double pump"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "grip",
+   "round": 1,
+   "draft": "SG08",
+   "draft_name": "Double pump",
+   "archive": "smg-shotgun/round1-grip"
+  },
+  {
+   "idea": "double pump",
+   "kind": "recycled",
+   "match": [
+    "double pump"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "grip",
+   "round": 2,
+   "draft": "SG08",
+   "draft_name": "Double pump",
+   "archive": "smg-shotgun/round2-grip"
+  },
+  {
+   "idea": "double pump",
+   "kind": "recycled",
+   "match": [
+    "double pump"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "bullpup",
+   "round": 1,
+   "draft": "SB08",
+   "draft_name": "Double pump",
+   "archive": "smg-shotgun/round1-bullpup"
+  },
+  {
+   "idea": "double pump",
+   "kind": "recycled",
+   "match": [
+    "double pump"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "top",
+   "round": 1,
+   "draft": "ST07",
+   "draft_name": "Double pump",
+   "archive": "smg-shotgun/round1-top"
+  },
+  {
+   "idea": "release and let it fall",
+   "kind": "recycled",
+   "match": [
+    "release and let it fall"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 3,
+   "draft": "SF26",
+   "draft_name": "Release and let it fall",
+   "archive": "smg-shotgun/round3-front"
+  },
+  {
+   "idea": "drop and catch",
+   "kind": "recycled",
+   "match": [
+    "drop and catch"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 3,
+   "draft": "SF28",
+   "draft_name": "Drop and catch",
+   "archive": "smg-shotgun/round3-front"
+  },
+  {
+   "idea": "belt strip (also belt-edge)",
+   "kind": "recycled",
+   "match": [
+    "belt strip",
+    "belt edge strip"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 3,
+   "draft": "SF22",
+   "draft_name": "Belt-edge strip",
+   "archive": "smg-shotgun/round3-front"
+  },
+  {
+   "idea": "belt strip (also belt-edge)",
+   "kind": "recycled",
+   "match": [
+    "belt strip",
+    "belt edge strip"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "grip",
+   "round": 2,
+   "draft": "SG13",
+   "draft_name": "Belt strip",
+   "archive": "smg-shotgun/round2-grip"
+  },
+  {
+   "idea": "belt strip (also belt-edge)",
+   "kind": "recycled",
+   "match": [
+    "belt strip",
+    "belt edge strip"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "bullpup",
+   "round": 2,
+   "draft": "SB12",
+   "draft_name": "Belt strip",
+   "archive": "smg-shotgun/round2-bullpup"
+  },
+  {
+   "idea": "belt strip (also belt-edge)",
+   "kind": "recycled",
+   "match": [
+    "belt strip",
+    "belt edge strip"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "masamune",
+   "round": 1,
+   "draft": "M01",
+   "draft_name": "Belt strip",
+   "archive": "rifle-reloads/masamune"
+  },
+  {
+   "idea": "thigh strip",
+   "kind": "recycled",
+   "match": [
+    "thigh strip"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 3,
+   "draft": "SF30",
+   "draft_name": "Thigh strip",
+   "archive": "smg-shotgun/round3-front"
+  },
+  {
+   "idea": "thigh strip",
+   "kind": "recycled",
+   "match": [
+    "thigh strip"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "grip",
+   "round": 2,
+   "draft": "SG16",
+   "draft_name": "Thigh strip",
+   "archive": "smg-shotgun/round2-grip"
+  },
+  {
+   "idea": "thigh strip",
+   "kind": "recycled",
+   "match": [
+    "thigh strip"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "bullpup",
+   "round": 2,
+   "draft": "SB18",
+   "draft_name": "Thigh strip",
+   "archive": "smg-shotgun/round2-bullpup"
+  },
+  {
+   "idea": "stomach strip",
+   "kind": "recycled",
+   "match": [
+    "stomach strip"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "smg_front",
+   "round": 3,
+   "draft": "SF25",
+   "draft_name": "Stomach strip, show empty",
+   "archive": "smg-shotgun/round3-front"
+  },
+  {
+   "idea": "forearm strip",
+   "kind": "recycled",
+   "match": [
+    "forearm strip"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": null,
+   "round": null,
+   "draft": null,
+   "archive": null
+  },
+  {
+   "idea": "pouch dump",
+   "kind": "recycled",
+   "match": [
+    "pouch dump"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "grip",
+   "round": 2,
+   "draft": "SG20",
+   "draft_name": "Pouch dump",
+   "archive": "smg-shotgun/round2-grip"
+  },
+  {
+   "idea": "pouch dump",
+   "kind": "recycled",
+   "match": [
+    "pouch dump"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "bullpup",
+   "round": 2,
+   "draft": "SB19",
+   "draft_name": "Pouch dump",
+   "archive": "smg-shotgun/round2-bullpup"
+  },
+  {
+   "idea": "drop behind past the hip",
+   "kind": "recycled",
+   "match": [
+    "drop behind past the hip"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": null,
+   "round": null,
+   "draft": null,
+   "archive": null
+  },
+  {
+   "idea": "tip back and shake",
+   "kind": "recycled",
+   "match": [
+    "tip back and shake"
+   ],
+   "reason": "listed as already shown and rejected as recycled (smg-shotgun/BRIEF-NEW-TECHNIQUES.md, Banned list (owner 2026-11-13: recycled ideas are rejected in any family))",
+   "family": "bullpup",
+   "round": 2,
+   "draft": "SB14",
+   "draft_name": "Tip back and shake",
+   "archive": "smg-shotgun/round2-bullpup"
+  },
+  {
+   "idea": "SF13 low chop (FRONT pick 1)",
+   "kind": "picked",
+   "match": [
+    "low chop"
+   ],
+   "reason": "a pick covers it (smg-shotgun/PICKS.md, FRONT final 2026-11-14); locked pick, do not redo",
+   "family": "smg_front",
+   "round": 2,
+   "draft": "SF13",
+   "draft_name": "Low chop",
+   "archive": "smg-shotgun/round2-front"
+  },
+  {
+   "idea": "SF35 bat (FRONT)",
+   "kind": "picked",
+   "match": [
+    "bat"
+   ],
+   "reason": "a pick covers it (smg-shotgun/PICKS.md, FRONT final 2026-11-14)",
+   "family": "smg_front",
+   "round": 4,
+   "draft": "SF35",
+   "draft_name": "Bat",
+   "archive": "smg-shotgun/round4-front"
+  },
+  {
+   "idea": "SF40 elbow check / slap home (FRONT)",
+   "kind": "picked",
+   "match": [
+    "elbow check"
+   ],
+   "reason": "a pick covers it (smg-shotgun/PICKS.md, FRONT final 2026-11-14)",
+   "family": "smg_front",
+   "round": 4,
+   "draft": "SF40",
+   "draft_name": "Elbow check, slap home",
+   "archive": "smg-shotgun/round4-front"
+  },
+  {
+   "idea": "SG08 double pump (GRIP)",
+   "kind": "picked",
+   "match": [
+    "double pump"
+   ],
+   "reason": "a pick covers it (smg-shotgun/PICKS.md, GRIP final 2026-11-13)",
+   "family": "grip",
+   "round": 1,
+   "draft": "SG08",
+   "draft_name": "Double pump",
+   "archive": "smg-shotgun/round1-grip"
+  },
+  {
+   "idea": "SG08 double pump (GRIP)",
+   "kind": "picked",
+   "match": [
+    "double pump"
+   ],
+   "reason": "a pick covers it (smg-shotgun/PICKS.md, GRIP final 2026-11-13)",
+   "family": "grip",
+   "round": 2,
+   "draft": "SG08",
+   "draft_name": "Double pump",
+   "archive": "smg-shotgun/round2-grip"
+  },
+  {
+   "idea": "SG13 belt strip (GRIP)",
+   "kind": "picked",
+   "match": [
+    "belt strip"
+   ],
+   "reason": "a pick covers it (smg-shotgun/PICKS.md, GRIP final 2026-11-13)",
+   "family": "grip",
+   "round": 2,
+   "draft": "SG13",
+   "draft_name": "Belt strip",
+   "archive": "smg-shotgun/round2-grip"
+  },
+  {
+   "idea": "SG12 side flick (GRIP)",
+   "kind": "picked",
+   "match": [
+    "side flick"
+   ],
+   "reason": "a pick covers it (smg-shotgun/PICKS.md, GRIP final 2026-11-13)",
+   "family": "grip",
+   "round": 2,
+   "draft": "SG12",
+   "draft_name": "Side flick",
+   "archive": "smg-shotgun/round2-grip"
+  },
+  {
+   "idea": "SB43 tilt-and-shake / rear pop-up rig (BULLPUP)",
+   "kind": "picked",
+   "match": [
+    "tilt shake rear rig",
+    "rear pop up rig"
+   ],
+   "reason": "a pick covers it (smg-shotgun/PICKS.md, BULLPUP final 2026-11-14)",
+   "family": "bullpup",
+   "round": 3,
+   "draft": "SB43",
+   "draft_name": "Tilt-shake, rear rig",
+   "archive": "smg-shotgun/round3-bullpup"
+  },
+  {
+   "idea": "SB39 belt-buckle anvil / toss-and-meet (BULLPUP)",
+   "kind": "picked",
+   "match": [
+    "buckle anvil",
+    "belt buckle anvil"
+   ],
+   "reason": "a pick covers it (smg-shotgun/PICKS.md, BULLPUP final 2026-11-14)",
+   "family": "bullpup",
+   "round": 3,
+   "draft": "SB39",
+   "draft_name": "Buckle anvil",
+   "archive": "smg-shotgun/round3-bullpup"
+  },
+  {
+   "idea": "SB38 thigh as anvil / hip pop-up (BULLPUP)",
+   "kind": "picked",
+   "match": [
+    "thigh anvil",
+    "thigh as anvil"
+   ],
+   "reason": "a pick covers it (smg-shotgun/PICKS.md, BULLPUP final 2026-11-14)",
+   "family": "bullpup",
+   "round": 3,
+   "draft": "SB38",
+   "draft_name": "Thigh anvil",
+   "archive": "smg-shotgun/round3-bullpup"
+  },
+  {
+   "idea": "ST38 thigh anvil / toss-and-meet (TOP)",
+   "kind": "picked",
+   "match": [
+    "thigh anvil"
+   ],
+   "reason": "a pick covers it (smg-shotgun/PICKS.md, TOP final 2026-11-14)",
+   "family": "top",
+   "round": 3,
+   "draft": "ST38",
+   "draft_name": "Thigh anvil, turned over",
+   "archive": "smg-shotgun/round3-top"
+  },
+  {
+   "idea": "ST40 tip-forward throw / slapped home on the hip (TOP)",
+   "kind": "picked",
+   "match": [
+    "tip throw",
+    "tip forward throw"
+   ],
+   "reason": "a pick covers it (smg-shotgun/PICKS.md, TOP final 2026-11-14)",
+   "family": "top",
+   "round": 3,
+   "draft": "ST40",
+   "draft_name": "Tip throw, hip slap",
+   "archive": "smg-shotgun/round3-top"
+  },
+  {
+   "idea": "ST32 slow in-hand half turn / pop-up rig (TOP)",
+   "kind": "picked",
+   "match": [
+    "slow roll off",
+    "half turn"
+   ],
+   "reason": "a pick covers it (smg-shotgun/PICKS.md, TOP final 2026-11-14)",
+   "family": "top",
+   "round": 3,
+   "draft": "ST32",
+   "draft_name": "Slow roll-off",
+   "archive": "smg-shotgun/round3-top"
+  },
+  {
+   "idea": "TU01 throw and meet (TUBE; TU21 short)",
+   "kind": "picked",
+   "match": [
+    "throw and meet"
+   ],
+   "reason": "a pick covers it (smg-shotgun/PICKS.md, TUBE final 2026-11-14)",
+   "family": "tube",
+   "round": 1,
+   "draft": "TU01",
+   "draft_name": "Throw and meet",
+   "archive": "smg-shotgun/round1-tube"
+  },
+  {
+   "idea": "TU01 throw and meet (TUBE; TU21 short)",
+   "kind": "picked",
+   "match": [
+    "throw and meet"
+   ],
+   "reason": "a pick covers it (smg-shotgun/PICKS.md, TUBE final 2026-11-14)",
+   "family": "tube",
+   "round": 2,
+   "draft": "TU21",
+   "draft_name": "Throw and meet, short",
+   "archive": "smg-shotgun/round2-tube"
+  },
+  {
+   "idea": "TU10 saddle flick (TUBE; TU22 short)",
+   "kind": "picked",
+   "match": [
+    "saddle flick"
+   ],
+   "reason": "a pick covers it (smg-shotgun/PICKS.md, TUBE final 2026-11-14)",
+   "family": "tube",
+   "round": 1,
+   "draft": "TU10",
+   "draft_name": "Saddle flick",
+   "archive": "smg-shotgun/round1-tube"
+  },
+  {
+   "idea": "TU10 saddle flick (TUBE; TU22 short)",
+   "kind": "picked",
+   "match": [
+    "saddle flick"
+   ],
+   "reason": "a pick covers it (smg-shotgun/PICKS.md, TUBE final 2026-11-14)",
+   "family": "tube",
+   "round": 2,
+   "draft": "TU22",
+   "draft_name": "Saddle flick, short",
+   "archive": "smg-shotgun/round2-tube"
+  },
+  {
+   "idea": "TU02 belt-row sweep (TUBE; TU23 short)",
+   "kind": "picked",
+   "match": [
+    "belt row sweep"
+   ],
+   "reason": "a pick covers it (smg-shotgun/PICKS.md, TUBE final 2026-11-14)",
+   "family": "tube",
+   "round": 1,
+   "draft": "TU02",
+   "draft_name": "Belt-row sweep",
+   "archive": "smg-shotgun/round1-tube"
+  },
+  {
+   "idea": "TU02 belt-row sweep (TUBE; TU23 short)",
+   "kind": "picked",
+   "match": [
+    "belt row sweep"
+   ],
+   "reason": "a pick covers it (smg-shotgun/PICKS.md, TUBE final 2026-11-14)",
+   "family": "tube",
+   "round": 2,
+   "draft": "TU23",
+   "draft_name": "Belt-row sweep, short",
+   "archive": "smg-shotgun/round2-tube"
+  },
+  {
+   "idea": "BR18 shoulder snap / backhand swing (BREAK-OPEN)",
+   "kind": "picked",
+   "match": [
+    "shoulder snap"
+   ],
+   "reason": "a pick covers it (smg-shotgun/PICKS.md, BREAK-OPEN final 2026-11-14)",
+   "family": "break",
+   "round": 2,
+   "draft": "BR18",
+   "draft_name": "Shoulder snap, backhand",
+   "archive": "smg-shotgun/round2-break"
+  },
+  {
+   "idea": "BR20 forward roll-tip / side swing (BREAK-OPEN)",
+   "kind": "picked",
+   "match": [
+    "forward roll tip",
+    "roll tip"
+   ],
+   "reason": "a pick covers it (smg-shotgun/PICKS.md, BREAK-OPEN final 2026-11-14)",
+   "family": "break",
+   "round": 2,
+   "draft": "BR20",
+   "draft_name": "Forward roll-tip, side swing",
+   "archive": "smg-shotgun/round2-break"
+  },
+  {
+   "idea": "BR17 chest roll-up / thrust (BREAK-OPEN)",
+   "kind": "picked",
+   "match": [
+    "chest roll up"
+   ],
+   "reason": "a pick covers it (smg-shotgun/PICKS.md, BREAK-OPEN final 2026-11-14)",
+   "family": "break",
+   "round": 2,
+   "draft": "BR17",
+   "draft_name": "Chest roll-up, thrust",
+   "archive": "smg-shotgun/round2-break"
+  },
+  {
+   "idea": "BR01 Weight break, bandolier (BREAK-OPEN round 1)",
+   "kind": "rejected",
+   "match": [
+    "weight break bandolier"
+   ],
+   "reason": "owner rejected the whole round (BREAK-OPEN round 1 rejected entirely 2026-11-14); owner wants reference-based one-handed break action reloads (a forceful flick that carries the momentum to break the action)",
+   "family": "break",
+   "round": 1,
+   "draft": "BR01",
+   "draft_name": "Weight break, bandolier",
+   "archive": "smg-shotgun/round1-break"
+  },
+  {
+   "idea": "BR02 Up-jerk break, gravity feed (BREAK-OPEN round 1)",
+   "kind": "rejected",
+   "match": [
+    "up jerk break"
+   ],
+   "reason": "owner rejected the whole round (BREAK-OPEN round 1 rejected entirely 2026-11-14); owner wants reference-based one-handed break action reloads (a forceful flick that carries the momentum to break the action)",
+   "family": "break",
+   "round": 1,
+   "draft": "BR02",
+   "draft_name": "Up-jerk break, gravity feed",
+   "archive": "smg-shotgun/round1-break"
+  },
+  {
+   "idea": "BR03 Thigh workstation (BREAK-OPEN round 1)",
+   "kind": "rejected",
+   "match": [
+    "thigh workstation"
+   ],
+   "reason": "owner rejected the whole round (BREAK-OPEN round 1 rejected entirely 2026-11-14); owner wants reference-based one-handed break action reloads (a forceful flick that carries the momentum to break the action)",
+   "family": "break",
+   "round": 1,
+   "draft": "BR03",
+   "draft_name": "Thigh workstation",
+   "archive": "smg-shotgun/round1-break"
+  },
+  {
+   "idea": "BR04 Spin break, throw and meet (BREAK-OPEN round 1)",
+   "kind": "rejected",
+   "match": [
+    "spin break"
+   ],
+   "reason": "owner rejected the whole round (BREAK-OPEN round 1 rejected entirely 2026-11-14); owner wants reference-based one-handed break action reloads (a forceful flick that carries the momentum to break the action)",
+   "family": "break",
+   "round": 1,
+   "draft": "BR04",
+   "draft_name": "Spin break, throw and meet",
+   "archive": "smg-shotgun/round1-break"
+  },
+  {
+   "idea": "BR05 Inverted scoop (BREAK-OPEN round 1)",
+   "kind": "rejected",
+   "match": [
+    "inverted scoop"
+   ],
+   "reason": "owner rejected the whole round (BREAK-OPEN round 1 rejected entirely 2026-11-14); owner wants reference-based one-handed break action reloads (a forceful flick that carries the momentum to break the action)",
+   "family": "break",
+   "round": 1,
+   "draft": "BR05",
+   "draft_name": "Inverted scoop",
+   "archive": "smg-shotgun/round1-break"
+  },
+  {
+   "idea": "BR06 Stock sleeve, flick and catch (BREAK-OPEN round 1)",
+   "kind": "rejected",
+   "match": [
+    "stock sleeve"
+   ],
+   "reason": "owner rejected the whole round (BREAK-OPEN round 1 rejected entirely 2026-11-14); owner wants reference-based one-handed break action reloads (a forceful flick that carries the momentum to break the action)",
+   "family": "break",
+   "round": 1,
+   "draft": "BR06",
+   "draft_name": "Stock sleeve, flick and catch",
+   "archive": "smg-shotgun/round1-break"
+  },
+  {
+   "idea": "BR07 Buckle pry (BREAK-OPEN round 1)",
+   "kind": "rejected",
+   "match": [
+    "buckle pry"
+   ],
+   "reason": "owner rejected the whole round (BREAK-OPEN round 1 rejected entirely 2026-11-14); owner wants reference-based one-handed break action reloads (a forceful flick that carries the momentum to break the action)",
+   "family": "break",
+   "round": 1,
+   "draft": "BR07",
+   "draft_name": "Buckle pry",
+   "archive": "smg-shotgun/round1-break"
+  },
+  {
+   "idea": "BR08 Hip bounce (BREAK-OPEN round 1)",
+   "kind": "rejected",
+   "match": [
+    "hip bounce"
+   ],
+   "reason": "owner rejected the whole round (BREAK-OPEN round 1 rejected entirely 2026-11-14); owner wants reference-based one-handed break action reloads (a forceful flick that carries the momentum to break the action)",
+   "family": "break",
+   "round": 1,
+   "draft": "BR08",
+   "draft_name": "Hip bounce",
+   "archive": "smg-shotgun/round1-break"
+  },
+  {
+   "idea": "BR09 Swing break, belt scoop (BREAK-OPEN round 1)",
+   "kind": "rejected",
+   "match": [
+    "swing break"
+   ],
+   "reason": "owner rejected the whole round (BREAK-OPEN round 1 rejected entirely 2026-11-14); owner wants reference-based one-handed break action reloads (a forceful flick that carries the momentum to break the action)",
+   "family": "break",
+   "round": 1,
+   "draft": "BR09",
+   "draft_name": "Swing break, belt scoop",
+   "archive": "smg-shotgun/round1-break"
+  },
+  {
+   "idea": "BR10 Shoulder rest (BREAK-OPEN round 1)",
+   "kind": "rejected",
+   "match": [
+    "shoulder rest"
+   ],
+   "reason": "owner rejected the whole round (BREAK-OPEN round 1 rejected entirely 2026-11-14); owner wants reference-based one-handed break action reloads (a forceful flick that carries the momentum to break the action)",
+   "family": "break",
+   "round": 1,
+   "draft": "BR10",
+   "draft_name": "Shoulder rest",
+   "archive": "smg-shotgun/round1-break"
+  },
+  {
+   "idea": "F16 muzzle-up shove",
+   "kind": "picked",
+   "match": [
+    "muzzle up shove"
+   ],
+   "reason": "a pick covers it (rifle-reloads/production*/NOTES.md and weapons.json reload.picks (rifle picks are round 3, PLAN.md log))",
+   "family": "front",
+   "round": 3,
+   "draft": "F16",
+   "draft_name": "Muzzle-up shove",
+   "archive": "rifle-reloads/round3-front"
+  },
+  {
+   "idea": "F02 side flick, punch rack (round 2 pick)",
+   "kind": "picked",
+   "match": [
+    "side flick"
+   ],
+   "reason": "a pick covers it (rifle-reloads/production*/NOTES.md and weapons.json reload.picks (rifle picks are round 3, PLAN.md log))",
+   "family": "front",
+   "round": 2,
+   "draft": "F02",
+   "draft_name": "Side flick, punch rack",
+   "archive": "rifle-reloads/round2"
+  },
+  {
+   "idea": "F09 chest tuck (round 2 pick)",
+   "kind": "picked",
+   "match": [
+    "chest tuck"
+   ],
+   "reason": "a pick covers it (rifle-reloads/production*/NOTES.md and weapons.json reload.picks (rifle picks are round 3, PLAN.md log))",
+   "family": "front",
+   "round": 2,
+   "draft": "F09",
+   "draft_name": "Chest tuck",
+   "archive": "rifle-reloads/round2"
+  },
+  {
+   "idea": "M11 nod throw, yank",
+   "kind": "picked",
+   "match": [
+    "nod throw"
+   ],
+   "reason": "a pick covers it (rifle-reloads/production*/NOTES.md and weapons.json reload.picks (rifle picks are round 3, PLAN.md log))",
+   "family": "masamune",
+   "round": 3,
+   "draft": "M11",
+   "draft_name": "Nod throw, yank",
+   "archive": "rifle-reloads/round3-masamune"
+  },
+  {
+   "idea": "M12 heave, nod",
+   "kind": "picked",
+   "match": [
+    "heave nod"
+   ],
+   "reason": "a pick covers it (rifle-reloads/production*/NOTES.md and weapons.json reload.picks (rifle picks are round 3, PLAN.md log))",
+   "family": "masamune",
+   "round": 3,
+   "draft": "M12",
+   "draft_name": "Heave, nod",
+   "archive": "rifle-reloads/round3-masamune"
+  },
+  {
+   "idea": "M20 corkscrew",
+   "kind": "picked",
+   "match": [
+    "corkscrew"
+   ],
+   "reason": "a pick covers it (rifle-reloads/production*/NOTES.md and weapons.json reload.picks (rifle picks are round 3, PLAN.md log))",
+   "family": "masamune",
+   "round": 3,
+   "draft": "M20",
+   "draft_name": "Corkscrew",
+   "archive": "rifle-reloads/round3-masamune"
+  },
+  {
+   "idea": "H13 hammer drop, uppercut",
+   "kind": "picked",
+   "match": [
+    "hammer drop"
+   ],
+   "reason": "a pick covers it (rifle-reloads/production*/NOTES.md and weapons.json reload.picks (rifle picks are round 3, PLAN.md log))",
+   "family": "hercules",
+   "round": 3,
+   "draft": "H13",
+   "draft_name": "Hammer drop, uppercut",
+   "archive": "rifle-reloads/round3-hercules"
+  },
+  {
+   "idea": "H14 up-snap, cant snap",
+   "kind": "picked",
+   "match": [
+    "up snap"
+   ],
+   "reason": "a pick covers it (rifle-reloads/production*/NOTES.md and weapons.json reload.picks (rifle picks are round 3, PLAN.md log))",
+   "family": "hercules",
+   "round": 3,
+   "draft": "H14",
+   "draft_name": "Up-snap, cant snap",
+   "archive": "rifle-reloads/round3-hercules"
+  },
+  {
+   "idea": "H16 two chops",
+   "kind": "picked",
+   "match": [
+    "two chops"
+   ],
+   "reason": "a pick covers it (rifle-reloads/production*/NOTES.md and weapons.json reload.picks (rifle picks are round 3, PLAN.md log))",
+   "family": "hercules",
+   "round": 3,
+   "draft": "H16",
+   "draft_name": "Two chops",
+   "archive": "rifle-reloads/round3-hercules"
+  }
+ ]
+}

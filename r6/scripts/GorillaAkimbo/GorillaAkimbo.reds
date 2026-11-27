@@ -334,6 +334,12 @@ public abstract class GorillaAkimboReload {
     return 6.0 / 30.0;
   }
 
+  // Seconds after a reload's end in which a lowered pair fires without the raise wait (PublicSafeToReadyDecisions
+  // wrap): the game's idleTimeToEnter for public safe, 1 s.
+  public static func RaiseWindow() -> Float {
+    return 1.0;
+  }
+
   // The game's end time stat of a weapon's reload: the reload state ends this long after the ammo lands.
   public static func EndTime(weapon: ref<WeaponObject>, empty: Bool) -> Float {
     if !IsDefined(weapon) {
@@ -460,14 +466,15 @@ public abstract class GorillaAkimboReload {
   // The weapon-side sets of such a gun (magazine track sets, or the gun part sets of shell-fed guns: pump, barrels,
   // shells), as the anim wrapper on the gun that selects them in the archive.xl
   // (GorillaAkimboRifles.archive.xl, GorillaAkimboSmgShotgun.archive.xl): per gun, body and hand.
-  public static func MagazineWrapper(owner: CName, player: ref<GameObject>, left: Bool, fallback: Bool) -> CName {
+  public static func MagazineWrapper(owner: CName, player: ref<GameObject>, left: Bool, fallback: Bool, lowered: Bool) -> CName {
     if fallback {
       // the quick-drop fallback's set: the magazine stays seated, swapped out of view (one set per gun)
       return StringToName("gorillaakimbo_rmagq_" + NameToString(owner));
     }
     let puppet = player as PlayerPuppet;
     let body = IsDefined(puppet) && Equals(puppet.GetResolvedGenderName(), n"Female") ? "pwa" : "pma";
-    return StringToName("gorillaakimbo_rmag_" + NameToString(owner) + "_" + body + "_" + (left ? "left" : "right"));
+    // the lowered-stance variant clips have their own magazine sets (reload.lowered_variant)
+    return StringToName((lowered ? "gorillaakimbo_rmagl_" : "gorillaakimbo_rmag_") + NameToString(owner) + "_" + body + "_" + (left ? "left" : "right"));
   }
 
   // The weapon's audio name, or a gun of its type when the game files have no reload sounds for it.
@@ -690,6 +697,36 @@ private let m_gorillaOwnFallback: Bool;
 @addField(ReloadEvents)
 private let m_gorillaOwnWeapon: wref<WeaponObject>;
 
+// Whether this reload plays the gun's lowered-stance variant clips (the weapon was Safe, lowered, as the reload started), the player wrapper that
+// selects their arm sets (GorillaAkimboSmgShotgun.archive.xl) and the player it was set on.
+@addField(ReloadEvents)
+private let m_gorillaOwnLowered: Bool;
+
+@addField(ReloadEvents)
+private let m_gorillaOwnLowWrapper: CName;
+
+@addField(ReloadEvents)
+private let m_gorillaOwnPlayer: wref<GameObject>;
+
+// The layout of the clip that plays (GorillaAkimboGuns: the shipped clip's, or the lowered variant's).
+@addMethod(ReloadEvents)
+private final func GorillaHideStart() -> Float {
+  return this.m_gorillaOwnLowered ? GorillaAkimboGuns.ReloadHideStartLow(this.m_gorillaOwn, this.m_gorillaOwnVariant, this.m_gorillaOwnEmpty)
+    : GorillaAkimboGuns.ReloadHideStart(this.m_gorillaOwn, this.m_gorillaOwnVariant, this.m_gorillaOwnEmpty);
+}
+
+@addMethod(ReloadEvents)
+private final func GorillaHideEnd() -> Float {
+  return this.m_gorillaOwnLowered ? GorillaAkimboGuns.ReloadHideEndLow(this.m_gorillaOwn, this.m_gorillaOwnVariant, this.m_gorillaOwnEmpty)
+    : GorillaAkimboGuns.ReloadHideEnd(this.m_gorillaOwn, this.m_gorillaOwnVariant, this.m_gorillaOwnEmpty);
+}
+
+@addMethod(ReloadEvents)
+private final func GorillaSettle() -> Float {
+  return this.m_gorillaOwnLowered ? GorillaAkimboGuns.ReloadSettleLow(this.m_gorillaOwn, this.m_gorillaOwnVariant, this.m_gorillaOwnEmpty)
+    : GorillaAkimboGuns.ReloadSettle(this.m_gorillaOwn, this.m_gorillaOwnVariant, this.m_gorillaOwnEmpty);
+}
+
 // Sets the playing clip's timing: its opening, hold end and settle (clip seconds) against the reload state's end
 // (the reload time plus the end time stat), and sends the speed of its first frame.
 @addMethod(ReloadEvents)
@@ -702,6 +739,19 @@ private final func GorillaClipSet(opening: Float, holdEnd: Float, settle: Float,
   this.m_animReloadSpeed.emptyReloadSpeed = this.m_gorillaSpeed;
 }
 
+// Sends the clip speed to the arm clip and to the gun. The gun's own reload graph plays the weapon-side set (magazine,
+// gun parts, a thrown gun) and needs the same speed, or its hidden part is not cut with the arm clip's: the gun was
+// still out of view when the hands rose, then snapped in as the set was turned off (Ajax empty, in-game 2026-11-26).
+@addMethod(ReloadEvents)
+private final func GorillaSendSpeed(scriptInterface: ref<StateGameScriptInterface>) -> Void {
+  let channel = this.IsRightWeaponLogic() ? n"RightReloadSpeed" : n"LeftReloadSpeed";
+  scriptInterface.SetAnimationParameterFeature(channel, this.m_animReloadSpeed);
+  let weapon = this.GetWeaponObject(scriptInterface);
+  if IsDefined(weapon) {
+    AnimationControllerComponent.ApplyFeature(weapon, channel, this.m_animReloadSpeed);
+  }
+}
+
 // Real seconds into the reload at which the playing clip reaches clip second t.
 @addMethod(ReloadEvents)
 private final func GorillaClipTime(t: Float) -> Float {
@@ -709,10 +759,8 @@ private final func GorillaClipTime(t: Float) -> Float {
 }
 
 // A shell-fed gun with clips of its own (tube, break-open): the shells the script loads (every pass but the last,
-// which the game loads at the reload's end, as the hidden part ends) go in where the clip puts a shell into the gun
-// up to the end of its hidden part; more shells than the
-// clip shows are spread over the rest of the hidden part, the last at the reload's end. Each with the gun's shell
-// sound. All at once: the extra shells go in with the clip's first shell. A gun the game reloads in one go (no
+// which the game loads at the reload's end) go in at the game's own pass times, evenly spaced, each with the gun's
+// shell sound. All at once: the extra shells go in with the clip's first shell. A gun the game reloads in one go (no
 // shell passes): the clip's shells are only heard.
 @addMethod(ReloadEvents)
 private final func GorillaOwnShells(duration: Float) -> Void {
@@ -735,23 +783,13 @@ private final func GorillaOwnShells(duration: Float) -> Void {
     this.m_gorillaShellTimes[0] = clip[0];
     events = clip;
   } else {
-    let i = 0;
-    while i <= n {
-      if i < k - 1 || (i == k - 1 && n + 1 <= k) {
-        ArrayPush(events, clip[i]);
-      } else {
-        // beyond the clip's own shells: from its last one to the reload's end
-        let rest = n + 1 - k;
-        let t = rest > 0 ? clip[k - 1] + Cast<Float>(i - (k - 1)) * (duration - clip[k - 1]) / Cast<Float>(rest) : clip[k - 1];
-        ArrayPush(events, t);
-      }
-      i += 1;
+    // Shell by shell: each pass loads when the game's own pass would (Prepare: the reload time, then the end time
+    // plus the reload time per pass), the last at the reload's end. The clip's own shell times were used before and
+    // put several shells within a few frames, then a long gap to the last (Tactician 3 missing: 0.48, 0.58, 2.24 s).
+    for t in this.m_gorillaShellTimes {
+      ArrayPush(events, t);
     }
-    i = 0;
-    while i < n {
-      this.m_gorillaShellTimes[i] = events[i];
-      i += 1;
-    }
+    ArrayPush(events, duration);
   }
   let j = 0;
   while j < ArraySize(events) {
@@ -773,26 +811,49 @@ private final func GorillaOwnShells(duration: Float) -> Void {
   }
 }
 
+// Whether this logic's weapon is lowered (Safe), from the player state machine's blackboard (the same value PublicSafeDecisions reads).
+@addMethod(ReloadEvents)
+private final func GorillaWeaponSafe(scriptInterface: ref<StateGameScriptInterface>) -> Bool {
+  let def = GetAllBlackboardDefs().PlayerStateMachine;
+  return scriptInterface.localBlackboard.GetInt(this.IsRightWeaponLogic() ? def.RightWeapon : def.LeftWeapon) == EnumInt(gamePSMRangedWeaponStates.Safe);
+}
+
+// Turns the player wrapper of the gun's lowered-stance arm sets on for this reload, or off (the xl entry of the variant clips needs it; the shipped arm sets play with it off).
+@addMethod(ReloadEvents)
+private final func GorillaOwnLowered(player: ref<GameObject>) -> Void {
+  let name = GorillaAkimboGuns.ReloadLowWrapper(this.m_gorillaOwn);
+  if !IsNameValid(name) || !IsDefined(player) {
+    return;
+  }
+  AnimationControllerComponent.SetAnimWrapperWeight(player, name, this.m_gorillaOwnLowered ? 1.0 : 0.0);
+  this.m_gorillaOwnLowWrapper = this.m_gorillaOwnLowered ? name : n"None";
+  this.m_gorillaOwnPlayer = player;
+}
+
 // The game's pick (RandomSync, set by OnEnter before the reload data is sent) and whether the quick-drop fallback
 // plays instead: when the pick's opening would have to play faster than FallbackAbove to fit the reload. Decided before the game sends the reload event and data (ActivateReloadAnimData), so
 // the graph enters the fallback slot from the first frame.
 @addMethod(ReloadEvents)
-private final func GorillaOwnPick(weapon: ref<WeaponObject>) -> Void {
+private final func GorillaOwnPick(weapon: ref<WeaponObject>, scriptInterface: ref<StateGameScriptInterface>) -> Void {
   let own = this.m_gorillaOwn;
   this.m_gorillaOwnVariant = IsDefined(this.m_randomSync) ? Clamp(this.m_randomSync.value, 0, 2) : 0;
-  let opening = GorillaAkimboGuns.ReloadHideStart(own, this.m_gorillaOwnVariant, this.m_gorillaOwnEmpty);
-  let holdEnd = GorillaAkimboGuns.ReloadHideEnd(own, this.m_gorillaOwnVariant, this.m_gorillaOwnEmpty);
+  // A gun with lowered-stance variant clips plays them when its weapon is lowered (Safe) as the reload starts: the game's pick stays (slot 0 to 2), the
+  // arm and magazine sets of the variant clips are selected by wrappers (GorillaOwnLowered).
+  this.m_gorillaOwnLowered = GorillaAkimboGuns.ReloadLowered(own) && this.GorillaWeaponSafe(scriptInterface);
+  let opening = this.GorillaHideStart();
+  let holdEnd = this.GorillaHideEnd();
   let duration = this.m_gorillaOwnEmpty ? this.m_animReloadData.emptyDuration : this.m_animReloadData.loopDuration;
   let stateEnd = duration + GorillaAkimboReload.EndTime(weapon, this.m_gorillaOwnEmpty);
-  let settle = GorillaAkimboGuns.ReloadSettle(own, this.m_gorillaOwnVariant, this.m_gorillaOwnEmpty);
+  let settle = this.GorillaSettle();
   let rate = GorillaAkimboReload.ClipRate(opening, holdEnd, GorillaAkimboReload.HiddenEnd(stateEnd, holdEnd, settle, GorillaAkimboReload.FireBuffer()));
-  this.m_gorillaOwnFallback = rate > GorillaAkimboReload.FallbackAbove() && GorillaAkimboGuns.ReloadFallback(own);
+  this.m_gorillaOwnFallback = (rate > GorillaAkimboReload.FallbackAbove() || GorillaAkimboGuns.ReloadFallbackOnly(own)) && GorillaAkimboGuns.ReloadFallback(own);
   if rate > GorillaAkimboReload.FallbackAbove() && !this.m_gorillaOwnFallback {
     FTLog("GorillaAkimbo: " + NameToString(own) + " reload too short for its clip (opening speed " + FloatToString(rate) + "), no quick-drop fallback");
   }
   if this.m_gorillaOwnFallback {
     // The fallback plays in the graph's shell-loop entry slot reload_start (Start To Loop: amountToReload above 0
-    // and not an empty reload; the ammo time stays the game's).
+    // and not an empty reload; the ammo time stays the game's). It is not a lowered variant.
+    this.m_gorillaOwnLowered = false;
     this.m_gorillaOwnVariant = GorillaAkimboReload.Fallback();
     this.m_animReloadData.amountToReload = 1;
     this.m_animReloadData.emptyReload = false;
@@ -803,7 +864,8 @@ private final func GorillaOwnPick(weapon: ref<WeaponObject>) -> Void {
 @wrapMethod(ReloadEvents)
 protected final func ActivateReloadAnimData(stateContext: ref<StateContext>, scriptInterface: ref<StateGameScriptInterface>) -> Void {
   if this.m_gorillaTimed && IsNameValid(this.m_gorillaOwn) && !this.m_gorillaTopMag {
-    this.GorillaOwnPick(this.GetWeaponObject(scriptInterface));
+    this.GorillaOwnPick(this.GetWeaponObject(scriptInterface), scriptInterface);
+    this.GorillaOwnLowered(scriptInterface.executionOwner);
   }
   wrappedMethod(stateContext, scriptInterface);
 }
@@ -815,6 +877,11 @@ public final func GorillaOwnEnd() -> Void {
     AnimationControllerComponent.SetAnimWrapperWeight(this.m_gorillaOwnWeapon, this.m_gorillaOwnWrapper, 0.0);
   }
   this.m_gorillaOwnWrapper = n"None";
+  if IsNameValid(this.m_gorillaOwnLowWrapper) && IsDefined(this.m_gorillaOwnPlayer) {
+    AnimationControllerComponent.SetAnimWrapperWeight(this.m_gorillaOwnPlayer, this.m_gorillaOwnLowWrapper, 0.0);
+  }
+  this.m_gorillaOwnLowWrapper = n"None";
+  this.m_gorillaOwnLowered = false;
   this.m_gorillaOwn = n"None";
 }
 
@@ -822,6 +889,8 @@ public final func GorillaOwnEnd() -> Void {
 protected final func OnEnter(stateContext: ref<StateContext>, scriptInterface: ref<StateGameScriptInterface>) -> Void {
   let weapon = this.GetWeaponObject(scriptInterface);
   GorillaAkimboTopMagSystem.Get(scriptInterface.GetGame()).SetReloading(this.IsLeftWeaponLogic(), true);
+  // The last own reload's magazine set off (a top-magazine gun's quick-drop fallback, then its two-handed reload).
+  this.GorillaOwnEnd();
   // Top-magazine guns: a two-handed clip (GorillaAkimboTopMag.reds).
   this.m_gorillaTopMag = this.GorillaTopMagPrepare(weapon, scriptInterface);
   if this.m_gorillaTopMag {
@@ -882,15 +951,15 @@ protected final func OnEnter(stateContext: ref<StateContext>, scriptInterface: r
     // its layout, the gun's sounds along it, and its weapon-side set.
     let own = this.m_gorillaOwn;
     let fallback = this.m_gorillaOwnFallback;
-    let opening = GorillaAkimboGuns.ReloadHideStart(own, this.m_gorillaOwnVariant, this.m_gorillaOwnEmpty);
-    let holdEnd = GorillaAkimboGuns.ReloadHideEnd(own, this.m_gorillaOwnVariant, this.m_gorillaOwnEmpty);
+    let opening = this.GorillaHideStart();
+    let holdEnd = this.GorillaHideEnd();
     let ownDuration = this.m_gorillaOwnEmpty ? this.m_animReloadData.emptyDuration : this.m_animReloadData.loopDuration;
     let stateEnd = ownDuration + GorillaAkimboReload.EndTime(weapon, this.m_gorillaOwnEmpty);
-    let settle = GorillaAkimboGuns.ReloadSettle(own, this.m_gorillaOwnVariant, this.m_gorillaOwnEmpty);
+    let settle = this.GorillaSettle();
     // The speed of the clip that plays, from its first frame.
     this.GorillaClipSet(opening, holdEnd, settle, stateEnd);
     this.m_animReloadSpeed.emptyReloadSpeed = this.m_gorillaSpeed;
-    scriptInterface.SetAnimationParameterFeature(this.IsRightWeaponLogic() ? n"RightReloadSpeed" : n"LeftReloadSpeed", this.m_animReloadSpeed);
+    this.GorillaSendSpeed(scriptInterface);
     let clipTimes: array<Float>;
     // The gun's sounds re-timed onto this clip where the gun has such a table, else as its own clip plays them.
     if !GorillaAkimboSounds.Own(own, this.m_gorillaOwnVariant, this.m_gorillaOwnEmpty, clipTimes, this.m_gorillaSoundNames) {
@@ -906,7 +975,7 @@ protected final func OnEnter(stateContext: ref<StateContext>, scriptInterface: r
     }
     if GorillaAkimboGuns.ReloadMagazine(own) {
       this.m_gorillaOwnWeapon = weapon;
-      this.m_gorillaOwnWrapper = GorillaAkimboReload.MagazineWrapper(own, scriptInterface.executionOwner, this.IsLeftWeaponLogic(), fallback);
+      this.m_gorillaOwnWrapper = GorillaAkimboReload.MagazineWrapper(own, scriptInterface.executionOwner, this.IsLeftWeaponLogic(), fallback, this.m_gorillaOwnLowered);
       AnimationControllerComponent.SetAnimWrapperWeight(weapon, this.m_gorillaOwnWrapper, 1.0);
     }
     return;
@@ -939,7 +1008,7 @@ protected final func OnUpdate(timeDelta: Float, stateContext: ref<StateContext>,
     this.m_gorillaSpeed = speed;
     this.m_animReloadSpeed.reloadSpeed = speed;
     this.m_animReloadSpeed.emptyReloadSpeed = speed;
-    scriptInterface.SetAnimationParameterFeature(this.IsRightWeaponLogic() ? n"RightReloadSpeed" : n"LeftReloadSpeed", this.m_animReloadSpeed);
+    this.GorillaSendSpeed(scriptInterface);
   }
   // Shell by shell: the passes before the last load as the game's own would, so the counter fills shell by
   // shell and firing mid-reload keeps what is in. All at once: the shells beyond the last pass load together.
@@ -960,6 +1029,23 @@ protected final func OnUpdate(timeDelta: Float, stateContext: ref<StateContext>,
   if this.m_gorillaShells {
     stateContext.SetPermanentFloatParameter(this.GetUninteruptibleReloadTimeStamp(), this.GetInStateTime() + 1.0, true);
   }
+}
+
+// A reload started lowered (public safe) ends lowered, and the weapon state goes back to public safe as the reload
+// state ends. The first trigger press then waits the raise from safe (publicSafeToReady transitionDuration, 0.3 s)
+// before the shot: 0.26 to 0.55 s later than raised (in-game 2026-11-26, rifles, SMGs, shotguns and pistols alike).
+// Within RaiseWindow of the reload's end (the game stores it as LastReloadTime) the raise does not wait, so the first
+// shot comes when the reload state ends, as raised.
+@wrapMethod(PublicSafeToReadyDecisions)
+protected final const func ToReady(const stateContext: ref<StateContext>, const scriptInterface: ref<StateGameScriptInterface>) -> Bool {
+  if GameObject.IsDualWielding(scriptInterface.executionOwner) {
+    let now = EngineTime.ToFloat(GameInstance.GetSimTime(scriptInterface.GetGame()));
+    let reloadEnd = stateContext.GetFloatParameter(this.GetLastReloadTime(), true);
+    if reloadEnd > 0.0 && now - reloadEnd <= GorillaAkimboReload.RaiseWindow() {
+      return true;
+    }
+  }
+  return wrappedMethod(stateContext, scriptInterface);
 }
 
 // The ammo counter is drawn into a HUD slot as wide as its root's HUD entry size (1100). Two long SMG or
@@ -1205,6 +1291,8 @@ public class EnglishPackage extends ModLocalizationPackage {
     this.Text("GorillaAkimbo-HintFireLeft", "Fire left gun");
     this.Text("GorillaAkimbo-HintFireRight", "Fire right gun");
     this.Text("GorillaAkimbo-HintAim", "Aim");
+    this.Text("GorillaAkimbo-HintLeftAway", "Put away left gun");
+    this.Text("GorillaAkimbo-HintLeftDraw", "Draw left gun");
     this.Text("GorillaAkimbo-PerkNote", "equipping Gorilla Arms extends this effect to " + guns);
     this.Text("GorillaAkimbo-RecoilLine", "<Rich color=\"TooltipText.cyberwareDescriptionHighlightColor\" style=\"Semi-Bold\">-{float_0}% recoil</> with dual-wielded " + guns + " per Attribute Point.\nCurrent total: <Rich color=\"TooltipText.cyberwareDescriptionHighlightColor\" style=\"Semi-Bold\">-{float_1}%</>");
     this.Text("GorillaAkimbo-FireRateLine", "<Rich color=\"TooltipText.cyberwareDescriptionHighlightColor\" style=\"Semi-Bold\">+{float_0}% fire rate</> with dual-wielded " + guns + " per Attribute Point.\nCurrent total: <Rich color=\"TooltipText.cyberwareDescriptionHighlightColor\" style=\"Semi-Bold\">+{float_1}%</>");

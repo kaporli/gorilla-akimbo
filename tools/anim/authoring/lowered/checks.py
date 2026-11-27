@@ -1,7 +1,7 @@
 """Numeric checks of the lowered stance clips, per gun and body (build.sh check runs these).
 
 Per gun with a mesh, three pairs through the preview sequence (seq.py): the gun right with the reference gun left
-(weapons.json checks.lowered.pair_reference, a long gun in v2), the reference right with the gun left, and two of
+(weapons.json checks.lowered.pair_reference), the reference right with the gun left, and two of
 the gun. Checked: loop seam and clip ends against the idle's first frame, closest gun point to the eye in the lowered
 idle, how much nearer than the game's raised pose the guns come anywhere, the gap between the guns, and the wrist
 bend read from the clips (hand against forearm, relative to idlepose_shoulder).
@@ -49,6 +49,26 @@ def wrists(glb, body):
                 worst = max(worst, math.degrees(2 * math.acos(min(1, abs(float(np.dot(rel, rel0)))))))
             out[clip][S] = worst
     return out
+
+
+def eye_short(T, r):
+    """How much nearer than the game's raised pose the guns come (cm), where they are under eye_min_cm; else 0."""
+    return r['raised_eye'] - r['eye'] if r['eye'] < T['eye_min_cm'] else 0.0
+
+
+def gap_level(T, r):
+    """The gun gap a pair must keep (cm): gun_gap_min_cm, or the gap it has in the game's raised pose where that is less."""
+    return min(r['raised_apart'], T['gun_gap_min_cm'])
+
+
+def gap_short(T, r):
+    """How far under gap_level the pair gets anywhere in the sequence (cm; 0 or less passes)."""
+    return gap_level(T, r) - r['apart']
+
+
+def on_limit(value, limit, frac=0.01):
+    """Within 1 % of a limit (either side)."""
+    return abs(value - limit) <= frac * abs(limit)
 
 
 def _pair(a):
@@ -100,23 +120,28 @@ def run(guns=None, bodies=None, thresholds=None, clips=None, out=None, jobs=None
         a, v = max(((a, max(max(s[0], s[1]) for s in r['seam'].values())) for a, r in pres), key=lambda x: x[1])
         row('lowered: seam and clip ends against the idle', name(a), v, f'<= {T["seam_max"]}', 'cm or deg', v <= T['seam_max'], n)
         a, v = min(((a, r['labels']['lowered idle']['eye']) for a, r in pres), key=lambda x: x[1])
-        row('lowered: eye distance, lowered idle', name(a), v, f'>= {T["eye_min_cm"]}', 'cm', v >= T['eye_min_cm'], n)
+        row('lowered: eye distance, lowered idle', name(a), v, f'>= {T["eye_min_cm"]}', 'cm', v >= T['eye_min_cm'], n + ('; on limit' if v >= T['eye_min_cm'] and on_limit(v, T['eye_min_cm']) else ''))
         # Under eye_min_cm the guns may come only a little nearer than the game's own raised pose does.
-        a, v = max(((a, r['raised_eye'] - r['eye'] if r['eye'] < T['eye_min_cm'] else 0.0) for a, r in pres), key=lambda x: x[1])
+        a, v = max(((a, eye_short(T, r)) for a, r in pres), key=lambda x: x[1])
         row(f'lowered: nearer to the eye than the raised pose (where under {T["eye_min_cm"]} cm)', name(a), v,
-            f'<= {T["eye_closer_than_raised_max_cm"]} (baseline)', 'cm', round(v, 2) <= T['eye_closer_than_raised_max_cm'], n)
+            f'<= {T["eye_closer_than_raised_max_cm"]} (baseline)', 'cm', round(v, 2) <= T['eye_closer_than_raised_max_cm'],
+            n + ('; on limit' if round(v, 2) <= T['eye_closer_than_raised_max_cm'] and on_limit(v, T['eye_closer_than_raised_max_cm']) else ''))
         # Gap: never under gun_gap_min_cm, or under the gap the pair has in the game's raised pose.
-        a, v = max(((a, min(r['raised_apart'], T['gun_gap_min_cm']) - r['apart']) for a, r in pres), key=lambda x: x[1])
-        row(f'lowered: gun gap under {T["gun_gap_min_cm"]} cm and under the raised pose gap', name(a), v, '<= 0', 'cm', round(v, 2) <= 0, n)
+        a, v = max(((a, gap_short(T, r)) for a, r in pres), key=lambda x: x[1])
+        lv = gap_level(T, dict(pres)[a])
+        row(f'lowered: gun gap under {T["gun_gap_min_cm"]} cm and under the raised pose gap', name(a), v, '<= 0', 'cm', round(v, 2) <= 0,
+            n + (f'; on limit (gap {lv - v:.1f} of {lv:.1f} cm)' if round(v, 2) <= 0 and on_limit(lv - v, lv) else ''))
         a, v = min(((a, min(r['labels'][k]['apart'] for k in r['labels'] if k in OWN)) for a, r in pres), key=lambda x: x[1])
         row('lowered: gun gap, lowered idle and clips', name(a), v, 'none', 'cm', True, 'for information')
         a, v = min(((a, r['raised_apart']) for a, r in pres), key=lambda x: x[1])
         row('lowered: gun gap, game raised pose', name(a), v, 'none', 'cm', True, 'for information: the game pose')
     if wres:
         a, v = max((((os.path.basename(a[0]), a[1], S), w['friendly_idlepose'][S]) for a, w in wres for S in w['friendly_idlepose']), key=lambda x: x[1])
-        row('lowered: wrist bend, lowered idle', f'{a[1]} {a[0]} {a[2]}', v, f'<= {T["wrist_idle_max_deg"]}', 'deg', round(v, 1) <= T['wrist_idle_max_deg'], f'{len(wres)} clips')
+        row('lowered: wrist bend, lowered idle', f'{a[1]} {a[0]} {a[2]}', v, f'<= {T["wrist_idle_max_deg"]}', 'deg', round(v, 1) <= T['wrist_idle_max_deg'],
+            f'{len(wres)} clips' + ('; on limit' if round(v, 1) <= T['wrist_idle_max_deg'] and on_limit(v, T['wrist_idle_max_deg']) else ''))
         a, v = max((((os.path.basename(a[0]), a[1], S, c), w[c][S]) for a, w in wres for c in w for S in w[c]), key=lambda x: x[1])
-        row('lowered: wrist bend, any clip', f'{a[1]} {a[0]} {a[3]} {a[2]}', v, f'<= {T["wrist_max_deg"]} (baseline)', 'deg', round(v, 1) <= T['wrist_max_deg'], f'{len(wres)} clips')
+        row('lowered: wrist bend, any clip', f'{a[1]} {a[0]} {a[3]} {a[2]}', v, f'<= {T["wrist_max_deg"]} (baseline)', 'deg', round(v, 1) <= T['wrist_max_deg'],
+            f'{len(wres)} clips' + ('; on limit' if round(v, 1) <= T['wrist_max_deg'] and on_limit(v, T['wrist_max_deg']) else ''))
     if skipped:
         row('lowered: clips present', skipped[0], len(skipped), '0 missing', 'clips', False, '; '.join(skipped[:6]))
     return rows

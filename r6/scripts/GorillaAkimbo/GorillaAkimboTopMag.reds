@@ -254,6 +254,17 @@ public class GorillaAkimboTopMagSystem extends ScriptableSystem {
     }
   }
 
+  // Turns this hand's magazine track set off (a one-handed quick-drop fallback plays its own); the next UpdateFamily
+  // turns it on again.
+  public func ClearFamily(weapon: ref<WeaponObject>, left: Bool) {
+    GorillaAkimboTopMag.SetFamily(weapon, n"None");
+    if left {
+      this.familyLeft = n"None";
+    } else {
+      this.familyRight = n"None";
+    }
+  }
+
   public func Reset() {
     this.busy = false;
     this.reloadingLeft = false;
@@ -301,7 +312,8 @@ private let m_gorillaJoinShellCounts: array<Int32>;
 
 // Sets up a two-handed top-magazine reload before the game's own OnEnter: the clip timed by the shared engine
 // (GorillaAkimboReload.ClipSpeed) to the game's reload state, and the gun's own reload sounds along it. Returns false
-// when the reload isn't one.
+// when the reload isn't one, or when it is too short for the clip: then the own-reload path in OnEnter plays the gun's
+// one-handed quick-drop fallback (GorillaAkimboGuns.ReloadFallbackOnly), the other gun stays up.
 @addMethod(ReloadEvents)
 private final func GorillaTopMagPrepare(weapon: ref<WeaponObject>, scriptInterface: ref<StateGameScriptInterface>) -> Bool {
   let owner = scriptInterface.executionOwner;
@@ -331,7 +343,7 @@ private final func GorillaTopMagPrepare(weapon: ref<WeaponObject>, scriptInterfa
   // The shared timing: the reload state keeps the game's length, the visible parts play at speed 1 and the
   // out-of-view hold is stretched or cut. The clip's settle is its hand-back, as the state ends (buffer 0): ending the
   // state before the hand-back hands the magazine and the left hand back mid-clip and the magazine floats (seen
-  // 2026-11-15). These guns have no quick-drop clip; a reload too short for theirs is logged.
+  // 2026-11-15). A reload too short for the clip (opening faster than FallbackAbove) plays the quick-drop fallback.
   let stateEnd = slowest + stats.GetStatValue(id, empty ? gamedataStatType.EmptyReloadEndTime : gamedataStatType.ReloadEndTime);
   let hs = GorillaAkimboTopMag.HoldStart(kind);
   let he = GorillaAkimboTopMag.HoldEnd(kind);
@@ -341,6 +353,15 @@ private final func GorillaTopMagPrepare(weapon: ref<WeaponObject>, scriptInterfa
   this.m_gorillaClipHidden = GorillaAkimboReload.HiddenEnd(stateEnd, he, GorillaAkimboTopMag.Length(kind) - GorillaAkimboTopMag.HandBack(), 0.0);
   let speed = GorillaAkimboReload.ClipSpeed(0.0, hs, he, this.m_gorillaClipHidden);
   if GorillaAkimboReload.ClipRate(hs, he, this.m_gorillaClipHidden) > GorillaAkimboReload.FallbackAbove() {
+    let own = GorillaAkimboReload.Owner(weapon.GetWeaponRecord());
+    if GorillaAkimboGuns.ReloadFallback(own) {
+      ModLog(n"GorillaAkimbo", s"Top-magazine reload too short for its clip (opening speed \(speed)): quick-drop fallback.");
+      let topMagFb = GorillaAkimboTopMagSystem.Get(weapon.GetGame());
+      topMagFb.ClearFamily(weapon, left);
+      // A reload the other hand asked for together with this one starts now instead of waiting to join.
+      topMagFb.joinWaitUntil = 0.0;
+      return false;
+    }
     FTLog("GorillaAkimbo: top-magazine reload too short for its clip (opening speed " + FloatToString(speed) + "), no quick-drop fallback");
   }
   this.m_animReloadData.amountToReload = 0;

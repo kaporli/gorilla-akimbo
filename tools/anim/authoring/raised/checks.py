@@ -2,7 +2,7 @@
 
 Per raised pose and body, from the clip files (paths.raised_clips) and the reload sets the build made (WORK/tmp_reload):
   metric     per gun that uses the pose (a gun that shares the variable too): screen cover at or under the family
-             target, eye distance, reach, wrist, gun-to-gun gap (the pair, and the gun beside one in the game pose),
+             target, eye distance (idle and aim), reach, wrist, gun-to-gun gap (the pair, and the gun beside one in the game pose),
              muzzle direction and hand on the grip against the game clip, idle and aim
   pose clips a clip that starts or ends in the idle in the game starts or ends in the raised idle; the other arm and
              the body are the game clip's
@@ -86,6 +86,8 @@ def _pose(a):
                     add('raised: wrist change against the game pose, idle', f'{gid} {S}', r['wrist_vs_game'], f'<= {T["wrist_vs_game_max_deg"]}', 'deg', r['wrist_vs_game'] <= T['wrist_vs_game_max_deg'])
                 else:
                     add('raised: screen cover, aim (one gun)', f'{gid} {S}', r['cover'], 'none', '%', True, f'for information; game pose {g0[S]["cover"]}')
+                    e = min(T['eye_aim_min_cm'], g0[S]['eye'])
+                    add('raised: eye distance, aim', f'{gid} {S}', r['eye'], f'>= {e}', 'cm', r['eye'] >= e, f'game pose {g0[S]["eye"]}')
             if name == 'idle':
                 lim = min(T['gap_min_cm'], g0['gap'])
                 add('raised: gun gap, the pair, idle', gid, m['gap'], f'>= {lim}', 'cm', m['gap'] >= lim, f'game pose {g0["gap"]}')

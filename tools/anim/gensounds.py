@@ -160,7 +160,7 @@ own, shell, rep = {}, {}, []
 for g in rreload.owners():
     r = g['reload']; take = rreload.TAKE[r['weight']]; d = manifest.path(r.get('clips', 'rreload_clips'))
     tab = {}
-    for v, pick in enumerate(r['slots']):
+    for v, pick in enumerate(r.get('slots') or []):
         for empty, clip in ((False, 'reload'), (True, 'empty_reload')):
             spec = json.load(open(rreload.clip_file(d, 'pma', g['id'], 'right', pick, take, clip, '.json')))
             n = spec['frames']; lay = r['layout'][pick + take][clip]
@@ -186,7 +186,7 @@ for g in rreload.owners():
                 raise SystemExit(f'gensounds: {g["id"]} {pick} {clip}: re-timed sounds out of order or outside the clip')
             tab[(v, empty)] = [(f / FPS, e) for f, e in lst]
     fb = (r.get('fallback') or {}).get('layout')
-    if len(tab) == 6 and fb:
+    if (len(tab) == 6 or not r.get('slots')) and fb:
         # quick-drop fallback (variant 3): the magazine (or pump) sounds out of view, the grab as the gun settles
         hs, he = fb['hide_start'], fb['hide_end']
         for empty, clip in ((False, 'reload'), (True, 'empty_reload')):
@@ -203,7 +203,7 @@ for g in rreload.owners():
             for f, e in lst:
                 rep.append(f"{g['id']:10s} v3 fallback {clip:12s} {e:52s} -> clip f{f} (hidden f{hs}-{he})")
             tab[(3, empty)] = [(f / FPS, e) for f, e in lst]
-    if len(tab) >= 6:
+    if len(tab) >= 6 or (3, False) in tab:
         own[g['id']] = tab
 
 lines += ['  // Guns with reload clips of their own whose gun parts were re-timed onto the clip: the gun\'s reload sounds at',
@@ -213,10 +213,13 @@ lines += ['  // Guns with reload clips of their own whose gun parts were re-time
           '    switch owner {']
 for gid in own:
     lines += [f'      case n"{gid}":']
-    for v in ((3, 1, 2, 0) if (3, False) in own[gid] else (1, 2, 0)):
+    only = (0, False) not in own[gid]      # fallback only (top-magazine guns): the fallback's sounds whatever the variant
+    for v in ((3,) if only else (3, 1, 2, 0) if (3, False) in own[gid] else (1, 2, 0)):
         a, b = own[gid][(v, False)], own[gid][(v, True)]
         body = [f'Deref(times) = empty ? {arr(b, 0)} : {arr(a, 0)};', f'Deref(names) = empty ? {arr(b, 1)} : {arr(a, 1)};']
-        if v:
+        if only:
+            lines += ['        ' + x for x in body] + ['        return true;']
+        elif v:
             lines += [f'        if variant == {v} {{'] + ['          ' + x for x in body] + ['          return true;', '        }']
         else:
             lines += ['        ' + x for x in body] + ['        return true;']

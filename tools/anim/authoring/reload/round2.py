@@ -141,7 +141,7 @@ PICKS = {'F02': ('Side flick, punch rack', 'copperhead', f02, 'front'), 'F09': (
          'M03': ('Thigh slam, hip bump', 'masamune', m03, 'masamune'), 'H02': ('Flip and shake, punch', 'hercules', h02, 'hercules')}
 GEN = '''"""{tid} {name}, take {take} ({kind}). Rebuilds the clip, its magazine track and its checks."""
 import sys
-sys.path.insert(0, 'C:/Modding/gg-work/reloads/tools/anim/authoring/reload')
+sys.path.insert(0, {here!r})
 import round2
 PARAMS = {params}
 if __name__ == '__main__':
@@ -159,7 +159,7 @@ def one(tid, params=None, clip='empty_reload', out=None, quiet=False):
     json.dump(spec, open(f'{d}/{stem}.json', 'w'), indent=1)
     c = rchecks2.check(spec, track); c['name'] = spec['_name']; json.dump(c, open(f'{d}/{stem}_checks.json', 'w'), indent=1)
     if clip == 'empty_reload':
-        open(f'{d}/gen_{tid}.py', 'w').write(GEN.format(tid=tid, name=name, take=take, kind='snappy' if take == 'A' else 'heavy', params=json.dumps(params or {}), clip=clip))
+        open(f'{d}/gen_{tid}.py', 'w').write(GEN.format(tid=tid, name=name, take=take, kind='snappy' if take == 'A' else 'heavy', params=json.dumps(params or {}), clip=clip, here=os.path.dirname(os.path.abspath(__file__)).replace(chr(92), '/')))
     en = magtrack2.vanilla(gun, clip)['enter']; gq = G[spec['_timing']['seated']][1]; c['fresh_side'] = [round(float(x), 2) for x in -qrot(gq, en)]
     json.dump(c, open(f'{d}/{stem}_checks.json', 'w'), indent=1)
     if not quiet: print(summary(c), 'fresh magazine stands toward', c['fresh_side'])

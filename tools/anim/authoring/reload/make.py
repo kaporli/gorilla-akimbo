@@ -11,11 +11,12 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import renv, common
 import rlib, rchecks
 
+HERE = os.path.dirname(os.path.abspath(__file__)).replace(chr(92), '/')      # the folder of the running make.py, written into each gen.py
 CATS = {'front': ('front', 'copperhead'), 'masamune': ('masa', 'masamune'), 'hercules': ('herc', 'hercules')}
 GEN = '''"""{did} {name}: {doc}
 Rebuilds this draft. Parameters of the motion are in PARAMS (empty = the defaults in {mod}.py)."""
 import sys
-sys.path.insert(0, 'C:/Modding/gg-work/reloads/tools/anim/authoring/reload')
+sys.path.insert(0, {here!r})
 import make
 PARAMS = {params}
 if __name__ == '__main__':
@@ -39,7 +40,7 @@ def one(cat, did, params=None, gun=None, left=None, clip='empty_reload', body='p
     spec['_name'] = name; spec['_doc'] = ' '.join((fn.__doc__ or '').split()); json.dump(spec, open(f'{d}/{stem}.json', 'w'), indent=1)
     c = rchecks.check(spec); c['name'] = name; json.dump(c, open(f'{d}/{stem}_checks.json', 'w'), indent=1)
     if stem == did:
-        open(f'{d}/gen.py', 'w').write(GEN.format(did=did, name=name, doc=spec['_doc'], mod=mod, params=json.dumps(params or {}), cat=cat, gun=gun, left=left, clip=clip, body=body))
+        open(f'{d}/gen.py', 'w').write(GEN.format(did=did, name=name, doc=spec['_doc'], mod=mod, params=json.dumps(params or {}), cat=cat, gun=gun, left=left, clip=clip, body=body, here=HERE))
     with open(f'{out}/{cat}/builds.log', 'a') as f:
         f.write(json.dumps({'time': time.strftime('%Y-%m-%d %H:%M:%S'), 'stem': stem, 'params': params or {}, 'fails': c['fails']}) + '\n')
     if not quiet: print(summary(c))

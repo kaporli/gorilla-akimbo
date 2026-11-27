@@ -10,7 +10,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import renv, common
 import make, rchecks
 
-STYLE_FROM = 'C:/Modding/anim-work/long-partner/review/long-topmag.html'
+STYLE_FROM = common.mp('C:/Modding/anim-work/long-partner/review/long-topmag.html')
 TITLES = {'front': ('Front Magazine Rifle Reloads', 'Copperhead (stands for Umbra and Sidewinder; Ajax and Kyubi with their own timing)'),
           'masamune': ('Masamune Reloads', 'Masamune'), 'hercules': ('Hercules Reloads', 'Hercules 3AX')}
 

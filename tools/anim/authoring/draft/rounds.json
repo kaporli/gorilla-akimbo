@@ -1,0 +1,969 @@
+{
+ "_note": "One entry per (family, round): the generator and the review tool of a draft round as they were run, wired to `ga drafts`. family = manifest reload.category = draft check family. `gen`, `review.script`: files of authoring/reload, run from that folder with ROUND_OUT=<out>/<family>/round<N>. `catalog`: module and dict (id -> name or (name, ...)) that lists the round's draft ids. `build`: ids go positional or after `ids_flag`; `takes_flag` passes the takes. `rest`: [gun, gun] pairs and bodies whose rest glbs are made first (rest.py), so parallel generator runs only read them. `seed_ref`: copy smg_ref to <root>/ref (tube and break generators read it). `post`: generator commands after the build. `review.labels`: clip take letters per draft id that the review tool renders (tube round 2: O round 1 pick, C Carnage, T Tactician). `review.pre`: python call before the review. `review.env`: environment of the review commands ({anim_work} is paths.anim_work). `review.takes_flag`: the review tool takes --takes. `review.module`: first argument of the review script. Rounds not listed here are in `unwired`. `archive`: folder (under paths.anim_work) of the archived round this entry reproduces; a round with an archive path is an archived round (a take without an R4 budget is not a stop there, the check reports it as not measurable). `clips_dir`: folder of the clips under the round folder when the generator writes it elsewhere (front3.py: round3-front/clips). `layout` `spec` with `dir` (folder of one draft, {id}): the generator names take and clip in no file name; id, take and body come from the spec. `build.extra`: arguments after the ids. `review_note`: shown instead of a review step when the round has no `review`. `rest_archive`: folder under paths.anim_work holding the rest glbs (<body>/rest_<gun>_R__<gun>_L.glb) the archived round was authored on; copied instead of made by rest.py (rifle rounds 1 and 2: today's rest.py makes other poses). `id_prefix`: only the catalog ids starting with it (round2.py lists the picks of every rifle family). `build.ids_per_take`: ids are passed as <id><take> for every take (round2.py).",
+ "families": {
+  "smg_front": {
+   "1": {
+    "gen": "sf1.py",
+    "catalog": [
+     "sf1",
+     "PICKS"
+    ],
+    "takes": [
+     "A",
+     "B"
+    ],
+    "build": {
+     "argv": [
+      "build"
+     ],
+     "takes_flag": "--takes"
+    },
+    "rest": {
+     "pairs": [
+      [
+       "saratoga",
+       "saratoga"
+      ],
+      [
+       "zhuo",
+       "zhuo"
+      ]
+     ],
+     "bodies": [
+      "pma"
+     ]
+    },
+    "review": {
+     "script": "sf1review.py",
+     "labels": [
+      "A",
+      "B"
+     ],
+     "takes_flag": "--takes"
+    }
+   },
+   "2": {
+    "gen": "sf2.py",
+    "catalog": [
+     "sf2",
+     "PICKS"
+    ],
+    "takes": [
+     "A",
+     "B"
+    ],
+    "build": {
+     "argv": [
+      "build"
+     ],
+     "takes_flag": "--takes"
+    },
+    "rest": {
+     "pairs": [
+      [
+       "saratoga",
+       "saratoga"
+      ],
+      [
+       "zhuo",
+       "zhuo"
+      ]
+     ],
+     "bodies": [
+      "pma"
+     ]
+    },
+    "review": {
+     "script": "sf2review.py",
+     "labels": [
+      "A",
+      "B"
+     ],
+     "takes_flag": "--takes"
+    }
+   },
+   "3": {
+    "gen": "sf3.py",
+    "catalog": [
+     "sf3",
+     "PICKS"
+    ],
+    "takes": [
+     "A",
+     "B"
+    ],
+    "build": {
+     "argv": [
+      "build"
+     ],
+     "takes_flag": "--takes"
+    },
+    "rest": {
+     "pairs": [
+      [
+       "saratoga",
+       "saratoga"
+      ],
+      [
+       "zhuo",
+       "zhuo"
+      ]
+     ],
+     "bodies": [
+      "pma"
+     ]
+    },
+    "review": {
+     "script": "sf3review.py",
+     "labels": [
+      "A",
+      "B"
+     ],
+     "takes_flag": "--takes"
+    }
+   },
+   "4": {
+    "gen": "sf4.py",
+    "catalog": [
+     "sf4",
+     "PICKS"
+    ],
+    "takes": [
+     "A",
+     "B"
+    ],
+    "build": {
+     "argv": [
+      "build"
+     ],
+     "takes_flag": "--takes"
+    },
+    "rest": {
+     "pairs": [
+      [
+       "saratoga",
+       "saratoga"
+      ],
+      [
+       "zhuo",
+       "zhuo"
+      ]
+     ],
+     "bodies": [
+      "pma"
+     ]
+    },
+    "review": {
+     "script": "sf4review.py",
+     "labels": [
+      "A",
+      "B"
+     ],
+     "takes_flag": "--takes"
+    }
+   }
+  },
+  "grip": {
+   "1": {
+    "gen": "grip1.py",
+    "catalog": [
+     "grip1",
+     "PICKS"
+    ],
+    "takes": [
+     "A"
+    ],
+    "build": {
+     "argv": [
+      "build"
+     ]
+    },
+    "rest": {
+     "pairs": [
+      [
+       "senkoh",
+       "senkoh"
+      ]
+     ],
+     "bodies": [
+      "pma"
+     ]
+    },
+    "review": {
+     "script": "r1review.py",
+     "module": "grip1",
+     "labels": [
+      "A"
+     ]
+    }
+   },
+   "2": {
+    "gen": "grip2.py",
+    "catalog": [
+     "grip2",
+     "PICKS"
+    ],
+    "takes": [
+     "A"
+    ],
+    "build": {
+     "argv": [
+      "build"
+     ]
+    },
+    "rest": {
+     "pairs": [
+      [
+       "senkoh",
+       "senkoh"
+      ]
+     ],
+     "bodies": [
+      "pma"
+     ]
+    },
+    "review": {
+     "script": "r2review.py",
+     "module": "grip2",
+     "labels": [
+      "A"
+     ]
+    }
+   }
+  },
+  "bullpup": {
+   "1": {
+    "gen": "bull1.py",
+    "catalog": [
+     "bull1",
+     "PICKS"
+    ],
+    "takes": [
+     "A"
+    ],
+    "build": {
+     "argv": [
+      "build"
+     ]
+    },
+    "rest": {
+     "pairs": [
+      [
+       "pulsar",
+       "pulsar"
+      ]
+     ],
+     "bodies": [
+      "pma"
+     ]
+    },
+    "archive": "smg-shotgun/round1-bullpup",
+    "review": {
+     "script": "r1review.py",
+     "module": "bull1",
+     "labels": [
+      "A"
+     ]
+    }
+   },
+   "2": {
+    "gen": "bull2.py",
+    "catalog": [
+     "bull2",
+     "PICKS"
+    ],
+    "takes": [
+     "A"
+    ],
+    "build": {
+     "argv": [
+      "build"
+     ]
+    },
+    "rest": {
+     "pairs": [
+      [
+       "pulsar",
+       "pulsar"
+      ]
+     ],
+     "bodies": [
+      "pma"
+     ]
+    },
+    "archive": "smg-shotgun/round2-bullpup",
+    "review": {
+     "script": "r2review.py",
+     "module": "bull2",
+     "labels": [
+      "A"
+     ]
+    }
+   },
+   "3": {
+    "gen": "bull3.py",
+    "catalog": [
+     "bull3",
+     "PICKS"
+    ],
+    "takes": [
+     "A"
+    ],
+    "build": {
+     "argv": [
+      "build"
+     ]
+    },
+    "rest": {
+     "pairs": [
+      [
+       "pulsar",
+       "pulsar"
+      ]
+     ],
+     "bodies": [
+      "pma"
+     ]
+    },
+    "review": {
+     "script": "r3review.py",
+     "module": "bull3",
+     "labels": [
+      "A"
+     ]
+    }
+   }
+  },
+  "top": {
+   "1": {
+    "gen": "top1.py",
+    "catalog": [
+     "top1",
+     "PICKS"
+    ],
+    "takes": [
+     "B"
+    ],
+    "build": {
+     "argv": [
+      "build"
+     ]
+    },
+    "rest": {
+     "pairs": [
+      [
+       "warden",
+       "warden"
+      ]
+     ],
+     "bodies": [
+      "pma"
+     ]
+    },
+    "archive": "smg-shotgun/round1-top",
+    "review": {
+     "script": "r1review.py",
+     "module": "top1",
+     "labels": [
+      "B"
+     ]
+    }
+   },
+   "2": {
+    "gen": "top2.py",
+    "catalog": [
+     "top2",
+     "PICKS"
+    ],
+    "takes": [
+     "B"
+    ],
+    "build": {
+     "argv": [
+      "build"
+     ]
+    },
+    "rest": {
+     "pairs": [
+      [
+       "warden",
+       "warden"
+      ]
+     ],
+     "bodies": [
+      "pma"
+     ]
+    },
+    "archive": "smg-shotgun/round2-top",
+    "review": {
+     "script": "r2review.py",
+     "module": "top2",
+     "labels": [
+      "B"
+     ]
+    }
+   },
+   "3": {
+    "gen": "top3.py",
+    "catalog": [
+     "top3",
+     "PICKS"
+    ],
+    "takes": [
+     "B"
+    ],
+    "build": {
+     "argv": [
+      "build"
+     ]
+    },
+    "rest": {
+     "pairs": [
+      [
+       "warden",
+       "warden"
+      ]
+     ],
+     "bodies": [
+      "pma"
+     ]
+    },
+    "review": {
+     "script": "r3review.py",
+     "module": "top3",
+     "labels": [
+      "B"
+     ]
+    }
+   },
+   "4": {
+    "gen": "top4.py",
+    "catalog": [
+     "top4",
+     "PICKS"
+    ],
+    "takes": [
+     "B"
+    ],
+    "build": {
+     "argv": [
+      "build"
+     ]
+    },
+    "rest": {
+     "pairs": [
+      [
+       "warden",
+       "warden"
+      ]
+     ],
+     "bodies": [
+      "pma"
+     ]
+    },
+    "review": {
+     "script": "r3review.py",
+     "module": "top4",
+     "labels": [
+      "B"
+     ]
+    }
+   },
+   "5": {
+    "gen": "top5.py",
+    "catalog": [
+     "top5",
+     "PICKS"
+    ],
+    "takes": [
+     "B"
+    ],
+    "build": {
+     "argv": [
+      "build"
+     ]
+    },
+    "rest": {
+     "pairs": [
+      [
+       "warden",
+       "warden"
+      ]
+     ],
+     "bodies": [
+      "pma"
+     ]
+    },
+    "review": {
+     "script": "r3review.py",
+     "module": "top5",
+     "labels": [
+      "B"
+     ]
+    }
+   }
+  },
+  "tube": {
+   "1": {
+    "gen": "tube1.py",
+    "catalog": [
+     "tube1",
+     "PICKS"
+    ],
+    "takes": [
+     "A"
+    ],
+    "build": {
+     "argv": [
+      "build"
+     ]
+    },
+    "rest": {
+     "pairs": [
+      [
+       "carnage",
+       "carnage"
+      ]
+     ],
+     "bodies": [
+      "pma"
+     ]
+    },
+    "seed_ref": true,
+    "review": {
+     "script": "shellreview.py",
+     "module": "tube1",
+     "labels": [
+      "A"
+     ]
+    }
+   },
+   "2": {
+    "gen": "tube2.py",
+    "catalog": [
+     "tube2",
+     "FUN"
+    ],
+    "takes": [
+     "A"
+    ],
+    "build": {
+     "argv": [
+      "build"
+     ],
+     "ids_flag": "--picks"
+    },
+    "rest": {
+     "pairs": [
+      [
+       "carnage",
+       "carnage"
+      ],
+      [
+       "tactician",
+       "tactician"
+      ]
+     ],
+     "bodies": [
+      "pma",
+      "pwa"
+     ]
+    },
+    "seed_ref": true,
+    "post": [
+     [
+      "layout"
+     ]
+    ],
+    "review": {
+     "script": "shellreview.py",
+     "module": "tube2rev",
+     "labels": [
+      "O",
+      "C",
+      "T"
+     ],
+     "pre": "tube2rev.copy_originals",
+     "env": {
+      "TUBE_R1_CLIPS": "{anim_work}/smg-shotgun/production/superseded/tube_r1/clips"
+     }
+    }
+   }
+  },
+  "break": {
+   "1": {
+    "gen": "break1.py",
+    "catalog": [
+     "break1",
+     "PICKS"
+    ],
+    "takes": [
+     "A",
+     "B"
+    ],
+    "build": {
+     "argv": [
+      "build"
+     ],
+     "takes_flag": "--takes"
+    },
+    "rest": {
+     "pairs": [
+      [
+       "palica",
+       "palica"
+      ],
+      [
+       "satara",
+       "satara"
+      ]
+     ],
+     "bodies": [
+      "pma"
+     ]
+    },
+    "seed_ref": true,
+    "review": {
+     "script": "shellreview.py",
+     "module": "break1",
+     "labels": [
+      "A",
+      "B"
+     ]
+    }
+   },
+   "2": {
+    "gen": "break2.py",
+    "catalog": [
+     "break2",
+     "PICKS"
+    ],
+    "takes": [
+     "A",
+     "B"
+    ],
+    "build": {
+     "argv": [
+      "build"
+     ],
+     "takes_flag": "--takes"
+    },
+    "rest": {
+     "pairs": [
+      [
+       "palica",
+       "palica"
+      ],
+      [
+       "satara",
+       "satara"
+      ]
+     ],
+     "bodies": [
+      "pma"
+     ]
+    },
+    "seed_ref": true,
+    "review": {
+     "script": "break2review.py",
+     "labels": [
+      "A",
+      "B"
+     ],
+     "takes_flag": "--takes"
+    }
+   }
+  },
+  "front": {
+   "1": {
+    "gen": "make.py",
+    "catalog": [
+     "front",
+     "DRAFTS"
+    ],
+    "takes": [
+     "A"
+    ],
+    "build": {
+     "argv": [
+      "front"
+     ]
+    },
+    "rest": {
+     "pairs": [
+      [
+       "copperhead",
+       "copperhead"
+      ]
+     ],
+     "bodies": [
+      "pma"
+     ]
+    },
+    "archive": "rifle-reloads/front",
+    "layout": "spec",
+    "dir": "front/{id}",
+    "rest_archive": "rifle-reloads/rest",
+    "review_note": "no review tool for this round: rrender3.py frames <spec.json> renders first-person and outside frames of one draft; rrender.py (draft, sheet, grid) and rpage.py take the round 1 folder of the rifle category and its scores.json and are not wired"
+   },
+   "2": {
+    "gen": "round2.py",
+    "catalog": [
+     "round2",
+     "PICKS"
+    ],
+    "takes": [
+     "A",
+     "B"
+    ],
+    "build": {
+     "argv": [],
+     "ids_per_take": true
+    },
+    "rest": {
+     "pairs": [
+      [
+       "copperhead",
+       "copperhead"
+      ]
+     ],
+     "bodies": [
+      "pma"
+     ]
+    },
+    "archive": "rifle-reloads/round2",
+    "layout": "spec",
+    "dir": "round2/{id}",
+    "rest_archive": "rifle-reloads/rest",
+    "id_prefix": "F",
+    "review_note": "no review tool for this round: rrender3.py frames <spec.json> renders first-person and outside frames of one draft; rrender.py (draft, sheet, grid) and rpage.py take the round 1 folder of the rifle category and its scores.json and are not wired"
+   },
+   "3": {
+    "gen": "front3.py",
+    "catalog": [
+     "front3",
+     "PICKS3"
+    ],
+    "takes": [
+     "A"
+    ],
+    "build": {
+     "argv": [
+      "build"
+     ]
+    },
+    "rest": {
+     "pairs": [
+      [
+       "copperhead",
+       "copperhead"
+      ]
+     ],
+     "bodies": [
+      "pma"
+     ]
+    },
+    "archive": "rifle-reloads/round3-front",
+    "clips_dir": "round3-front/clips",
+    "review_note": "no review tool for this round: rrender3.py frames <spec.json> renders first-person and outside frames of one draft; the contact sheet, grid and page tools of round 3 are not in the tree"
+   }
+  },
+  "masamune": {
+   "1": {
+    "gen": "make.py",
+    "catalog": [
+     "masa",
+     "DRAFTS"
+    ],
+    "takes": [
+     "B"
+    ],
+    "build": {
+     "argv": [
+      "masamune"
+     ]
+    },
+    "rest": {
+     "pairs": [
+      [
+       "masamune",
+       "masamune"
+      ]
+     ],
+     "bodies": [
+      "pma"
+     ]
+    },
+    "archive": "rifle-reloads/masamune",
+    "layout": "spec",
+    "dir": "masamune/{id}",
+    "rest_archive": "rifle-reloads/rest",
+    "review_note": "no review tool for this round: rrender3.py frames <spec.json> renders first-person and outside frames of one draft; rrender.py (draft, sheet, grid) and rpage.py take the round 1 folder of the rifle category and its scores.json and are not wired"
+   },
+   "2": {
+    "gen": "round2.py",
+    "catalog": [
+     "round2",
+     "PICKS"
+    ],
+    "takes": [
+     "A",
+     "B"
+    ],
+    "build": {
+     "argv": [],
+     "ids_per_take": true
+    },
+    "rest": {
+     "pairs": [
+      [
+       "masamune",
+       "masamune"
+      ]
+     ],
+     "bodies": [
+      "pma"
+     ]
+    },
+    "archive": "rifle-reloads/round2",
+    "layout": "spec",
+    "dir": "round2/{id}",
+    "rest_archive": "rifle-reloads/rest",
+    "id_prefix": "M",
+    "review_note": "no review tool for this round: rrender3.py frames <spec.json> renders first-person and outside frames of one draft; rrender.py (draft, sheet, grid) and rpage.py take the round 1 folder of the rifle category and its scores.json and are not wired"
+   },
+   "3": {
+    "gen": "masa3.py",
+    "catalog": [
+     "masa3",
+     "DRAFTS"
+    ],
+    "takes": [
+     "B"
+    ],
+    "build": {
+     "argv": [
+      "build"
+     ]
+    },
+    "rest": {
+     "pairs": [
+      [
+       "masamune",
+       "masamune"
+      ]
+     ],
+     "bodies": [
+      "pma"
+     ]
+    },
+    "archive": "rifle-reloads/round3-masamune",
+    "layout": "spec",
+    "dir": "{id}",
+    "review_note": "no review tool for this round: rrender3.py frames <spec.json> renders first-person and outside frames of one draft; the contact sheet, grid and page tools of round 3 are not in the tree"
+   }
+  },
+  "hercules": {
+   "1": {
+    "gen": "make.py",
+    "catalog": [
+     "herc",
+     "DRAFTS"
+    ],
+    "takes": [
+     "B"
+    ],
+    "build": {
+     "argv": [
+      "hercules"
+     ]
+    },
+    "rest": {
+     "pairs": [
+      [
+       "hercules",
+       "hercules"
+      ]
+     ],
+     "bodies": [
+      "pma"
+     ]
+    },
+    "archive": "rifle-reloads/hercules",
+    "layout": "spec",
+    "dir": "hercules/{id}",
+    "rest_archive": "rifle-reloads/rest",
+    "review_note": "no review tool for this round: rrender3.py frames <spec.json> renders first-person and outside frames of one draft; rrender.py (draft, sheet, grid) and rpage.py take the round 1 folder of the rifle category and its scores.json and are not wired"
+   },
+   "2": {
+    "gen": "round2.py",
+    "catalog": [
+     "round2",
+     "PICKS"
+    ],
+    "takes": [
+     "A",
+     "B"
+    ],
+    "build": {
+     "argv": [],
+     "ids_per_take": true
+    },
+    "rest": {
+     "pairs": [
+      [
+       "hercules",
+       "hercules"
+      ]
+     ],
+     "bodies": [
+      "pma"
+     ]
+    },
+    "archive": "rifle-reloads/round2",
+    "layout": "spec",
+    "dir": "round2/{id}",
+    "rest_archive": "rifle-reloads/rest",
+    "id_prefix": "H",
+    "review_note": "no review tool for this round: rrender3.py frames <spec.json> renders first-person and outside frames of one draft; rrender.py (draft, sheet, grid) and rpage.py take the round 1 folder of the rifle category and its scores.json and are not wired"
+   },
+   "3": {
+    "gen": "herc3.py",
+    "catalog": [
+     "herc3",
+     "PICKS"
+    ],
+    "takes": [
+     "B"
+    ],
+    "build": {
+     "argv": [
+      "build"
+     ],
+     "extra": [
+      "--sides",
+      "right,left",
+      "--bodies",
+      "pma,pwa"
+     ]
+    },
+    "rest": {
+     "pairs": [
+      [
+       "hercules",
+       "hercules"
+      ]
+     ],
+     "bodies": [
+      "pma",
+      "pwa"
+     ]
+    },
+    "archive": "rifle-reloads/round3-hercules",
+    "review_note": "no review tool for this round: rrender3.py frames <spec.json> renders first-person and outside frames of one draft; the contact sheet, grid and page tools of round 3 are not in the tree"
+   }
+  }
+ },
+ "unwired": {},
+ "vanilla": {"top": {"gen": "vtop.py", "gun": "warden", "take": "B", "family": "top", "ids": ["SV01", "SV02", "SV03", "SV04", "SV05", "SV06", "SV07", "SV08", "SV09", "SV10", "SV11", "SV12", "SV13", "SV14", "SV15", "SV16"], "note": "drafts translated from vanilla reloads (vref.REFS): Lexington dual wield (one-handed) first, then the Warden, Shingen and Borg two-handed ones"}}
+}

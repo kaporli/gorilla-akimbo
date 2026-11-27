@@ -2,7 +2,8 @@
 does for the top-magazine sets: each clip glb holds one animation on the dual-wield rig and is stored under one of
 the set's reload clip names with that name's metadata from the base set (fallback pose slots, no sound events, SIMD).
 
-usage: rarmset.py <base glb> <out glb> <clip glb>=<name>[:<keys>] [...] [--phases]
+usage: rarmset.py <base glb> <out glb> <clip glb>[#<animation>]=<name>[:<keys>] [...] [--phases]
+#<animation>: that animation of the glb instead of its first (a fallback-only gun's reload clip, from the base set's glb).
 <keys>: pad the clip to this many keys by holding its last frame (the idle). WolvenKit's import keeps the key count
 only for some lengths; the build pads to good_keys(n).
 A clip longer than <keys> is an error. A name the base set lacks (reload_start, reload_loop: the dual-wield graph's
@@ -42,10 +43,10 @@ if __name__ == '__main__':
     for a in argv[2:]:
         path, name = a.rsplit('=', 1); keys = None
         if ':' in name: name, keys = name.split(':'); keys = int(keys)
-        c = Glb(path)
+        path, _, which = path.partition('#'); c = Glb(path)
         if [n.get('name') for n in c.j['nodes']] != [n.get('name') for n in g.j['nodes']]:
             raise SystemExit(f'{path}: node list differs from the base set')
-        src = c.j['animations'][0]; n = max(len(c.acc(s['input'])) for s in src['samplers'])
+        src = c.anim(which) if which else c.j['animations'][0]; n = max(len(c.acc(s['input'])) for s in src['samplers'])
         if keys and n > keys: raise SystemExit(f'{path}: {n} keys, more than {keys}')
         samplers = []; crossings = 0
         for s in src['samplers']:

@@ -138,7 +138,7 @@ def check(spec):
     if isinstance(spec, str): spec = json.load(open(spec))
     gid, lid, clip = spec['_gun'], spec['_left_gun'], spec['_gun_clip']; T = spec['_timing']; N = spec['frames']
     g = Glb(spec['out']); c = Clip(g, spec['clip']); nm = g.names; ix = {n: i for i, n in enumerate(nm)}
-    r = Glb(spec['src']); R0 = Clip(r, 'idle').world(0)
+    r = Glb(common.mp(spec['src'])); R0 = Clip(r, 'idle').world(0)
     PR, PL, PM = gun_points(gid), gun_points(lid, 5000), mag_points(gid); MT = mag_track(gid, clip)
     arm = [n for n in nm if (n.startswith('Right') or n.startswith('Left')) and any(k in n for k in ('Shoulder', 'Arm', 'ForeArm', 'Hand')) and 'Leg' not in n] + ['WeaponRight', 'WeaponLeft']
     out = {'draft': spec['_draft'], 'gun': gid, 'frames': N, 'two_arm': spec.get('_two_arm', False)}

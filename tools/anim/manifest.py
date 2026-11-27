@@ -6,6 +6,7 @@ manifest's paths block; each can be overridden by its environment variable.
 import json, os
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = 'C:/Modding'
 PICKS = ('flip', 'doubletap', 'uppercut')
 _m = None
 
@@ -18,6 +19,16 @@ def load():
     return _m
 
 
+def mp(s):
+    """Moves a C:/Modding path to the root named by GA_ROOT (Linux lab); without GA_ROOT the text is returned unchanged.
+    A ';' list is moved entry by entry."""
+    r = os.environ.get('GA_ROOT')
+    if not r:
+        return s
+    r = r.replace('\\', '/').rstrip('/')
+    return ';'.join(r + d[len(ROOT):] if d.startswith(ROOT) else d for d in s.split(';'))
+
+
 def with_test():
     return os.environ.get('GA_TEST') == '1'
 
@@ -25,7 +36,7 @@ def with_test():
 def path(key):
     """A path of the paths block. A relative default is relative to this folder (data kept in the repo)."""
     p = load()['paths'][key]
-    v = (os.environ.get(p['env']) or p['default']).replace('\\', '/')
+    v = mp((os.environ.get(p['env']) or p['default']).replace('\\', '/'))
     if ';' not in v and not os.path.isabs(v):
         v = os.path.join(HERE, v).replace('\\', '/')
     return v

@@ -52,7 +52,7 @@ def left_nodes(g):
 
 
 def make(right, left, body='pma', out=None):
-    out = out or f'{renv.OUT}/production/rest/{body}/rest_{right}_R__{left}_L.glb'
+    out = out or f'{renv.OUT}/rest/{body}/rest_{right}_R__{left}_L.glb'
     os.makedirs(os.path.dirname(out), exist_ok=True)
     pr, cr, _, tr = idle_source(right, body); pl, _, cl, tl = idle_source(left, body)
     info = {'right_tuned': tr, 'left_tuned': tl, 'right_src': pr, 'left_src': pl}

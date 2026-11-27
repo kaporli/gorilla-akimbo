@@ -16,7 +16,7 @@ for _p in (ANIM, HERE):
         sys.path.insert(0, _p)
 import manifest
 
-path, paths, find = manifest.path, manifest.paths, manifest.find
+path, paths, find, mp = manifest.path, manifest.paths, manifest.find, manifest.mp
 BODIES = manifest.bodies()
 SIDES = ('right', 'left')
 
@@ -65,6 +65,16 @@ def gun(key):
         if key in (g['id'], g.get('mesh')) or key in manifest.gun_vars(g):
             return g
     raise SystemExit(f'weapons.json: no gun {key}')
+
+
+def lowered_family(length_cm):
+    """The pose rule (owner, 2026-11-23), lowered: v1d when the assembled gun is longer than checks.lowered.v1d_over_cm, else v1."""
+    return 'v1d' if length_cm > manifest.load()['checks']['lowered']['v1d_over_cm'] else 'v1'
+
+
+def raised_family(cover_pct):
+    """The pose rule, raised: C when the idle cover in the game pose is over checks.raised.limit_pct, else none (the game pose)."""
+    return 'C' if cover_pct > manifest.load()['checks']['raised']['limit_pct'] else 'none'
 
 
 def gun_list(arg=None, arm_only=True):

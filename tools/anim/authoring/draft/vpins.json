@@ -1,0 +1,42 @@
+{
+ "_note": "Build options of the owner-approved vanilla-reference drafts (pvan2 SV13 and SV14 finals, 'the new standard'): vtop vsolve options (amp, drive, afr, lift, roll, dz, dx, ms, sa) of the raised and lowered builds and the post-seat scale s of the lowered overlay. ga drafts top --from-vanilla builds a pinned id from these instead of solving, so the finals reproduce byte for byte (rules.json A1). raised_opts: the options of the raised build where they differ from the lowered one (SV13: lift 0.19 raised, 0.18 lowered).",
+ "SV13": {
+  "opts": {
+   "amp": 1.2,
+   "drive": 1.3,
+   "roll": 0,
+   "afr": 0.6,
+   "lift": 0.18,
+   "dz": -0.08,
+   "dx": 0.1,
+   "ms": 0.8,
+   "sa": 1
+  },
+  "s": 0.75,
+  "raised_opts": {
+   "amp": 1.2,
+   "drive": 1.3,
+   "roll": 0,
+   "afr": 0.6,
+   "lift": 0.19,
+   "dz": -0.08,
+   "dx": 0.1,
+   "ms": 0.8,
+   "sa": 1
+  }
+ },
+ "SV14": {
+  "opts": {
+   "amp": 1.2,
+   "drive": 1.3,
+   "roll": 0,
+   "afr": 0.6,
+   "lift": 0.19,
+   "dz": -0.08,
+   "dx": 0.1,
+   "ms": 0.8,
+   "sa": 1
+  },
+  "s": 0.75
+ }
+}

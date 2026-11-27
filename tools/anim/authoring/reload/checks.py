@@ -1,6 +1,6 @@
 """Gate area `rreload` (build.sh check --only rreload --with-test): the production rifle reload clips and their sets.
 
-run(bodies, jobs) -> rows as authoring/checks/gate.py prints them. Per clip (rgate.py): start and end pose against
+run(bodies, jobs, guns) -> rows as authoring/checks/gate.py prints them (guns: only these gun ids). Per clip (rgate.py): start and end pose against
 the gun's raised idle, the hidden window (present, long enough, handle hit outside, no magazine on screen after
 hide_start), no magazine hanging in the air, release velocity continuity, exit and insertion on the well axis, eye
 distance, cover, wrist, reach, shoulder pull, body, gap to the other gun. Per built set (rreload.py round trip, when
@@ -18,10 +18,10 @@ def _one(a):
     return (f'{body}/{gid}_{side}_{pick}{take}_{clip}', rgate.gate(p))
 
 
-def run(bodies=None, jobs=4):
+def run(bodies=None, jobs=4, guns=None):
     import prod, rgate
     L = rgate.LIM; rows = []; row = lambda c, i, v, t, u, ok, n='': rows.append({'check': c, 'item': i, 'value': v, 'threshold': t, 'unit': u, 'ok': bool(ok), 'note': n})
-    pl = prod.plan(bodies=list(bodies) if bodies else None)
+    pl = prod.plan(guns=list(guns) if guns else None, bodies=list(bodies) if bodies else None)
     with concurrent.futures.ProcessPoolExecutor(jobs) as ex: res = list(ex.map(_one, pl))
     for item, o in res:
         if o is None: row('rreload: clip built', item, 0, 1, 'file', False); continue
@@ -37,11 +37,21 @@ def run(bodies=None, jobs=4):
         row('rreload: eye distance (below the rule and the idle less 1 cm)', item, o['eye_cm'][0], round(emin, 1), 'cm', o['eye_cm'][0] >= emin, f"f{o['eye_cm'][1]}")
         row('rreload: screen cover', item, o['cover_peak'][0], L['cover_max_pct'], '%', o['cover_peak'][0] <= L['cover_max_pct'])
         row('rreload: wrist', item, o['wrist'][0], L['wrist_max_deg'], 'deg', o['wrist'][0] <= L['wrist_max_deg'])
-        row('rreload: wrist with the hand on screen', item, o['wrist_view'], L['wrist_view_max_deg'], 'deg', o['wrist_view'] <= L['wrist_view_max_deg'])
+        row('rreload: wrist with the hand on screen (from the bind pose)', item, o['wrist_view_bind'], L['wrist_view_bind_max_deg'], 'deg', o['wrist_view_bind'] <= L['wrist_view_bind_max_deg'])
         row('rreload: reach', item, o['reach'][0], L['reach_max'], 'ratio', o['reach'][0] <= L['reach_max'])
         row('rreload: shoulder pull', item, o['shoulder_pull_cm'], L['shoulder_pull_max_cm'], 'cm', o['shoulder_pull_cm'] <= L['shoulder_pull_max_cm'])
         row('rreload: gun inside the body blocks', item, o['body_cm'][0], L['body_min_cm'], 'cm', o['body_cm'][0] >= L['body_min_cm'])
         row('rreload: gap to the other gun', item, o['guns_gap_cm'][0], 0.5, 'cm', o['guns_gap_cm'][0] > 0.5)
+    import glob
+    for gp in sorted(glob.glob(renv.OUT + '/flick2/*/*_gate.json')):      # the Carnage toss-cock clips (flick2.py): rules F1 and F2
+        o = json.load(open(gp)); item = os.path.basename(gp)[:-10]; Lf = manifest.load()['checks']['draft']['flick']
+        for k, x in enumerate(o['F1']):
+            row('rreload: flick F1 free flight on a parabola', f'{item} flight {k + 1}', x['com_residual_cm_f2'], Lf['com_residual_cm_f2'], 'cm/f2', x['com_residual_cm_f2'] <= Lf['com_residual_cm_f2'])
+            row('rreload: flick F1 free flight constant spin', f'{item} flight {k + 1}', x['spin_change_deg_f'], Lf['spin_change_deg_f'], 'deg/f', x['spin_change_deg_f'] <= Lf['spin_change_deg_f'])
+        for k, x in enumerate(o['F2']):
+            row('rreload: flick F2 catch, hand on the part', f'{item} catch {k + 1}', x['hand_part_miss_cm'], Lf['hand_part_miss_cm'], 'cm', x['hand_part_miss_cm'] <= Lf['hand_part_miss_cm'])
+            row('rreload: flick F2 catch, velocities matched', f'{item} catch {k + 1}', x['relative_speed_cm_f'], Lf['relative_speed_cm_f'], 'cm/f', x['relative_speed_cm_f'] <= Lf['relative_speed_cm_f'])
+        row('rreload: flick cycle fits the Carnage CycleTime', item, o['flick_frames'], Lf['max_frames'], 'frames', o['flick_frames'] <= Lf['max_frames'])
     rt = manifest.path('work') + ('/test' if manifest.with_test() else '') + '/rreload/roundtrip.txt'
     if os.path.exists(rt):
         lines = [l for l in open(rt).read().splitlines() if l.strip()]; bad = [l for l in lines if l.startswith('BAD')]

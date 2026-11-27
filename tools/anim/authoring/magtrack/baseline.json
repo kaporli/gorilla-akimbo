@@ -2,14 +2,9 @@
  "_about": [
   "Items that miss a documented gate in the shipped state (spec round 3, clips of 2026-11-07), with the measured value.",
   "checks.py --baseline accepts these values for these items only; a worse value still fails.",
-  "exit: the gun-relative exit was the soft gate of the first search. contact, touch_gap: clips shared by several partner guns."
+  "contact, touch_gap: clips shared by several partner guns.",
+  "exit: removed 2026-11-24, the magtrack.exit limit is the shipped population worst (46.2)."
  ],
- "exit": {
-  "long_left_lupper": 46.2,
-  "long_right_hang": 44.3,
-  "pair_left_scissor": 30.9,
-  "pair_right_overunder": 36.8
- },
  "touch_gap": {
   "long_left_axe": 3.7,
   "long_right_axe": 0.9,

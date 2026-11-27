@@ -4,6 +4,7 @@ import os, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import manifest
+import rreload
 
 m = manifest.load()
 SETTLE_TOL = 1.0   # degrees: the arm counts as settled within this of the clip's last frame
@@ -161,13 +162,35 @@ for key, fn in (('hide_start', 'ReloadHideStart'), ('hide_end', 'ReloadHideEnd')
         r = byid[owner]['reload']
         take = 'A' if r['weight'] == 'light' else 'B'
         L += [f'    if Equals(owner, n"{owner}") {{']
+        if not r.get('slots'):      # fallback only (top-magazine guns): every variant is the fallback
+            L += [f"      return {r['fallback']['layout'][key]}.0 / {fps}.0;", '    }']
+            continue
         if r.get('fallback'):
             L += [f'      if variant == {FALLBACK} {{', f"        return {r['fallback']['layout'][key]}.0 / {fps}.0;", '      }']
         for v in (1, 2, 0):
-            lay = r['layout'][r['slots'][v] + take]
+            lay = rreload.played(r)[1][r['slots'][v] + take]      # the layout of the clips that play when the weapon is not lowered
             a, b = lay['reload'][key], lay['empty_reload'][key]
             value = f'{a}.0 / {fps}.0' if a == b else f'(empty ? {b}.0 : {a}.0) / {fps}.0'
             L += [f'      if variant == {v} {{', f'        return {value};', '      }'] if v else [f'      return {value};']
+        L += ['    }']
+    L += ['    return 0.0;', '  }', '']
+# Lowered-stance variants (reload.lowered_variant): the same layout functions with the lowered clips' frames, one per hide/length key; the variant argument is the game's pick.
+def lowered_owners(): return [o for o in owners if byid[o]['reload'].get('lowered_variant')]
+
+
+def low_value(r, v, key, empty_key=None):
+    lv = r['lowered_variant']; take = 'A' if r['weight'] == 'light' else 'B'; lay = lv['layout'][r['slots'][v] + take]
+    a, b = lay['reload'][key], lay['empty_reload'][key]
+    return f'{a}.0 / {fps}.0' if a == b else f'(empty ? {b}.0 : {a}.0) / {fps}.0'
+
+
+for key, fn in (('hide_start', 'ReloadHideStartLow'), ('hide_end', 'ReloadHideEndLow'), ('length', 'ReloadLengthLow')):
+    L += [f'  // {fn[:-3]} of the lowered-stance variant clips (reload.lowered_variant); 0.0 for a gun without them.',
+          f'  public static func {fn}(owner: CName, variant: Int32, empty: Bool) -> Float {{']
+    for owner in lowered_owners():
+        r = byid[owner]['reload']; L += [f'    if Equals(owner, n"{owner}") {{']
+        for v in (1, 2, 0):
+            value = low_value(r, v, key); L += [f'      if variant == {v} {{', f'        return {value};', '      }'] if v else [f'      return {value};']
         L += ['    }']
     L += ['    return 0.0;', '  }', '']
 # Settle: the clip frame after which the reloading arm (shoulder to hand) stays within SETTLE_TOL degrees of the clip's
@@ -207,13 +230,17 @@ L += ['  // Clip seconds at which the rise has settled: after it the reloading a
 for owner in owners:
     g = byid[owner]; r = g['reload']
     take = 'A' if r['weight'] == 'light' else 'B'
-    d = manifest.path(r.get('clips', 'rreload_clips'))
+    d = manifest.path(rreload.played(r)[0])
     L += [f'    if Equals(owner, n"{owner}") {{']
     if r.get('fallback'):
         files = [rreload.fallback_files(g, body, side)[0] for body in manifest.bodies() for side in ('right', 'left')]
-        L += [f'      if variant == {FALLBACK} {{', f"        return {settle(owner, files, r['fallback']['layout']['length'])}.0 / {fps}.0;", '      }']
+        fs = f"{settle(owner, files, r['fallback']['layout']['length'])}.0 / {fps}.0"
+        if not r.get('slots'):
+            L += [f'      return {fs};', '    }']
+            continue
+        L += [f'      if variant == {FALLBACK} {{', f'        return {fs};', '      }']
     for v in (1, 2, 0):
-        lay = r['layout'][r['slots'][v] + take]
+        lay = rreload.played(r)[1][r['slots'][v] + take]
         vals = []
         for clip in ('reload', 'empty_reload'):
             files = [rreload.clip_file(d, body, owner, side, r['slots'][v], take, clip) for body in manifest.bodies() for side in ('right', 'left')]
@@ -223,11 +250,40 @@ for owner in owners:
         L += [f'      if variant == {v} {{', f'        return {value};', '      }'] if v else [f'      return {value};']
     L += ['    }']
 L += ['    return 0.0;', '  }', '']
+L += ['  // Clip seconds at which the rise has settled, for the lowered-stance variant clips (measured from them).',
+      '  public static func ReloadSettleLow(owner: CName, variant: Int32, empty: Bool) -> Float {']
+for owner in lowered_owners():
+    g = byid[owner]; r = g['reload']; lv = r['lowered_variant']; take = 'A' if r['weight'] == 'light' else 'B'; d = manifest.path(lv['clips']) if lv['clips'] in m['paths'] else lv['clips']
+    L += [f'    if Equals(owner, n"{owner}") {{']
+    for v in (1, 2, 0):
+        lay = lv['layout'][r['slots'][v] + take]; vals = []
+        for clip in ('reload', 'empty_reload'):
+            files = [rreload.clip_file(d, body, owner, side, r['slots'][v], take, clip) for body in manifest.bodies() for side in ('right', 'left')]
+            vals.append(settle(owner, files, lay[clip]['length']))
+        a, b = vals; value = f'{a}.0 / {fps}.0' if a == b else f'(empty ? {b}.0 : {a}.0) / {fps}.0'
+        L += [f'      if variant == {v} {{', f'        return {value};', '      }'] if v else [f'      return {value};']
+    L += ['    }']
+L += ['    return 0.0;', '  }', '']
+L += ['  // Whether a gun has reload clips for the lowered stance (reload.lowered_variant): played when the weapon is lowered (safe) as the reload starts.',
+      '  public static func ReloadLowered(owner: CName) -> Bool {', '    switch owner {']
+for owner in lowered_owners(): L += [f'      case n"{owner}":']
+L += ['        return true;', '    }', '    return false;', '  }', '']
+L += ['  // The anim wrapper on the player that selects the lowered-stance arm sets of a gun (GorillaAkimboSmgShotgun.archive.xl).',
+      '  public static func ReloadLowWrapper(owner: CName) -> CName {']
+for owner in lowered_owners(): L += [f'    if Equals(owner, n"{owner}") {{', f"      return n\"{byid[owner]['reload']['lowered_variant']['wrapper']}\";", '    }']
+L += ['    return n"None";', '  }', '']
 L += ['  // Guns with a quick-drop fallback clip (variant 3 in the layout functions): played instead of the picked reload',
       '  // when that one would have to be sped up too much (GorillaAkimboReload.FallbackAbove).',
       '  public static func ReloadFallback(owner: CName) -> Bool {', '    switch owner {']
 for owner in owners:
     if byid[owner]['reload'].get('fallback'):
+        L += [f'      case n"{owner}":']
+L += ['        return true;', '    }', '    return false;', '  }', '']
+L += ['  // Guns whose only own clip is the quick-drop fallback (the top-magazine guns): a reload of theirs that comes to the',
+      '  // own-reload path plays the fallback (variant 3) whatever the game picked.',
+      '  public static func ReloadFallbackOnly(owner: CName) -> Bool {', '    switch owner {']
+for owner in owners:
+    if not byid[owner]['reload'].get('slots'):
         L += [f'      case n"{owner}":']
 L += ['        return true;', '    }', '    return false;', '  }', '']
 L += ['  // Whether a gun with reload clips of its own has weapon-side sets for them: magazine track sets, or gun part sets',
@@ -237,7 +293,7 @@ for owner in owners:
     if byid[owner]['reload'].get('magazine', True) or byid[owner]['reload'].get('parts'):
         L += [f'      case n"{owner}":']
 L += ['        return true;', '    }', '    return false;', '  }', '']
-tubes = [o for o in owners if any('loads' in c for lay in byid[o]['reload']['layout'].values() for c in lay.values())]
+tubes = [o for o in owners if any('loads' in c for lay in byid[o]['reload'].get('layout', {}).values() for c in lay.values())]
 L += ['  // Shell-fed guns (layout "loads": tube, break-open): clip seconds at which the clip puts a shell into the gun, per',
       '  // variant and clip, and which of them goes into the chamber (-1: none).',
       '  public static func ReloadLoads(owner: CName, variant: Int32, empty: Bool) -> array<Float> {']
@@ -246,7 +302,7 @@ L += ['  // Shell-fed guns (layout "loads": tube, break-open): clip seconds at w
 def per_clip(owner, key, fmt):
     r = byid[owner]['reload']; take = 'A' if r['weight'] == 'light' else 'B'; out = []
     for v in (1, 2, 0):
-        a, b = (fmt(r['layout'][r['slots'][v] + take][c].get(key)) for c in ('reload', 'empty_reload'))
+        a, b = (fmt(rreload.played(r)[1][r['slots'][v] + take][c].get(key)) for c in ('reload', 'empty_reload'))
         val = a if a == b else f'empty ? {b} : {a}'
         out += [f'      if variant == {v} {{', f'        return {val};', '      }'] if v else [f'      return {val};']
     return out
@@ -281,10 +337,25 @@ FALLBACK_ABOVE, MAX_SPEED, FIRE_BUFFER = 1.15, 8.0, 6.0 / 30.0
 rep = []; missing = []
 for owner in owners:
     r = byid[owner]['reload']; take = 'A' if r['weight'] == 'light' else 'B'
-    d = manifest.path(r.get('clips', 'rreload_clips')); worst = 0.0
+    if not r.get('slots'):
+        # fallback only: the gun's two-handed top-magazine clip (opening to hold start, hidden to hold end, settled at its
+        # hand-back, 6 frames before the end, as the state ends) against its fallback
+        g = byid[owner]; fb = r['fallback']['layout']
+        files = [rreload.fallback_files(g, body, side)[0] for body in manifest.bodies() for side in ('right', 'left')]
+        st = settle(owner, files, fb['length']) / fps; hs = fb['hide_start'] / fps; he = fb['hide_end'] / fps
+        fneed = hs / FALLBACK_ABOVE + (he - hs) / MAX_SPEED + (st - he) - FIRE_BUFFER
+        tm = g.get('topmag') or {}
+        if tm.get('enabled'):
+            f = tm['frames']; ths, the, tst = f['hold_start'] / fps, f['hold_end'] / fps, (f['length'] - 6) / fps
+            need = ths / FALLBACK_ABOVE + (the - ths) / MAX_SPEED + (tst - the)
+            rep.append(f'{owner:12s} two-handed clip: shortest reload state {need:.2f} s, below it the fallback (shortest {fneed:.2f} s)')
+        else:
+            rep.append(f'{owner:12s} no two-handed clip ships (topmag disabled): the fallback always (shortest {fneed:.2f} s)')
+        continue
+    d = manifest.path(rreload.played(r)[0]); worst = 0.0
     for v in (0, 1, 2):
         for clip in ('reload', 'empty_reload'):
-            lay = r['layout'][r['slots'][v] + take][clip]
+            lay = rreload.played(r)[1][r['slots'][v] + take][clip]
             files = [rreload.clip_file(d, body, owner, side, r['slots'][v], take, clip) for body in manifest.bodies() for side in ('right', 'left')]
             st = settle(owner, files, lay['length']) / fps; hs = lay['hide_start'] / fps; he = lay['hide_end'] / fps
             # ClipRate <= FALLBACK_ABOVE  <=>  hidden >= hs / FALLBACK_ABOVE + (he - hs) / MAX_SPEED

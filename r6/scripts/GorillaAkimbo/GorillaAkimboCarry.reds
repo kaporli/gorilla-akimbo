@@ -31,9 +31,11 @@ public abstract class GorillaAkimboCarry {
     return false;
   }
 
-  // A grip weapon held alone in the right hand while a body is carried.
+  // A grip weapon held alone in the right hand while a body is carried, in driver combat, or after the left gun key put the left gun away
+  // (GorillaAkimboToggle.reds).
   public static func OneHanded(owner: ref<GameObject>, item: ItemID) -> Bool {
-    if !IsDefined(owner) || !IsGripWeaponType(RPGManager.GetItemType(item)) || !GorillaAkimboCarry.Carrying(owner) {
+    if !IsDefined(owner) || !IsGripWeaponType(RPGManager.GetItemType(item))
+      || !(GorillaAkimboCarry.Carrying(owner) || GorillaAkimboVehicle.Active(owner) || GorillaAkimboToggle.Holds(owner, item)) {
       return false;
     }
     let ts = GameInstance.GetTransactionSystem(owner.GetGame());

@@ -1,0 +1,193 @@
+"""Quick-drop fallback reload (owner decision 2026-11-14): the clip the script plays instead of a gun's picked reload
+when that reload would have to be sped up more than the threshold to fit the game's reload time. The gun drops
+straight down out of the first-person view onto the hip station, the magazine change (or the shells) happens out of
+view, and it comes back up into the idle. After flick.py's plain drop (_02, 12 frames down), rebuilt per gun, body
+and hand on the gun's own dual-wield idle, on the production engines: target timeline (rlib2 moves, the rifle motion
+profiles), the gun as a mass on it (inertia.spring, take A or B as the gun's picks), so the drop overshoots and the
+rise settles instead of floating.
+
+Played in the dual-wield graph's shell-loop entry slot `reload_start` (Start To Loop), whatever the gun's real reload
+kind; see WIRING-NOTES.md. One clip serves reload and empty reload.
+
+Per clip: <OUT>/fallback/<body>/<gun>_<side>_FB_reload.glb (+ .json spec, _track.json, _gate.json) and
+<gun>_<side>_FBloop_reload.glb (the idle held, the slot `reload_loop` the graph plays after reload_start);
+<OUT>/fallback/layout_fallback.json (the window all hands and bodies share), gates in <OUT>/fallback/gates.md.
+
+usage: fallback.py build (--set smg|rifle | --guns a,b) [--sides ..] [--bodies ..]
+       fallback.py layout (--set smg|rifle | --guns a,b)
+--set names the gun set of the run (SMG_GUNS or RIFLE_GUNS); --guns takes a gun of either set; one of them is required.
+"""
+import os, sys, json
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import renv, common
+import numpy as np
+import author, prod, rgate, timing, magtrack2, rarmset
+import inertia_r1 as inertia      # the spring model (spring, report, END); inertia.py is the round 4 simulation
+import tube1, tubeprod
+from rlib import K
+from glb import Glb
+
+OUT = renv.OUT + '/fallback'
+CLIP = 'fallback'
+SMG_GUNS = {'senkoh': 'A', 'pulsar': 'A', 'warden': 'B', 'saratoga': 'A', 'crusher': 'A', 'pozhar': 'A', 'dian': 'A', 'zhuo': 'B',
+        'carnage': 'A', 'tactician': 'A', 'palica': 'A', 'igla': 'A', 'satara': 'B', 'testera': 'B',
+        'shingen': 'A', 'borg': 'A'}      # top-magazine guns (2026-11-15): one-handed fallback for reloads too short for the two-handed clip
+RIFLE_GUNS = {'ajax': 'A', 'copperhead': 'A', 'sidewinder': 'A', 'masamune': 'B', 'hercules': 'B'}      # rifle fallback (tools_fallback copy)
+SETS = {'smg': SMG_GUNS, 'rifle': RIFLE_GUNS}
+TAKES = dict(SMG_GUNS, **RIFLE_GUNS)
+TUBES = ('carnage', 'tactician')
+BREAKS = ('palica', 'igla', 'satara', 'testera')      # break-open: no magazine track (shells by the script)
+SHELLS = TUBES + BREAKS
+SIDES = ('right', 'left'); BODIES = ('pma', 'pwa')
+# frames: hold, drop to the hip station (12 frames, flick.py's plain drop), held out of view, rise into the idle, settle
+B = {'drop0': 2, 'down': 14, 'rise0': 25, 'via': 33, 'home': 36, 'frames': 52}
+# the rise's via point (offset m, angles deg): long stocks (Dian 37 cm behind the grip, Carnage) came within 14 to 17.5 cm
+# of the eye on the rise with the muzzle 8 deg down: Carnage rises further forward, muzzle level; Dian lower, further out, muzzle 6 deg up
+VIA = {'_': ((0.02, -0.07, -0.04), (-8, 0, -2)), 'dian': ((0.05, -0.09, -0.03), (6, 0, 0)), 'carnage': ((0.02, -0.07, -0.07), (0, 0, -2))}
+# the hip station (offset from the hips, m) where the default's comes too near the eye: the Borg's long rear passed
+# 18.6 cm from the eye at f10 of the drop (pwa right, idle 20.1): further out, lower, further forward
+HIP = {'borg': (0.33, 0.15, -0.10)}
+SEAT_CLIP = {'senkoh': 'SG08A', 'pulsar': 'SB43A', 'warden': 'ST38B', 'saratoga': 'SF13A', 'crusher': 'SF13A', 'pozhar': 'SF13A', 'dian': 'SF13A', 'zhuo': 'SF13B', 'ajax': 'F02A', 'copperhead': 'F02A', 'sidewinder': 'F02A', 'masamune': 'M11B', 'hercules': 'H13B'}
+
+
+def seat(gid):
+    """The magazine mesh seated in gun axes: the last row of a production track (all picks end seated); guns without
+    production picks (Shingen, Borg): the seat of the gun's own reload animation (magtrack2.vanilla, the same matrix)."""
+    if gid not in SEAT_CLIP:
+        return np.array(magtrack2.vanilla(gid, 'reload')['seat'])
+    f = f'{renv.OUT}/clips/pma/{gid}_right_{SEAT_CLIP[gid]}_empty_reload_track.json'
+    if not os.path.exists(f): f = f.replace('_empty_reload_track', '_reload_track')      # Hercules: one clip serves both
+    tr = json.load(open(f))
+    return np.array(tr['frames'][-1]['m']).reshape(4, 4)
+
+
+def setup(gid):
+    """Timing table and magazine data the tools expect (Ctx, rgate) for this clip: the hidden swap at mid hold."""
+    mid = (B['down'] + B['rise0']) // 2
+    T = {'gun': gid, 'clip': CLIP, 'frames': B['frames'], 'out': B['frames'], 'clear': None, 'far': None, 'near': mid, 'seated': mid,
+         'exit_dir': [0, 1, 0], 'exit_speed_cm_f': 0, 'in_dir': [0, 1, 0], 'slot': [0, 0, 0], 'parts': {}, 'handle': None, 'budget': B, '_fallback': True}
+    timing._cache[(gid, CLIP)] = T
+    if gid in TUBES:
+        tubeprod.use_gun(gid); M = tube1.CH; cen = tube1.SC
+    elif gid in BREAKS:
+        M = np.eye(4); cen = np.zeros(3)
+    else:
+        M = seat(gid); cen = np.zeros(3)
+    magtrack2._van[(gid, CLIP)] = {'M': [M], 'seat': M, 'centre': cen, 'exit': np.array([0, 1.0, 0]), 'enter': np.array([0, -1.0, 0]), 'dist': np.zeros(2), 'out': 0, 'seated': 1}
+    return T, M
+
+
+def hip(c, gid):
+    """The hip station (prod.Ctx.station), with the gun's own offset from HIP."""
+    if gid not in HIP: return c.station('hip')
+    keep = prod.STATION['hip']; prod.STATION['hip'] = (HIP[gid], keep[1])
+    try: return c.station('hip')
+    finally: prod.STATION['hip'] = keep
+
+
+def name(gid, side, loop=False): return f'{gid}_{side}_FB{"loop" if loop else ""}_reload'
+
+
+def build(gid, side, body, quiet=False):
+    T, M = setup(gid); take = TAKES[gid]; S = side.capitalize(); O = 'Left' if S == 'Right' else 'Right'
+    d = f'{OUT}/{body}'; os.makedirs(d, exist_ok=True); nm = name(gid, side)
+    P = dict(prod.TAKES[take], drag=0.0, lag=0)
+    c = prod.Ctx(gid, body, CLIP, P, S); c.side = S; tl = tube1.TL(c, 0, 0.0)
+    hp, hr = hip(c, gid)
+    tl.hold(B['drop0']); tl.to(B['down'], hp, hr, 'drive', antic=P['a']); tl.mark('down', B['down'])
+    tl.hold(B['rise0']); tl.mark('rise', B['rise0'])
+    vp, vr = VIA.get(gid, VIA['_'])
+    tl.to(B['via'], vp, vr, 'rise'); tl.to(B['home'], (0, 0, 0), (0, 0, 0), 'settle')
+    tl.kick(B['home'], (0.003, 0.008 * P['k'], -0.008), (-1.5, 0, 0), release=3.0); tl.mark('hit', B['home'])
+    tube1.settle(c, tl, B['home'])
+    Pt, Rt = tl.P.copy(), tl.R.copy(); Pt[-1] = 0; Rt[-1] = 0; Ps, Rs = inertia.spring(Pt, Rt, take); rep = inertia.report(Ps, Rs, Pt, Rt, tl.stops)
+    if S == 'Left': Ps = Ps * prod.MIR_P; Rs = Rs * prod.MIR_R
+    keys = [K(f, Ps[f], Rs[f]) for f in range(c.N)]; keys[0] = K(0); keys[-1] = K(c.N - 1)
+    spec = {'_draft': nm, '_name': 'quick-drop fallback', '_doc': __doc__.split('\n\n')[0], '_gun': gid, '_left_gun': gid, '_body': body, '_side': S,
+            '_gun_clip': CLIP, '_serves': ['reload_start'], '_pick': 'FB', '_take': take, '_timing': T, '_params': {k: v for k, v in c.P.items()}, '_marks': tl.marks,
+            '_two_arm': False, '_round': 'fallback', 'src': c.rest, 'template': 'idle', 'clip': 'reload_draft', 'frames': c.N,
+            'keys': {S: keys, O: [K(0)]}, 'shakes': {S: []}, 'reach': [0.93, 0.985], 'twist_share': 0.6, 'pole_tilt': prod.POLE_TILT, 'out': f'{d}/{nm}.glb', '_inertia': rep}
+    author.build(spec, spec['out'])
+    tube_ = gid in SHELLS
+    # magazine seated with the gun throughout (swapped out of view); tube guns: no magazine
+    track = {'frames': [{'m': [round(float(x), 6) for x in M.ravel()], 's': 0.0 if tube_ else 1.0, 'state': 'seated'}] * c.N, 'release': c.N, 'free_from': c.N, 'gone': c.N,
+             'exit_gun_axes': [0, 1, 0], 'enter_gun_axes': [0, -1, 0], 'plan': {'mode': 'none'}, 'clip': CLIP}
+    spec['_track'] = f'{d}/{nm}_track.json'; json.dump(track, open(spec['_track'], 'w'))
+    find0 = common.find
+    if find0('weapon_meshes', common.gun(gid)['mesh'] + '__mag_std_01.glb') is None:
+        # no shell mesh in the game files (Igla, Testera): rgate's hidden dummy track loads the Satara's, as breakprod
+        sat = common.gun('satara')['mesh'] + '__mag_std_01.glb'
+        common.find = lambda k, nm: find0(k, sat) if nm.endswith('__mag_std_01.glb') else find0(k, nm)
+    try:
+        o = rgate.gate(spec, track)
+    finally:
+        common.find = find0
+    o['elbow_step_deg'] = tubeprod.prod_elbow(spec)
+    if o['elbow_step_deg'] > 45: o['fails'].append(f"elbow swings {o['elbow_step_deg']} deg in one frame")
+    o['end_transition'] = et = tubeprod.end_transition(spec)
+    if et['last3_step_cm'] > 0.5 or et['last_vs_idle_cm'] > 0.02 or et['last_vs_idle_deg'] > 0.02: o['fails'].append(f'end transition {et}')
+    o['inertia'] = rep; kn = rarmset.good_keys(c.N); o['layout']['keys'] = kn; tubeprod.pad(spec['out'], 'reload_draft', kn); spec['_keys'] = kn
+    json.dump(spec, open(f'{d}/{nm}.json', 'w'), indent=1); json.dump(o, open(f'{d}/{nm}_gate.json', 'w'), indent=1)
+    loop(spec, gid, side, d)
+    if not quiet:
+        print(body, side, nm, '| fails', o['fails'], '| eye', o['eye_cm'], 'cover', o['cover_peak'], 'reach', o['reach'], 'sh', o['shoulder_pull_cm'], 'wrist', o['wrist'][0], o['wrist_view'],
+              'body', o['body_cm'], 'gap', o['guns_gap_cm'], 'hide', o['layout']['hide_start'], o['layout']['hide_end'], 'peak', o['motion']['peak_speed'], flush=True)
+    return spec, o
+
+
+def loop(spec, gid, side, d, n=10):
+    """`reload_loop`: the clip's last frame (the idle) held n keys; the graph loops it after reload_start ends."""
+    g = Glb(spec['out']); a = g.anim(spec['clip']); done = {}
+    for ch in a['channels']:
+        s = a['samplers'][ch['sampler']]
+        if id(s) in done: continue
+        v = np.asarray(g.acc(s['output']), float); v = v.reshape(len(v), -1)[-1:]
+        kind = {1: 'SCALAR', 3: 'VEC3', 4: 'VEC4'}[v.shape[1]]
+        s['input'] = g.add_acc(np.arange(n) / 30.0, 'SCALAR'); s['output'] = g.add_acc(np.repeat(v, n, 0) if v.shape[1] > 1 else np.repeat(v[:, 0], n), kind); done[id(s)] = 1
+    out = f'{d}/{name(gid, side, True)}.glb'; g.save(out)
+    json.dump({'frames': n, '_keys': n, '_doc': 'idle held (reload_loop after the quick-drop fallback)', 'src': spec['out']}, open(out[:-4] + '.json', 'w'), indent=1)
+
+
+def gun_list(argv):
+    """The guns of this run: --guns, else every gun of --set. One of the two is required (the set is not guessed from the output folder)."""
+    guns, st = common.opt(argv, '--guns'), common.opt(argv, '--set')
+    if guns: return guns.split(',')
+    if st in SETS: return list(SETS[st])
+    raise SystemExit('fallback.py: give --set smg|rifle or --guns a,b')
+
+
+def layout(GUNS):
+    """Per gun the window all hands and bodies share (latest start, earliest end), the swap frame and the shell loads."""
+    rows = ['| gun | body | side | hidden | eye cm | cover % | wrist / in view | reach | shoulder cm | body cm | gap cm | end step | peak cm/f | fails |', '|' + '---|' * 14]
+    L = {}
+    for gid in GUNS:
+        hs, he = [], []; per = {}
+        for body in BODIES:
+            for side in SIDES:
+                f = f'{OUT}/{body}/{name(gid, side)}_gate.json'
+                if not os.path.exists(f): continue
+                o = json.load(open(f)); l = o['layout']; hs.append(l['hide_start']); he.append(l['hide_end']); per[f'{body}_{side}'] = [l['hide_start'], l['hide_end']]
+                et = o['end_transition']
+                rows.append(f"| {gid} | {body} | {side} | f{l['hide_start']}-{l['hide_end']} ({o['hidden_frames']}) | {o['eye_cm'][0]} | {o['cover_peak'][0]} | {o['wrist'][0]} / {o['wrist_view']} | "
+                            f"{o['reach'][0]} | {o['shoulder_pull_cm']} | {o['body_cm'][0]} | {o['guns_gap_cm'][0]} | {et['last3_step_cm']} | {o['motion']['peak_speed']} | {'; '.join(o['fails']) or 'pass'} |")
+        if not hs or None in hs: continue
+        s, e = max(hs), min(he); mid = (s + e) // 2
+        L[gid] = {'hide_start': s, 'hide_end': e, 'mag_out': s, 'seated': mid, 'length': B['frames'], 'handle': None, 'keys': rarmset.good_keys(B['frames']),
+                  'loads': [mid] if gid in SHELLS else None, 'empty_loads': [mid - 1, mid + 1] if gid in SHELLS else None, 'swap': mid, 'per_clip': per}
+    json.dump(L, open(f'{OUT}/layout_fallback.json', 'w'), indent=1)
+    open(f'{OUT}/gates.md', 'w').write('# Quick-drop fallback gate\n\n' + '\n'.join(rows) + '\n')
+    print(json.dumps({g: (v['hide_start'], v['hide_end']) for g, v in L.items()}))
+
+
+if __name__ == '__main__':
+    argv = sys.argv[1:]; o = lambda n: common.opt(argv, n); cs = lambda v: v.split(',') if v else None
+    cmd = argv[0] if argv else 'build'
+    if cmd == 'build':
+        fails = 0
+        for gid in gun_list(argv):
+            for body in cs(o('--bodies')) or BODIES:
+                for side in cs(o('--sides')) or SIDES:
+                    _, r = build(gid, side, body); fails += bool(r['fails'])
+        print('clips with fails:', fails)
+    elif cmd == 'layout': layout(gun_list(argv))
+    else: raise SystemExit(__doc__)

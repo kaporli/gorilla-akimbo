@@ -42,6 +42,26 @@ def render(spec_path, res=(640, 360)):
     return d
 
 
+def stance_frames(spec_path, stance, low_glb, frames, out_dir, res=(640, 360)):
+    """First-person renders of a reload clip in a stance with the game's camera (checks.draft.r9: the rig's camera joint,
+    the game's fov): what the graph plays, raised = the clip, lowered = blended in from friendly_idlepose (checks/visibility.py).
+    Returns {frame: png}."""
+    sys.path.insert(0, os.path.join(common.HERE, 'checks'))
+    import visibility as V
+    spec = json.load(open(spec_path)); s = spec['_side'].lower(); o = 'left' if s == 'right' else 'right'; os.makedirs(out_dir, exist_ok=True)
+    r, L = V.poses(spec['out'], spec['clip'], low_glb, s, stance)
+    glb = f'{out_dir}/{stance}_seq.glb'; V.R.write_full(r, spec['out'], {'seq': L}, glb)
+    cfg = {'clip_glb': glb, 'clip': 'seq', 'frames': list(frames), 'out': f'{out_dir}/{stance}', 'body': spec['_body'], 'view': 'fpp', 'res': list(res),
+           'right_gun': spec['_gun'], 'left_gun': spec['_gun'], 'right_parts': parts(spec['_gun']), 'left_parts': parts(spec['_gun']),
+           f'{s}_mag_clip': spec['_gun_clip'], f'{o}_mag_clip': None, 'one_mag': True, 'mag_time': True, 'bg': [0.33, 0.36, 0.40],
+           f'{s}_parts_anim': True, f'{s}_mag_track': spec['_track'], 'eye': [float(x) for x in V.camera(spec['_body'])[0]],
+           'fov': V.CFG['camera']['hfov_169'], 'pitch': 0}
+    p = f'{out_dir}/{stance}_cfg.json'; json.dump(cfg, open(p, 'w'))
+    log = subprocess.run([common.need(common.path('blender')), '-b', '--factory-startup', '--python', SCENE, '--', p], capture_output=True, text=True, errors='replace').stdout
+    if 'DONE' not in log: raise SystemExit(f'scene.py failed for {p}: ' + ' | '.join(log.splitlines()[-15:]))
+    return {f: f'{out_dir}/{stance}_{f:03d}.png' for f in frames}
+
+
 def phase(spec, gate, f):
     L = gate['layout']; mg = spec['_mag']; hit = L['handle']; lat = spec['_marks'].get('latch')
     if lat is not None and lat - 3 <= f <= lat + 3: return 'latch opens'

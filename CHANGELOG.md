@@ -1,5 +1,46 @@
 # Changelog
 
+## 5.0.0 (2026-11-27)
+
+New
+- Reloads made for the lowered and the raised stance. A reload that starts with the guns lowered (safe zone) now plays a version that starts and ends in the lowered stance, so the guns no longer rise to the raised pose and drift back down afterwards. A reload that starts raised plays the raised version.
+- Discard-visible reloads: the gun comes up into view for the magazine drop and goes down again, in both stances, for male and female V, either hand. Warden (all three picks), Senkoh, Pulsar, Saratoga and Pozhar (two picks each), and Dian, Zhuo, Crusher, Copperhead and Sidewinder (one pick each).
+- Lowered-only reloads that never leave the lowered pose: Pulsar, Zhuo, Ajax and Copperhead (one pick each), Sidewinder (two picks) and Hercules (all three).
+- The shotguns Tactician, Igla, Palica, Testera and Satara get their own reloads, with the pump, barrels and shells moving as they should, for male and female V. Shell by shell, each shell goes in when the game's own pass would. Carnage keeps the one-handed quick drop.
+- Cocking handles, slides and levers: on 12 guns (Pulsar, Saratoga, Warden, Dian, Zhuo, Crusher, Pozhar, Ajax, Copperhead, Masamune, Sidewinder, Hercules) these move only while the gun is out of view, and end in their normal position. Before, they could move on their own while the gun was in view.
+- Driver combat: with Gorilla Arms, V can shoot any ranged firearm from a car or bike, one gun at a time. A pair keeps its right gun and the left one comes back after leaving the vehicle. New setting, on by default.
+- Left gun key: F2 (LB + Select on a controller) puts the left gun away and draws it again, keeping the right gun, held one-handed. Input hint on screen, new setting, on by default.
+- Per-gun perks: weapon-type perks apply to each gun by its own type, whatever hand it is in (31 perks). With an assault rifle in one hand and a pistol in the other, each gun gets the perks of its own type. Salt in the Wound counts only the hits and misses of the matching guns. Mind Over Matter and the other recoil perks apply per hand.
+- Shingen and Midnight Borg: when the reload is too short for the two-handed animation (high Body with reload speed scaling), they play the one-handed quick drop instead.
+- Shingen, Midnight Borg, Warden, Dian and Carnage are held lower, at the hip, in the raised stance, like the bulky rifles.
+
+Changed
+- Lowered stance: Carnage, Zhuo, Igla, Testera, Satara and double-barrel shotguns in general hold low ready instead of high port. The Tactician holds deep low ready. Small position changes for the Saratoga, Warden, Dian, Pozhar, Palica and Copperhead.
+- Reload timing: the gun plays at the same speed as the arms, so a part that is hidden stays hidden until the hands come back up.
+- A reload that ended lowered no longer makes the first shot wait for the raise; the guns fire when the reload ends, as raised.
+- Reload sounds of the Shingen, Midnight Borg and the five shotguns follow their clips.
+- Input hints show "Put away left gun" or "Draw left gun".
+
+Fixed
+- Rifle reloads: the gun could still be out of view when the hands rose, then snapped in.
+- Salt in the Wound lost its streak when the other gun missed.
+
+Settings
+- New: Guns in driver combat (category Vehicles, on by default).
+- New: Left gun key (category Left gun key, on by default).
+
+Key bindings
+- New: Put away / draw left gun (F2, LB + Select), in Key Bindings with Unified Keybinds.
+
+Compatibility
+- Same requirements as 4.3.0. The per-gun perks change the vanilla records of the weapon perks through TweakXL; another mod that changes the same perk records can override them.
+
+Known issues
+- A long gun in the right hand with a handgun in the left hand has different recoil from other pairs.
+- Sidewinder and Copperhead settle abruptly or slowly into the lowered pose after some reloads.
+- Shells fly oddly on some shotguns.
+- The Guillotine takes a lot of screen in the raised pose.
+
 ## 4.3.0 (2026-11-15)
 
 - One-handed reloads made for each SMG's magazine, for male and female V, either hand, three picks at random per gun: Senkoh, Pulsar, Saratoga and Guillotine, Warden, Dian, Zhuo, Crusher and Pozhar. The magazine has its own animation in each. A reload too short for its pick (high Body with reload speed scaling) plays a quick drop instead, so no animation is sped up.

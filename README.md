@@ -34,23 +34,24 @@ The **Double Trouble** perk only pairs Power pistols and revolvers. With it, Tec
 
   ![The Body scaling settings and the Body Attuned block on the Gorilla Arms tooltip](screenshots/body-scaling.png)
 
-- **One-handed reload animations**, for male and female V. The gun tips up while its magazine drops, goes down out of view, and rises once its ammo is in. Shell-fed shotguns go straight down.
+- **One-handed reload animations**, for male and female V. The gun tips up while its magazine drops, goes down out of view, and rises once its ammo is in. Shell-fed shotguns go straight down; the Tactician, Igla, Palica, Testera and Satara have their own reloads.
 - **SMG reloads made for each SMG's magazine**, three picks per gun, for the Senkoh, Pulsar, Saratoga, Guillotine, Warden, Dian, Zhuo, Crusher and Pozhar, each with its own magazine animation.
 - **Assault rifle reloads made for each rifle's magazine**, three picks per rifle: front-magazine rifles throw the magazine out, shove it out forward or leave it behind and are driven onto a fresh one at the belt, the Masamune throws its magazine out with a nod or a corkscrew roll, or heaves the rifle off it, the Hercules pops its latch and throws or drops the cassette. The magazine has its own animation in each.
 
   ![Rifle reloads: Copperhead, Masamune, Hercules, Ajax](research/showcase/rifle-reloads.gif)
 
-- **Bulky rifles held at the hip** (Masamune, Hercules, Copperhead, Umbra, Sidewinder, Divided We Stand), so a pair doesn't fill the view. Aiming and shots are unchanged.
+- **Bulky guns held at the hip** (Masamune, Hercules, Copperhead, Umbra, Sidewinder, Divided We Stand, Shingen, Midnight Borg, Warden, Dian, Carnage), so a pair doesn't fill the view. Aiming and shots are unchanged.
 - **Every pistol and revolver**: Tech and Smart pistols and Tech revolvers pair with Double Trouble alone, with the Lexington's and the Nova's dual-wield animations.
 
   ![Kenshin and Yukimura pairs](research/showcase/pistol-pairs.gif)
 
 - **Independent reloads.** Only the gun that needs ammo goes down; the other can keep firing.
+- **Reloads for each stance.** A reload that starts lowered starts and ends lowered; the guns rise only where the magazine drop needs to be seen.
 - **Reload timing calculated from each gun's stats**, including perks and weapon mods, so mixed pairs work.
 - **Shell-by-shell reloads like vanilla.** Shells load one at a time; firing mid-reload keeps them.
 - **Each gun's own reload sounds**, for both guns.
 - **Ammo counter fix:** with two long guns, the left gun's count is no longer cut off.
-- **Lowered stance in safe zones**, for male and female V: low ready for SMGs, short shotguns and assault rifles, high port for long shotguns, each hand by its own gun. Firing raises the guns; they lower again after a while.
+- **Lowered stance in safe zones**, for male and female V: low ready for SMGs, shotguns and assault rifles, deep low ready for the longest guns, each hand by its own gun. Firing raises the guns; they lower again after a while.
 
   ![The game's pistol pose and Gorilla Akimbo's lowered stance, SMGs and long shotguns](research/showcase/compare-lowered.gif)
 
@@ -61,6 +62,10 @@ The **Double Trouble** perk only pairs Power pistols and revolvers. With it, Tec
 - **Carrying a body:** with Gorilla Arms, SMGs, shotguns and assault rifles are held in the right hand while V carries a body, like pistols and revolvers in vanilla, and fire and reload one-handed. The left gun comes back when the body is put down. The mouse wheel switches between these guns during the carry, paired or not. The game's own requirement for shooting while carrying a body still applies.
 
   ![Picking up a body with an SMG pair, then switching to a shotgun and a rifle](research/showcase/carry-body.gif)
+
+- **Driver combat:** with Gorilla Arms, shoot any ranged firearm from a car or bike, one gun at a time. A pair keeps its right gun.
+- **Left gun key:** F2 (LB + Select) puts the left gun away and draws it again.
+- **Per-gun perks:** weapon-type perks apply to each gun by its own type, in either hand.
 
 - **Inventory screen:** a pair of SMGs, shotguns or assault rifles is held in the game's dual-pistol pose, both guns raised. Without it V holds the pair in the one-gun pose and the left gun clips.
 
@@ -107,8 +112,15 @@ Set it up in game with [Mod Settings](https://www.nexusmods.com/cyberpunk2077/mo
 
   ![The shell reload setting](screenshots/setting-shell-reload.png)
 
+- **Guns in driver combat:** shoot any ranged firearm from a car or bike with Gorilla Arms.
+- **Left gun key:** turns the put away / draw left gun key on or off. The key is set in Key Bindings with Unified Keybinds.
+
 ## Limitations
 
+- A long gun in the right hand with a handgun in the left hand has different recoil from other pairs.
+- Sidewinder and Copperhead settle abruptly or slowly into the lowered pose after some reloads.
+- Shells fly oddly on some shotguns.
+- The Guillotine takes a lot of screen in the raised pose.
 - Without independent firing, only the right gun's reload can be cut short by firing, unless the right gun is empty. Vanilla pistols work the same way.
 - Long shotguns (Zhuo, Tactician) swing toward the middle of the screen during the reload.
 - Photo mode poses hold a single gun.
@@ -120,7 +132,7 @@ Set it up in game with [Mod Settings](https://www.nexusmods.com/cyberpunk2077/mo
 - Cyberpunk 2077 **2.5**
 - [RED4ext](https://www.nexusmods.com/cyberpunk2077/mods/2380), [redscript](https://www.nexusmods.com/cyberpunk2077/mods/1511), [TweakXL](https://www.nexusmods.com/cyberpunk2077/mods/4197), [Codeware](https://www.nexusmods.com/cyberpunk2077/mods/7780), [ArchiveXL](https://www.nexusmods.com/cyberpunk2077/mods/4198)
 - [Mod Settings](https://www.nexusmods.com/cyberpunk2077/mods/4885) for the settings (without it, the defaults apply)
-- [Input Loader](https://www.nexusmods.com/cyberpunk2077/mods/4575) and [Unified Keybinds](https://www.nexusmods.com/cyberpunk2077/mods/37156) for independent firing's aim key
+- [Input Loader](https://www.nexusmods.com/cyberpunk2077/mods/4575) and [Unified Keybinds](https://www.nexusmods.com/cyberpunk2077/mods/37156) for independent firing's aim key and the left gun key
 
 ## Installation
 
@@ -148,8 +160,12 @@ r6/scripts/GorillaAkimbo/GorillaAkimboSettings.reds
 r6/scripts/GorillaAkimbo/GorillaAkimboSmart.reds
 r6/scripts/GorillaAkimbo/GorillaAkimboSounds.reds
 r6/scripts/GorillaAkimbo/GorillaAkimboTopMag.reds
+r6/scripts/GorillaAkimbo/GorillaAkimboPerks.reds
+r6/scripts/GorillaAkimbo/GorillaAkimboToggle.reds
+r6/scripts/GorillaAkimbo/GorillaAkimboVehicle.reds
 r6/scripts/GorillaAkimbo/GorillaAkimboVanilla.reds
 r6/tweaks/GorillaAkimbo/GorillaAkimbo.yaml
+r6/tweaks/GorillaAkimbo/GorillaAkimboPerks.yaml
 ```
 
 *Formerly Gorilla Grip.* Updating by hand from Gorilla Grip: **delete the old** `r6/scripts/GorillaGrip` and `r6/tweaks/GorillaGrip` folders.

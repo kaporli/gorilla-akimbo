@@ -11,6 +11,10 @@ Per gun that owns a model variable and has guns[].reload.slots in weapons.json, 
                 the gun's own magazine set (rmagset.py; rmagset2.py for reload.magazine.builder "rmagset2", the
                 SMG and shotgun tracks where both magazines are in view at once). None for reload.magazine null
                 (shell-by-shell tube guns).
+A gun with reload.fallback and no reload.slots (the top-magazine guns: their two-handed clips are in GorillaAkimbo, see
+topmag) owns only its quick-drop fallback: its arm set is today's set with reload_start and reload_loop added and the
+reload clip (reload_l) carrying the phase events, no per-hand magazine set, the quick magazine set built from the
+fallback's own track (seated).
 Each gun's sets go into reload.archive (default GorillaAkimboRifles), with its .archive.xl (genrxl.py). Clips are
 padded to rarmset.good_keys. Then every built set is exported back and compared with what went in (key counts, SIMD
 buffers, gun path, magazine path, magazine float tracks); report in WORK/rreload/roundtrip.txt.
@@ -30,9 +34,17 @@ EMPTY = ('empty_reload', 'empty_reload_01', 'empty_reload_02')
 TAKE = {'light': 'A', 'heavy': 'B'}
 
 
+ONLY = None      # build.py --guns: the gun ids of this run (every plan below is restricted to them), None = all
+
+
 def owners():
     # A gun whose own reload is parked (reload.parked) plays the generic reload clips: no own sets are built or wired.
-    return [g for g in manifest.guns() if g.get('reload', {}).get('slots') and not g['reload'].get('parked')]
+    return [g for g in manifest.guns() if (g.get('reload', {}).get('slots') or g.get('reload', {}).get('fallback')) and not g['reload'].get('parked') and (ONLY is None or g['id'] in ONLY)]
+
+
+def fallback_only(g):
+    """A gun whose only own clip is the quick-drop fallback (no picks)."""
+    return not g['reload'].get('slots')
 
 
 def archive(g): return g['reload'].get('archive', ARCHIVE)
@@ -41,6 +53,14 @@ def arm_set(body, side, gid): return f'{body}_dual_wield_{side}_rreload_{gid}'
 def mag_set(body, side, gid): return f'{gid}__rmag_{body}_{side}'
 def wrapper(body, side, gid): return f'gorillaakimbo_rmag_{gid}_{body}_{side}'
 def has_magazine(g): return bool(g['reload'].get('magazine'))
+def played(r):
+    """(clip folder key, layout) of the clips the gun plays when it is not lowered: the raised-stance variant clips when the gun has them (reload.raised_variant with a layout), else the shipped clips."""
+    rv = r.get('raised_variant')
+    return (rv['clips'], rv['layout']) if rv and rv.get('layout') else (r.get('clips', 'rreload_clips'), r.get('layout'))      # a fallback-only gun has no layout
+def lowered(g): return g['reload'].get('lowered_variant')      # reload.lowered_variant: clips for the lowered (safe) stance, played through a wrapper on the player
+def low_arm_set(body, side, gid): return f'{body}_dual_wield_{side}_rreload_{gid}_low'
+def low_mag_set(body, side, gid): return f'{gid}__rmagl_{body}_{side}'
+def low_mag_wrapper(body, side, gid): return f'gorillaakimbo_rmagl_{gid}_{body}_{side}'
 def quick_set(gid): return f'{gid}__rmagq'
 def quick_wrapper(gid): return f'gorillaakimbo_rmagq_{gid}'
 FALLBACK = ('reload_start', 'reload_loop')
@@ -119,17 +139,29 @@ def drafted_parts(g):
                     b = clip_file(d, body, g['id'], side, pick, take, clip, '.json')[:-5]
                     out += [p for p in (b + '_objects.json', b + '_phys.json') if os.path.exists(p)]
     return sorted(set(out))
+def base_reload(g, body, side):
+    """A fallback-only gun's reload clip: today's set's own (from its built glb, `<glb>#<animation>`) and its key count;
+    it is imported again only to carry the phase events."""
+    base = today_set(body, side, g); suf = '' if side == 'right' else '_l'
+    glb = f"{manifest.path('work')}{'/test' if manifest.with_test() else ''}/tmp_reload/{base}/{base}.glb"
+    n = 0
+    if os.path.exists(glb):
+        from glb import Glb
+        G = Glb(glb); n = max(G.j['accessors'][x['input']]['count'] for x in G.anim('reload' + suf)['samplers'])
+    return f'{glb}#reload{suf}', rarmset.good_keys(n) if n else 0
 
 
 def plan():
     """[(gun, body, side, arm set name, magazine set name or None, [(clip name, clip glb, track json, keys)])]"""
     out = []
     for g in owners():
-        r = g['reload']; take = TAKE[r['weight']]; d = manifest.path(r.get('clips', 'rreload_clips'))
+        r = g['reload']; take = TAKE[r['weight']]; d = manifest.path(played(r)[0])      # the clips that play when the weapon is not lowered
         for body in manifest.bodies():
             for side in ('right', 'left'):
                 items = []
-                for names, clip in ((SLOTS, 'reload'), (EMPTY, 'empty_reload')):
+                if fallback_only(g):
+                    p, k = base_reload(g, body, side); items.append(('reload', p, None, k))
+                for names, clip in (() if fallback_only(g) else ((SLOTS, 'reload'), (EMPTY, 'empty_reload'))):
                     for name, pick in zip(names, r['slots']):
                         glb = clip_file(d, body, g['id'], side, pick, take, clip); tr = glb[:-4] + '_track.json'
                         n = json.load(open(glb[:-4] + '.json'))['frames'] if os.path.exists(glb[:-4] + '.json') else 0
@@ -139,8 +171,71 @@ def plan():
                     for name, glb in zip(FALLBACK, fallback_files(g, body, side)):
                         n = json.load(open(glb[:-4] + '.json'))['frames'] if os.path.exists(glb[:-4] + '.json') else 0
                         items.append((name, glb, None, rarmset.good_keys(n) if n else 0))
-                out.append((g, body, side, arm_set(body, side, g['id']), mag_set(body, side, g['id']) if has_magazine(g) else None, items))
+                mname = mag_set(body, side, g['id']) if has_magazine(g) and not fallback_only(g) else None
+                out.append((g, body, side, arm_set(body, side, g['id']), mname, items))
     return out
+
+
+def low_plan():
+    """Like plan(), for the lowered-stance variants (reload.lowered_variant): the arm set and the magazine set built from the variant clips (the same three slots)."""
+    out = []
+    for g in owners():
+        lv = lowered(g)
+        if not lv: continue
+        r = g['reload']; take = TAKE[r['weight']]; d = manifest.path(lv['clips'])
+        for body in manifest.bodies():
+            for side in ('right', 'left'):
+                items = []
+                for names, clip in ((SLOTS, 'reload'), (EMPTY, 'empty_reload')):
+                    for name, pick in zip(names, r['slots']):
+                        glb = clip_file(d, body, g['id'], side, pick, take, clip); tr = glb[:-4] + '_track.json'
+                        n = json.load(open(glb[:-4] + '.json'))['frames'] if os.path.exists(glb[:-4] + '.json') else 0
+                        items.append((name, glb, tr, rarmset.good_keys(n) if n else 0))
+                out.append((g, body, side, low_arm_set(body, side, g['id']), low_mag_set(body, side, g['id']) if has_magazine(g) else None, items))
+    return out
+
+
+def handle_set(body, side, gid, low=False): return f'{gid}__rhandle{"l" if low else ""}_{body}_{side}'
+
+
+def has_handle(g):
+    """The gun's weapon set has a handle joint that moves in a reload slot (hfix): its handle part set is built (rule H1, hpartset.py)."""
+    # checks.rreload.handle_sets false: off for every gun except one that opts in with reload.handle_set (the bodies to build, e.g. ["pma"]);
+    # the sets go through the weapon set import path (build.import_weapon_set, wsetimport.py)
+    if not manifest.load()['checks']['rreload'].get('handle_sets', True) and not g['reload'].get('handle_set'): return False
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), 'authoring', 'checks'))
+    import hfix
+    return not has_parts(g) and any(hfix.handle_glb(g['id'], s) for s in EMPTY[:1] + SLOTS[:1])      # the tube guns have their own part sets (rpartset)
+
+
+def handle_plan():
+    """[(gun, body, side, handle set name, lowered, [(clip name, clip stem, keys)])]: per arm set that has a magazine set (the handle set rides the same wrapper), the weapon set's handle
+    joints played inside each clip's hidden window (hpartset.py), same slots and key counts as the arm set."""
+    out = []; sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), 'authoring', 'checks'))
+    import hfix
+    for low, pl in ((False, plan()), (True, low_plan())):
+        for g, body, side, an, mn, items in pl:
+            if not mn or not has_handle(g): continue
+            if g['reload'].get('handle_set') and body not in g['reload']['handle_set']: continue
+            have = hfix.slots_of(hfix.handle_glb(g['id'], 'empty_reload'))      # the vanilla set has no clip for some slots (no handle motion there to move)
+            # only slots in which a handle joint moves: the other slots stay the game's clip (no clip of that name in the set)
+            rows = [(n, p[:-4], k) for n, p, t, k in items if n in SLOTS + EMPTY and n in have and k and os.path.exists(p[:-4] + '_gate.json') and hfix.curves(g['id'], n)]
+            if rows: out.append((g, body, side, handle_set(body, side, g['id'], low), low, rows))
+    return out
+
+
+def archive_names(a):
+    """Names of the sets packed into archive a, for the guns of this run."""
+    names = [n for g, _, _, an, mn, _ in plan() + low_plan() if archive(g) == a for n in (an, mn) if n] + [q for g, q in quick_plan() if archive(g) == a]
+    names += [n for x in parts_plan() if archive(x[0]) == a for n in (x[3] if ships_barrels(x[0]) else None, x[4]) if n]
+    names += [n for x in quick_parts_plan() if archive(x[0]) == a for n in (x[1] if ships_barrels(x[0]) else None, x[2]) if n]
+    names += [x[3] for x in handle_plan() if archive(x[0]) == a]
+    return names
+
+
+def today_sets():
+    """Names of the per-hand reload sets (the `reload` step's) the guns of this run play."""
+    return {today_set(body, side, g) for g in owners() for body in manifest.bodies() for side in ('right', 'left')}
 
 
 def quick_plan():
@@ -152,7 +247,8 @@ def quick_plan():
 def today_set(body, side, g):
     """The per-hand reload set the gun's model variable gets from genxl.py today."""
     r = g.get('raised') or {}
-    return manifest.raised_reload_set(body, side, r['pose']) if r.get('family', 'none') != 'none' else manifest.reload_set(body, side)
+    import raisedsets   # genxl wires a raised-pose reload set only for a pose with clips (raisedsets.poses)
+    return manifest.raised_reload_set(body, side, r['pose']) if r.get('family', 'none') != 'none' and raisedsets.built(r['pose']) else manifest.reload_set(body, side)
 
 
 def variables():
@@ -193,7 +289,7 @@ def step(B):
 
     def one(g, body, side, aname, mname, items):
         sets = f'{B.SETS}/{archive(g)}'
-        miss = [p for _, p, t, _ in items for p in ((p, t) if mname and t else (p,)) if not os.path.exists(p)]
+        miss = [p for _, p, t, _ in items for p in ((p, t) if mname and t else (p,)) if not os.path.exists(p.split('#')[0])]
         if miss: B.die(f'rreload: missing clip {miss[0]} (authoring/reload/prod.py build, fallback.py build)')
         suf = '' if side == 'right' else '_l'; base = today_set(body, side, g); d = f'{tmp}/{aname}'; os.makedirs(d)
         ph = ['--phases'] if g['reload'].get('fallback') else []
@@ -221,8 +317,11 @@ def step(B):
         wset = B.need(gameglb(gamefile(m['weapon_set'], key))); mesh = manifest.find('weapon_meshes', g['mesh'] + '__mag_std_01.glb')
         cd = manifest.path(r.get('clips', 'rreload_clips')); args = []
         for names, clip in ((SLOTS, 'reload'), (EMPTY, 'empty_reload')):
-            for name, pick in zip(names, r['slots']):
-                tr = json.load(open(clip_file(cd, 'pma', g['id'], 'right', pick, take, clip)[:-4] + '_track.json'))
+            for name, pick in zip(names, r.get('slots') or [None] * 3):
+                if pick is None:      # fallback only: the fallback's own track (seated with the gun throughout)
+                    tr = json.load(open(fallback_files(g, 'pma', 'right')[0][:-4] + '_track.json')); tr = dict(tr, clip=clip)
+                else:
+                    tr = json.load(open(clip_file(cd, 'pma', g['id'], 'right', pick, take, clip)[:-4] + '_track.json'))
                 row = dict(tr['frames'][-1]); row['state'] = 'seated'; row.pop('m2', None); row.pop('s2', None)
                 syn = {'frames': [row] * fb['length'], 'release': fb['swap'] - 1, 'clip': tr['clip']}
                 tp = f'{d}/{name}_track.json'; json.dump(syn, open(tp, 'w')); args.append(f'{tp}={name}:{fb["keys"]}')
@@ -242,30 +341,43 @@ def step(B):
         kp = [n for n, _, _, _ in rows]; sets = f'{B.SETS}/{archive(g)}'
         if ships_barrels(g):
             base = bvan
-            if pr.get('strip_set'):
-                # WolvenKit's import fails into some game sets (Satara base1: "Index was out of range", its own reload
-                # clip too); a copy with only the reload clips imports. The other clips fall through to the game's set.
+            if True:
+                # A copy with only the clips this set overrides (the weapon set import path; also WolvenKit's import fails
+                # into some game sets, Satara base1: "Index was out of range"). The other clips play from the game's set.
                 x = f'{d}/strip'; os.makedirs(x); base = f'{x}/{os.path.basename(bvan)}'; shutil.copyfile(bvan, base)
                 B.wk('convert', 's', base, '-o', x); js = base + '.json'; j = json.load(open(js, encoding='utf-8'))
-                j['Data']['RootChunk']['animations'] = [e for e in j['Data']['RootChunk']['animations'] if e['Data']['animation']['Data']['name']['$value'] in SLOTS + EMPTY]
+                bkp = [e['Data']['animation']['Data']['name']['$value'] for e in j['Data']['RootChunk']['animations'] if e['Data']['animation']['Data']['name']['$value'] in kp]      # a clip the game set lacks is left out (the gun does as in the game)
+                j['Data']['RootChunk']['animations'] = [e for e in j['Data']['RootChunk']['animations'] if e['Data']['animation']['Data']['name']['$value'] in bkp]
                 json.dump(j, open(js, 'w', encoding='utf-8'), indent=1); os.remove(base); B.wk('convert', 'd', js, '-o', x); B.need(base)
-            B.import_set(f'{d}/{bname}.glb', base, kp, f'{sets}/{bname}.anims')
+            B.import_weapon_set(f'{d}/{bname}.glb', base, bvan, bkp, f'{sets}/{bname}.anims', {n: k for n, _, k, _ in rows if n in bkp})
         if sname:
             os.makedirs(f'{tmp}/{sname}'); shutil.move(f'{tmp}/{sname}.glb', f'{tmp}/{sname}/{sname}.glb')
             B.import_set(f'{tmp}/{sname}/{sname}.glb', svan, kp, f'{sets}/{sname}.anims')
 
+    def handles(g, body, side, name, low, rows):
+        # handle part set (hpartset.py): the weapon set's handle joints inside each clip's hidden window, ending in the vanilla state; exits 1 when a handle changes on a visible frame
+        import hfix
+        m = g['reload']['magazine']; key = m.get('gamefiles', 'rreload_gamefiles'); glb = hfix.handle_glb(g['id'], 'empty_reload'); d = f'{tmp}/{name}'; os.makedirs(d)
+        B.py('hpartset.py', glb, f'{d}/{name}.glb', '--gun', g['id'], *[f'{p}={n}:{k}' for n, p, k in rows], '--report', f'{d}/{name}_check.json')
+        depot = m['weapon_set'].rsplit(chr(92), 1)[0] + chr(92) + os.path.basename(glb)[:-len('.glb')]; van = B.need(gamefile(depot, key))
+        # the seed holds only the clips this set overrides; the others play from the game's set
+        seed = f'{d}/seed'; os.makedirs(seed); base = f'{seed}/{name}.anims'; shutil.copyfile(van, base); B.wk('convert', 's', base, '-o', seed)
+        j = json.load(open(base + '.json', encoding='utf-8')); keep = {n for n, _, _ in rows}
+        j['Data']['RootChunk']['animations'] = [e for e in j['Data']['RootChunk']['animations'] if e['Data']['animation']['Data']['name']['$value'] in keep]
+        json.dump(j, open(base + '.json', 'w', encoding='utf-8'), indent=1); os.makedirs(f'{seed}/t'); B.wk('convert', 'd', base + '.json', '-o', f'{seed}/t')
+        B.import_weapon_set(f'{d}/{name}.glb', f'{seed}/t/{name}.anims', van, sorted(keep), f'{B.SETS}/{archive(g)}/{name}.anims', {n: k for n, _, k in rows})
+
     # GA_REUSE_SETS=1: sets already in SETS are kept (a part-set-only rebuild; their round trip is the earlier build's)
     reuse = os.environ.get('GA_REUSE_SETS') == '1'
     have = lambda g, n: reuse and os.path.exists(f'{B.SETS}/{archive(g)}/{n}.anims')
-    B.parallel([lambda a=a: one(*a) for a in plan() if not (have(a[0], a[3]) and (not a[4] or have(a[0], a[4])))]
+    B.parallel([lambda a=a: one(*a) for a in plan() + low_plan() if not (have(a[0], a[3]) and (not a[4] or have(a[0], a[4])))]
                + [lambda a=a: quick(*a) for a in quick_plan() if not have(a[0], a[1])]
+               + [lambda a=a: handles(*a) for a in handle_plan() if not have(a[0], a[3])]
                + [lambda a=a: parts(a[0], a[3], a[4], a[5]) for a in parts_plan()] + [lambda a=a: parts(*a) for a in quick_parts_plan()])
     for a in archives():
         sets = f'{B.SETS}/{a}'
         stage = B.fresh(f'{B.WORK}/pack/{a}'); os.makedirs(stage + '/gorillaakimbo/animations')
-        names = [n for g, _, _, an, mn, _ in plan() if archive(g) == a for n in (an, mn) if n] + [q for g, q in quick_plan() if archive(g) == a]
-        names += [n for x in parts_plan() if archive(x[0]) == a for n in (x[3] if ships_barrels(x[0]) else None, x[4]) if n]
-        names += [n for x in quick_parts_plan() if archive(x[0]) == a for n in (x[1] if ships_barrels(x[0]) else None, x[2]) if n]
+        names = archive_names(a)
         for n in names: shutil.copyfile(B.need(f'{sets}/{n}.anims'), f'{stage}/gorillaakimbo/animations/{n}.anims')
         B.wk('pack', stage, '-o', B.WORK + '/pack'); os.makedirs(B.OUT_ARCHIVE, exist_ok=True)
         shutil.copyfile(B.need(f'{B.WORK}/pack/{a}.archive'), f'{B.OUT_ARCHIVE}/{a}.archive')
@@ -273,7 +385,8 @@ def step(B):
         print(f'{a}.archive.xl:', B.py('genrxl.py', f'{B.OUT_ARCHIVE}/{a}.archive.xl', sets).strip())
     magchecks(B)
     partchecks(B)
-    roundtrip(B)
+    if roundtrip(B):
+        B.die(f'rreload round trip: bad clips, see {B.WORK}/rreload/roundtrip.txt')
 
 
 def partchecks(B):
@@ -305,7 +418,7 @@ def partchecks(B):
 def magchecks(B):
     """rmagset2 check results (every mesh matrix rebuilt from the written keys against the track) in one report."""
     rows = []
-    for g, body, side, aname, mname, _ in plan():
+    for g, body, side, aname, mname, _ in plan() + low_plan():
         f = f'{B.WORK}/tmp_rreload/{mname}/{mname}_check.json' if mname else None
         if f and os.path.exists(f):
             r = json.load(open(f))
@@ -341,12 +454,13 @@ def roundtrip(B):
     from glb import Glb
     from fk import Clip
     out = B.fresh(B.WORK + '/rreload'); rows = []; bad = 0
-    jobs = [(g, body, side, aname, 'arm', items) for g, body, side, aname, mname, items in plan()]
-    jobs += [(g, body, side, mname, 'mag', [x for x in items if x[0] in SLOTS + EMPTY]) for g, body, side, aname, mname, items in plan() if mname]
+    jobs = [(g, body, side, aname, 'arm', items) for g, body, side, aname, mname, items in plan() + low_plan()]
+    jobs += [(g, body, side, mname, 'mag', [x for x in items if x[0] in SLOTS + EMPTY]) for g, body, side, aname, mname, items in plan() + low_plan() if mname]
     jobs += [(g, 'pma', 'right', q, 'mag', [(n, None, None, g['reload']['fallback']['layout']['keys']) for n in SLOTS + EMPTY]) for g, q in quick_plan()]
     for x in parts_plan() + [(q[0], 'pma', 'right', q[1], q[2], q[3]) for q in quick_parts_plan()]:
         prow = [(n, None, None, k) for n, _, k, _ in x[5]]
         jobs += ([(x[0], x[1], x[2], x[3], 'part', prow)] if ships_barrels(x[0]) else []) + ([(x[0], x[1], x[2], x[4], 'mag', prow)] if x[4] else [])
+    jobs += [(g, body, side, name, 'handle', [(n, None, None, k) for n, _, k in items]) for g, body, side, name, low, items in handle_plan()]
     if os.environ.get('GA_REUSE_SETS') == '1':
         jobs = [j for j in jobs if os.path.exists(f'{B.WORK}/tmp_rreload/{j[3]}/{j[3]}.glb')]
     for g, body, side, name, kind, items in jobs:
@@ -354,6 +468,8 @@ def roundtrip(B):
         if True:
             d = f'{out}/{name}'; os.makedirs(d); shutil.copyfile(f'{sets}/{name}.anims', f'{d}/{name}.anims')
             B.run([B.WK, 'export', f'{d}/{name}.anims', '-o', d, '-gp', B.GAME], check=False); B.wk('convert', 's', f'{d}/{name}.anims', '-o', d); via = ''
+            if not os.path.exists(f'{d}/{name}.anims.glb') and kind in ('part', 'handle'):
+                B.die(f'{name}: weapon set does not export; no substitute check for a Barrel set')
             if not os.path.exists(f'{d}/{name}.anims.glb'):
                 # WolvenKit cannot export the gun's raised-pose reload set this one is a copy of (the base set fails the
                 # same way): the six clips are checked through a copy of the Lexington set instead, metadata on the real set.
@@ -362,6 +478,27 @@ def roundtrip(B):
                 B.wk('export', f'{x}/{name}.anims', '-o', x, '-gp', B.GAME); shutil.copyfile(f'{x}/{name}.anims.glb', f'{d}/{name}.anims.glb'); via = ' (path through a Lexington set copy: the real set does not export)'
             back = Glb(f'{d}/{name}.anims.glb'); src = Glb(f'{B.WORK}/tmp_rreload/{name}/{name}.glb'); j = json.load(open(f'{d}/{name}.anims.json', encoding='utf-8'))
             meta = {e['Data']['animation']['Data']['name']['$value']: e['Data']['animation']['Data']['animBuffer']['Data'] for e in j['Data']['RootChunk']['animations']}
+            if kind in ('part', 'handle'):
+                # every CR2W field against the game set (wsetimport.ALLOWED may differ), every joint against the glb as written
+                import wsetimport, hpartset
+                van = f'{B.WORK}/tmp_rreload/{name}/wset/van/{name}.anims.json'
+                fbad, fok = wsetimport.field_diff(van, f'{d}/{name}.anims.json')
+                for f in fbad: rows.append(f'BAD {name} field {f}')
+                bad += len(fbad)
+                for cn, _, _, keys in items:
+                    if kind == 'part' and cn not in meta:
+                        rows.append(f'ok  {name} {cn} left out: the game set has no such clip'); continue
+                    simd = meta[cn]['$type'] == 'animAnimationBufferSimd'; r = hpartset.roundtrip_clip(src, back, cn, keys, 0.1 if simd else 0.5)
+                    ok = r['ok'] and (not simd or meta[cn].get('quantizationBits') == 0)      # the format itself is the game's (field_diff)
+                    if kind == 'handle':
+                        it = next((p, n, k) for gg, bb, ss, nn, ll, rr in handle_plan() if nn == name for n, p, k in rr if n == cn)
+                        c = hpartset.check(hpartset.hfix.handle_glb(g['id']), f'{d}/{name}.anims.glb', [it], g['id'])[0]
+                        lim = hpartset.hfix.lim()
+                        ok = ok and c['other_worst_cm'] < 0.05 and all(not v['visible_change_f'] and v['end_vs_vanilla_cm'] <= lim['end_tol_cm'] for v in c['handle'].values())
+                        r['check'] = c
+                    bad += not ok
+                    rows.append(f"{'ok ' if ok else 'BAD'} {name} {cn} {meta[cn]['$type']} q{meta[cn].get('quantizationBits')} fields: {len(fbad)} bad, allowed {sorted({x[1].rsplit('.', 1)[-1] for x in fok if x[0] == cn})} {json.dumps(r, sort_keys=True)}")
+                continue
             suf = '_l' if (side == 'left' and kind == 'arm') else ''; node = ('Weapon' + side.capitalize()) if kind == 'arm' else 'magazine'
             nodes = [node]
             if kind == 'part':      # the pump or barrel joint; every base joint is checked by partchecks

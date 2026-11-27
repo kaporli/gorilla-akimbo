@@ -156,11 +156,8 @@ def _mesh_tris(path):
 
 
 def gun_parts(G):
-    """Mesh part names of a gun body (as lowered/guns.py: base, receiver, fixed stock, mesh_parts)."""
-    names = [G + '__base1_01']
-    for part in ['rcv1_01', 'rcv1_01_stock_01'] + list(GN._gun(G).get('mesh_parts', [])):
-        if GN.find(f'{G}__{part}.glb'): names.append(f'{G}__{part}')
-    return names
+    """Mesh part names of a gun body: lowered/guns.py part_names (the scene's parts, receiver, fixed stock, mesh_parts)."""
+    return GN.part_names(G)
 
 
 def place(tq, V):
@@ -190,10 +187,12 @@ def surface(G, n=40000):
     return P
 
 
-def screen(P):
-    """World points -> (sx, sy in -1..1 of the 16:9 view, in-front mask)."""
-    Q = P - EYE; fwd = -Q[:, 2]; ok = fwd > 0.02
-    sx = Q[:, 0] / np.maximum(fwd, 1e-6) / math.tan(HH); sy = Q[:, 1] / np.maximum(fwd, 1e-6) / math.tan(HV)
+def screen(P, eye=None, hh=None):
+    """World points -> (sx, sy in -1..1 of the 16:9 view, in-front mask). eye, hh (half horizontal fov, radians): another camera
+    than checks.raised.camera (the R9 check uses the game's)."""
+    e = EYE if eye is None else eye; h = HH if hh is None else hh; v = math.atan(math.tan(h) * 9 / 16)
+    Q = P - e; fwd = -Q[:, 2]; ok = fwd > 0.02
+    sx = Q[:, 0] / np.maximum(fwd, 1e-6) / math.tan(h); sy = Q[:, 1] / np.maximum(fwd, 1e-6) / math.tan(v)
     return sx, sy, ok
 
 

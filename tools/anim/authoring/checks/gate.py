@@ -6,9 +6,15 @@ usage: gate.py [--guns id,id] [--bodies pma,pwa] [--clips <dir>] [--only area,ar
   --clips   top-magazine arm clips folder to check instead of paths.clips (<body>/<clip>.glb); the checks of the
             built anim sets are skipped then
   --only    areas: clips (end pose, unchanged frames, frame count), sets (SIMD buffers, frame counts of the built
-            sets), lowered, raised (raised pose clips, the reload and top-magazine clips that end in them), topmag,
-            magtrack, parts (shell-fed guns with drafted part motion have a part set; part set clips pass their
-            rebuild check). Not run by default: roundtrip (built sets exported back to glb and
+            sets), pose (the pose rule: every gun's lowered family (v1d over checks.lowered.v1d_over_cm, else v1) and raised family (C over
+            checks.raised.limit_pct, else none) equals the measure; no clips needed), lowered, raised (raised pose clips, the reload and top-magazine clips that end in them), topmag,
+            magtrack, manifest (no path of weapons.json that the build reads is under gg-work or a scratchpad / Temp folder; paths marked "output" are skipped; defaults are read from the file, not the environment; no WolvenKit),
+            rules (the rule manifest rules.json: unique ids, every gate rule resolves to a check and a limit, no baselines, every stance plays a variant that passes R9; authoring/checks/rules.py),
+            parts (shell-fed guns with drafted part motion have a part set; part set clips pass their
+            rebuild check), draft (not run by default: the owner's reload rules R1 to R6 on every reload clip of the
+            manifest, shipped and parked, and the lowered-stance variants of reload.lowered_variant; authoring/checks/draftcheck.py; output in WORK/check/draft; no WolvenKit),
+            lowvar (the lowered-stance variants: R9 absolute on the whole gun and hand in the discard window, wrist from the bind pose, rgate rules; authoring/lowvar/checks.py).
+            Not run by default: roundtrip (built sets exported back to glb and
             compared with the glbs they were imported from; one set of each kind, every set with --roundtrip-all).
             A wrongly encoded track (a constant quaternion with w < 0 once was) shows there.
 The built sets are read from WORK/sets (build.sh all first). Results also go to WORK/check/report.txt.
@@ -21,7 +27,7 @@ from glb import Glb
 from fk import Clip
 
 manifest = common.manifest
-AREAS = ('clips', 'sets', 'lowered', 'raised', 'topmag', 'magtrack', 'parts')   # 'roundtrip' only when named in --only
+AREAS = ('rules', 'manifest', 'pose', 'clips', 'sets', 'lowered', 'raised', 'topmag', 'magtrack', 'parts', 'draft', 'lowvar')   # 'roundtrip' only when named in --only
 JOBS = int(os.environ.get('JOBS', '4'))
 T = manifest.load()['checks']
 
@@ -301,9 +307,10 @@ def check_magtrack(clips, bodies):
     return m.run(manifest.mag_spec(), sets, clips_dir=clips, bodies=bodies, thresholds=thr)
 
 
-def check_rreload(bodies):
-    """Production rifle reload clips and sets (authoring/reload/checks.py); only when named in --only."""
-    return load('reload').run(bodies, jobs=JOBS)
+def check_rreload(bodies, guns=None):
+    """Production rifle reload clips and sets (authoring/reload/checks.py); only when named in --only. Rifle guns: it reads
+    paths.rreload_clips, where the SMG and shotgun clips are not."""
+    return load('reload').run(bodies, jobs=JOBS, guns=guns)
 
 
 def check_parts():
@@ -326,6 +333,29 @@ def check_parts():
         badl = [l for l in lines if l.startswith('BAD')]
         rows.append(row('parts: part set clips rebuilt from their keys', (badl[0][:120] if badl else rep), len(badl) if lines else -1, 0, 'bad clips',
                         bool(lines) and not badl, f'{len(lines)} clips'))
+    return rows
+
+
+def is_temp(component):
+    """A path component under C:/Modding/gg-work or in a scratchpad or Temp folder."""
+    p = component.replace('\\', '/').rstrip('/').lower()
+    return p == 'c:/modding/gg-work' or p.startswith('c:/modding/gg-work/') or any(s in p.split('/') for s in ('scratchpad', 'temp', 'tmp'))
+
+
+def check_manifest():
+    """Every weapons.json paths entry that is a build input has no component (split at ';') under gg-work or in a scratchpad / Temp
+    folder. An entry with "output" (a note why) is only written by the build and skipped. There are no exceptions.
+    The defaults of the file are read, not the environment."""
+    rows = []
+    for key, p in manifest.load()['paths'].items():
+        comps = [c.replace(chr(92), '/').rstrip('/') for c in p['default'].split(';') if c]
+        if 'output' in p:
+            ok = isinstance(p['output'], str) and bool(p['output'].strip())
+            rows.append(row('manifest: "output" has a note', key, 0 if ok else 1, 0, 'missing notes', ok, p['output'][:60] if ok else 'give the reason as a string'))
+            continue
+        for c in comps:
+            bad = is_temp(c)
+            rows.append(row('manifest: build inputs are not under gg-work or a scratchpad / Temp folder', f'{key}: {c}', 1 if bad else 0, 0, 'temporary components', not bad))
     return rows
 
 
@@ -356,6 +386,7 @@ if __name__ == '__main__':
     argv = sys.argv[1:]
     if '--with-test' in argv:
         argv.remove('--with-test'); os.environ['GA_TEST'] = '1'
+    os.environ.setdefault('GA_TEST', '0')      # the reload tools (renv) default it to 1 when imported: then WORK/test would be read, not WORK
     area = common.opt(argv, '--area'); out_json = common.opt(argv, '--json')
     picked = common.opt(argv, '--guns'); bodies = common.body_list(common.opt(argv, '--bodies'))
     clips_arg = common.opt(argv, '--clips'); only = common.opt(argv, '--only')
@@ -363,11 +394,13 @@ if __name__ == '__main__':
     clips = (clips_arg or manifest.path('clips')).replace('\\', '/')
     if area:   # one area, in its own process (the areas' modules share names)
         rows = {'clips': lambda: check_clips(clips, guns, bodies, picked), 'sets': check_sets,
-                'lowered': lambda: check_lowered(guns, bodies), 'raised': lambda: load('raised').run(guns, bodies, work=work(), jobs=JOBS),
+                'lowered': lambda: check_lowered(guns, bodies), 'pose': lambda: load('pose').run(guns if picked else None, bodies, jobs=JOBS), 'raised': lambda: load('raised').run(guns, bodies, work=work(), jobs=JOBS),
                 'topmag': lambda: check_topmag(clips, guns, bodies, picked),
                 'magtrack': lambda: check_magtrack(clips_arg, bodies),
-                'roundtrip': lambda: check_roundtrip('--roundtrip-all' in argv), 'rreload': lambda: check_rreload(bodies),
-                'parts': check_parts}[area]()
+                'roundtrip': lambda: check_roundtrip('--roundtrip-all' in argv), 'rreload': lambda: check_rreload(bodies, [g['id'] for g in guns] if picked else None),
+                'draft': lambda: load('draft').run(guns if picked else None, bodies, jobs=JOBS),
+                'lowvar': lambda: load('lowvar').run(guns if picked else None, bodies, jobs=JOBS),
+                'parts': check_parts, 'manifest': check_manifest, 'rules': lambda: __import__('rules').run()}[area]()
         json.dump(rows, open(out_json, 'w'))
         sys.exit(0)
     areas = [a for a in (only.split(',') if only else AREAS) if not (a in ('sets', 'roundtrip') and clips_arg)]

@@ -175,6 +175,8 @@ public abstract class GorillaAkimboGuns {
   // n"None" for guns on the generic reload clips.
   public static func ReloadOwner(audio: CName) -> CName {
     switch audio {
+      case n"wea_set_shingen":
+        return n"shingen";
       case n"wea_set_senkoh":
       case n"wea_set_senkoh_prototype":
         return n"senkoh";
@@ -186,14 +188,26 @@ public abstract class GorillaAkimboGuns {
       case n"wea_set_warden":
       case n"wea_set_warden_suppressor":
         return n"warden";
+      case n"wea_set_borg4a":
+        return n"borg";
       case n"wea_set_dian":
         return n"dian";
+      case n"wea_set_tactician":
+        return n"tactician";
       case n"wea_set_zhuo":
         return n"zhuo";
       case n"wea_set_crusher":
         return n"crusher";
       case n"wea_set_pozhar":
         return n"pozhar";
+      case n"wea_set_igla":
+        return n"igla";
+      case n"wea_set_palica":
+        return n"palica";
+      case n"wea_set_testera":
+        return n"testera";
+      case n"wea_set_satara":
+        return n"satara";
       case n"wea_set_ajax":
       case n"wea_set_kyubi":
         return n"ajax";
@@ -213,6 +227,9 @@ public abstract class GorillaAkimboGuns {
   // Clip seconds from which the gun, its hand and every magazine are off screen (variant: the game's random
   // reload pick 0 to 2; empty: the empty reload clip).
   public static func ReloadHideStart(owner: CName, variant: Int32, empty: Bool) -> Float {
+    if Equals(owner, n"shingen") {
+      return 12.0 / 30.0;
+    }
     if Equals(owner, n"senkoh") {
       if variant == 3 {
         return 12.0 / 30.0;
@@ -230,7 +247,7 @@ public abstract class GorillaAkimboGuns {
         return 12.0 / 30.0;
       }
       if variant == 1 {
-        return 25.0 / 30.0;
+        return 31.0 / 30.0;
       }
       if variant == 2 {
         return 17.0 / 30.0;
@@ -251,27 +268,42 @@ public abstract class GorillaAkimboGuns {
     }
     if Equals(owner, n"warden") {
       if variant == 3 {
-        return 13.0 / 30.0;
+        return 12.0 / 30.0;
       }
       if variant == 1 {
-        return 37.0 / 30.0;
+        return 38.0 / 30.0;
       }
       if variant == 2 {
-        return 36.0 / 30.0;
+        return 33.0 / 30.0;
       }
-      return 27.0 / 30.0;
+      return 34.0 / 30.0;
+    }
+    if Equals(owner, n"borg") {
+      return 12.0 / 30.0;
     }
     if Equals(owner, n"dian") {
       if variant == 3 {
         return 12.0 / 30.0;
       }
       if variant == 1 {
-        return 23.0 / 30.0;
+        return 17.0 / 30.0;
       }
       if variant == 2 {
-        return 26.0 / 30.0;
+        return 27.0 / 30.0;
       }
       return 29.0 / 30.0;
+    }
+    if Equals(owner, n"tactician") {
+      if variant == 3 {
+        return 12.0 / 30.0;
+      }
+      if variant == 1 {
+        return 11.0 / 30.0;
+      }
+      if variant == 2 {
+        return 11.0 / 30.0;
+      }
+      return 11.0 / 30.0;
     }
     if Equals(owner, n"zhuo") {
       if variant == 3 {
@@ -307,9 +339,60 @@ public abstract class GorillaAkimboGuns {
       if variant == 2 {
         return 27.0 / 30.0;
       }
-      return 28.0 / 30.0;
+      return 29.0 / 30.0;
+    }
+    if Equals(owner, n"igla") {
+      if variant == 3 {
+        return 12.0 / 30.0;
+      }
+      if variant == 1 {
+        return 13.0 / 30.0;
+      }
+      if variant == 2 {
+        return 14.0 / 30.0;
+      }
+      return 13.0 / 30.0;
+    }
+    if Equals(owner, n"palica") {
+      if variant == 3 {
+        return 12.0 / 30.0;
+      }
+      if variant == 1 {
+        return 13.0 / 30.0;
+      }
+      if variant == 2 {
+        return 14.0 / 30.0;
+      }
+      return 13.0 / 30.0;
+    }
+    if Equals(owner, n"testera") {
+      if variant == 3 {
+        return 12.0 / 30.0;
+      }
+      if variant == 1 {
+        return 15.0 / 30.0;
+      }
+      if variant == 2 {
+        return 19.0 / 30.0;
+      }
+      return 18.0 / 30.0;
+    }
+    if Equals(owner, n"satara") {
+      if variant == 3 {
+        return 12.0 / 30.0;
+      }
+      if variant == 1 {
+        return 16.0 / 30.0;
+      }
+      if variant == 2 {
+        return 19.0 / 30.0;
+      }
+      return 18.0 / 30.0;
     }
     if Equals(owner, n"ajax") {
+      if variant == 3 {
+        return 12.0 / 30.0;
+      }
       if variant == 1 {
         return (empty ? 15.0 : 31.0) / 30.0;
       }
@@ -319,6 +402,9 @@ public abstract class GorillaAkimboGuns {
       return (empty ? 15.0 : 30.0) / 30.0;
     }
     if Equals(owner, n"copperhead") {
+      if variant == 3 {
+        return 12.0 / 30.0;
+      }
       if variant == 1 {
         return 27.0 / 30.0;
       }
@@ -328,6 +414,9 @@ public abstract class GorillaAkimboGuns {
       return 26.0 / 30.0;
     }
     if Equals(owner, n"masamune") {
+      if variant == 3 {
+        return 12.0 / 30.0;
+      }
       if variant == 1 {
         return (empty ? 45.0 : 37.0) / 30.0;
       }
@@ -337,6 +426,9 @@ public abstract class GorillaAkimboGuns {
       return (empty ? 31.0 : 30.0) / 30.0;
     }
     if Equals(owner, n"sidewinder") {
+      if variant == 3 {
+        return 12.0 / 30.0;
+      }
       if variant == 1 {
         return 27.0 / 30.0;
       }
@@ -346,6 +438,9 @@ public abstract class GorillaAkimboGuns {
       return 26.0 / 30.0;
     }
     if Equals(owner, n"hercules") {
+      if variant == 3 {
+        return 12.0 / 30.0;
+      }
       if variant == 1 {
         return 57.0 / 30.0;
       }
@@ -359,6 +454,9 @@ public abstract class GorillaAkimboGuns {
 
   // Clip seconds at which the hidden part ends; the fresh magazine is seated by then.
   public static func ReloadHideEnd(owner: CName, variant: Int32, empty: Bool) -> Float {
+    if Equals(owner, n"shingen") {
+      return 30.0 / 30.0;
+    }
     if Equals(owner, n"senkoh") {
       if variant == 3 {
         return 31.0 / 30.0;
@@ -397,27 +495,42 @@ public abstract class GorillaAkimboGuns {
     }
     if Equals(owner, n"warden") {
       if variant == 3 {
-        return 30.0 / 30.0;
+        return 31.0 / 30.0;
       }
       if variant == 1 {
         return 50.0 / 30.0;
       }
       if variant == 2 {
-        return 48.0 / 30.0;
+        return 49.0 / 30.0;
       }
       return 50.0 / 30.0;
     }
+    if Equals(owner, n"borg") {
+      return 30.0 / 30.0;
+    }
     if Equals(owner, n"dian") {
       if variant == 3 {
-        return 30.0 / 30.0;
+        return 31.0 / 30.0;
       }
       if variant == 1 {
-        return (empty ? 44.0 : 43.0) / 30.0;
+        return 44.0 / 30.0;
       }
       if variant == 2 {
         return 44.0 / 30.0;
       }
       return (empty ? 44.0 : 43.0) / 30.0;
+    }
+    if Equals(owner, n"tactician") {
+      if variant == 3 {
+        return 31.0 / 30.0;
+      }
+      if variant == 1 {
+        return 23.0 / 30.0;
+      }
+      if variant == 2 {
+        return 27.0 / 30.0;
+      }
+      return 22.0 / 30.0;
     }
     if Equals(owner, n"zhuo") {
       if variant == 3 {
@@ -455,7 +568,58 @@ public abstract class GorillaAkimboGuns {
       }
       return 44.0 / 30.0;
     }
+    if Equals(owner, n"igla") {
+      if variant == 3 {
+        return 31.0 / 30.0;
+      }
+      if variant == 1 {
+        return 44.0 / 30.0;
+      }
+      if variant == 2 {
+        return 44.0 / 30.0;
+      }
+      return 42.0 / 30.0;
+    }
+    if Equals(owner, n"palica") {
+      if variant == 3 {
+        return 31.0 / 30.0;
+      }
+      if variant == 1 {
+        return 47.0 / 30.0;
+      }
+      if variant == 2 {
+        return 49.0 / 30.0;
+      }
+      return 46.0 / 30.0;
+    }
+    if Equals(owner, n"testera") {
+      if variant == 3 {
+        return 31.0 / 30.0;
+      }
+      if variant == 1 {
+        return 62.0 / 30.0;
+      }
+      if variant == 2 {
+        return 55.0 / 30.0;
+      }
+      return 52.0 / 30.0;
+    }
+    if Equals(owner, n"satara") {
+      if variant == 3 {
+        return 31.0 / 30.0;
+      }
+      if variant == 1 {
+        return 53.0 / 30.0;
+      }
+      if variant == 2 {
+        return 50.0 / 30.0;
+      }
+      return 49.0 / 30.0;
+    }
     if Equals(owner, n"ajax") {
+      if variant == 3 {
+        return 31.0 / 30.0;
+      }
       if variant == 1 {
         return (empty ? 80.0 : 70.0) / 30.0;
       }
@@ -465,6 +629,9 @@ public abstract class GorillaAkimboGuns {
       return (empty ? 81.0 : 72.0) / 30.0;
     }
     if Equals(owner, n"copperhead") {
+      if variant == 3 {
+        return 31.0 / 30.0;
+      }
       if variant == 1 {
         return 65.0 / 30.0;
       }
@@ -474,6 +641,9 @@ public abstract class GorillaAkimboGuns {
       return 67.0 / 30.0;
     }
     if Equals(owner, n"masamune") {
+      if variant == 3 {
+        return 31.0 / 30.0;
+      }
       if variant == 1 {
         return 87.0 / 30.0;
       }
@@ -483,6 +653,9 @@ public abstract class GorillaAkimboGuns {
       return 88.0 / 30.0;
     }
     if Equals(owner, n"sidewinder") {
+      if variant == 3 {
+        return 31.0 / 30.0;
+      }
       if variant == 1 {
         return 65.0 / 30.0;
       }
@@ -492,6 +665,9 @@ public abstract class GorillaAkimboGuns {
       return (empty ? 67.0 : 66.0) / 30.0;
     }
     if Equals(owner, n"hercules") {
+      if variant == 3 {
+        return 31.0 / 30.0;
+      }
       if variant == 1 {
         return 131.0 / 30.0;
       }
@@ -505,6 +681,9 @@ public abstract class GorillaAkimboGuns {
 
   // Clip length in seconds.
   public static func ReloadLength(owner: CName, variant: Int32, empty: Bool) -> Float {
+    if Equals(owner, n"shingen") {
+      return 52.0 / 30.0;
+    }
     if Equals(owner, n"senkoh") {
       if variant == 3 {
         return 52.0 / 30.0;
@@ -553,6 +732,9 @@ public abstract class GorillaAkimboGuns {
       }
       return 77.0 / 30.0;
     }
+    if Equals(owner, n"borg") {
+      return 52.0 / 30.0;
+    }
     if Equals(owner, n"dian") {
       if variant == 3 {
         return 52.0 / 30.0;
@@ -564,6 +746,18 @@ public abstract class GorillaAkimboGuns {
         return 72.0 / 30.0;
       }
       return 72.0 / 30.0;
+    }
+    if Equals(owner, n"tactician") {
+      if variant == 3 {
+        return 52.0 / 30.0;
+      }
+      if variant == 1 {
+        return 58.0 / 30.0;
+      }
+      if variant == 2 {
+        return 46.0 / 30.0;
+      }
+      return 48.0 / 30.0;
     }
     if Equals(owner, n"zhuo") {
       if variant == 3 {
@@ -601,6 +795,417 @@ public abstract class GorillaAkimboGuns {
       }
       return 72.0 / 30.0;
     }
+    if Equals(owner, n"igla") {
+      if variant == 3 {
+        return 52.0 / 30.0;
+      }
+      if variant == 1 {
+        return 66.0 / 30.0;
+      }
+      if variant == 2 {
+        return 66.0 / 30.0;
+      }
+      return 66.0 / 30.0;
+    }
+    if Equals(owner, n"palica") {
+      if variant == 3 {
+        return 52.0 / 30.0;
+      }
+      if variant == 1 {
+        return 66.0 / 30.0;
+      }
+      if variant == 2 {
+        return 66.0 / 30.0;
+      }
+      return 66.0 / 30.0;
+    }
+    if Equals(owner, n"testera") {
+      if variant == 3 {
+        return 52.0 / 30.0;
+      }
+      if variant == 1 {
+        return 75.0 / 30.0;
+      }
+      if variant == 2 {
+        return 75.0 / 30.0;
+      }
+      return 75.0 / 30.0;
+    }
+    if Equals(owner, n"satara") {
+      if variant == 3 {
+        return 52.0 / 30.0;
+      }
+      if variant == 1 {
+        return 75.0 / 30.0;
+      }
+      if variant == 2 {
+        return 75.0 / 30.0;
+      }
+      return 75.0 / 30.0;
+    }
+    if Equals(owner, n"ajax") {
+      if variant == 3 {
+        return 52.0 / 30.0;
+      }
+      if variant == 1 {
+        return (empty ? 113.0 : 86.0) / 30.0;
+      }
+      if variant == 2 {
+        return (empty ? 113.0 : 86.0) / 30.0;
+      }
+      return (empty ? 113.0 : 86.0) / 30.0;
+    }
+    if Equals(owner, n"copperhead") {
+      if variant == 3 {
+        return 52.0 / 30.0;
+      }
+      if variant == 1 {
+        return (empty ? 106.0 : 91.0) / 30.0;
+      }
+      if variant == 2 {
+        return (empty ? 106.0 : 91.0) / 30.0;
+      }
+      return (empty ? 106.0 : 91.0) / 30.0;
+    }
+    if Equals(owner, n"masamune") {
+      if variant == 3 {
+        return 52.0 / 30.0;
+      }
+      if variant == 1 {
+        return (empty ? 121.0 : 109.0) / 30.0;
+      }
+      if variant == 2 {
+        return (empty ? 121.0 : 109.0) / 30.0;
+      }
+      return (empty ? 121.0 : 109.0) / 30.0;
+    }
+    if Equals(owner, n"sidewinder") {
+      if variant == 3 {
+        return 52.0 / 30.0;
+      }
+      if variant == 1 {
+        return (empty ? 106.0 : 91.0) / 30.0;
+      }
+      if variant == 2 {
+        return (empty ? 106.0 : 91.0) / 30.0;
+      }
+      return (empty ? 106.0 : 91.0) / 30.0;
+    }
+    if Equals(owner, n"hercules") {
+      if variant == 3 {
+        return 52.0 / 30.0;
+      }
+      if variant == 1 {
+        return 186.0 / 30.0;
+      }
+      if variant == 2 {
+        return 186.0 / 30.0;
+      }
+      return 186.0 / 30.0;
+    }
+    return 0.0;
+  }
+
+  // ReloadHideStart of the lowered-stance variant clips (reload.lowered_variant); 0.0 for a gun without them.
+  public static func ReloadHideStartLow(owner: CName, variant: Int32, empty: Bool) -> Float {
+    if Equals(owner, n"senkoh") {
+      if variant == 1 {
+        return 15.0 / 30.0;
+      }
+      if variant == 2 {
+        return 27.0 / 30.0;
+      }
+      return 27.0 / 30.0;
+    }
+    if Equals(owner, n"pulsar") {
+      if variant == 1 {
+        return 31.0 / 30.0;
+      }
+      if variant == 2 {
+        return 17.0 / 30.0;
+      }
+      return 29.0 / 30.0;
+    }
+    if Equals(owner, n"saratoga") {
+      if variant == 1 {
+        return 25.0 / 30.0;
+      }
+      if variant == 2 {
+        return 30.0 / 30.0;
+      }
+      return 28.0 / 30.0;
+    }
+    if Equals(owner, n"warden") {
+      if variant == 1 {
+        return 38.0 / 30.0;
+      }
+      if variant == 2 {
+        return 33.0 / 30.0;
+      }
+      return 34.0 / 30.0;
+    }
+    if Equals(owner, n"dian") {
+      if variant == 1 {
+        return 17.0 / 30.0;
+      }
+      if variant == 2 {
+        return 27.0 / 30.0;
+      }
+      return 29.0 / 30.0;
+    }
+    if Equals(owner, n"zhuo") {
+      if variant == 1 {
+        return 26.0 / 30.0;
+      }
+      if variant == 2 {
+        return 30.0 / 30.0;
+      }
+      return 33.0 / 30.0;
+    }
+    if Equals(owner, n"crusher") {
+      if variant == 1 {
+        return 24.0 / 30.0;
+      }
+      if variant == 2 {
+        return 29.0 / 30.0;
+      }
+      return 28.0 / 30.0;
+    }
+    if Equals(owner, n"pozhar") {
+      if variant == 1 {
+        return 25.0 / 30.0;
+      }
+      if variant == 2 {
+        return 27.0 / 30.0;
+      }
+      return 29.0 / 30.0;
+    }
+    if Equals(owner, n"ajax") {
+      if variant == 1 {
+        return (empty ? 15.0 : 31.0) / 30.0;
+      }
+      if variant == 2 {
+        return (empty ? 15.0 : 33.0) / 30.0;
+      }
+      return (empty ? 13.0 : 30.0) / 30.0;
+    }
+    if Equals(owner, n"copperhead") {
+      if variant == 1 {
+        return 27.0 / 30.0;
+      }
+      if variant == 2 {
+        return 29.0 / 30.0;
+      }
+      return 26.0 / 30.0;
+    }
+    if Equals(owner, n"sidewinder") {
+      if variant == 1 {
+        return 27.0 / 30.0;
+      }
+      if variant == 2 {
+        return 29.0 / 30.0;
+      }
+      return 26.0 / 30.0;
+    }
+    if Equals(owner, n"hercules") {
+      if variant == 1 {
+        return 57.0 / 30.0;
+      }
+      if variant == 2 {
+        return 62.0 / 30.0;
+      }
+      return 63.0 / 30.0;
+    }
+    return 0.0;
+  }
+
+  // ReloadHideEnd of the lowered-stance variant clips (reload.lowered_variant); 0.0 for a gun without them.
+  public static func ReloadHideEndLow(owner: CName, variant: Int32, empty: Bool) -> Float {
+    if Equals(owner, n"senkoh") {
+      if variant == 1 {
+        return 43.0 / 30.0;
+      }
+      if variant == 2 {
+        return 44.0 / 30.0;
+      }
+      return 44.0 / 30.0;
+    }
+    if Equals(owner, n"pulsar") {
+      if variant == 1 {
+        return 44.0 / 30.0;
+      }
+      if variant == 2 {
+        return 44.0 / 30.0;
+      }
+      return 44.0 / 30.0;
+    }
+    if Equals(owner, n"saratoga") {
+      if variant == 1 {
+        return 44.0 / 30.0;
+      }
+      if variant == 2 {
+        return 44.0 / 30.0;
+      }
+      return 44.0 / 30.0;
+    }
+    if Equals(owner, n"warden") {
+      if variant == 1 {
+        return 51.0 / 30.0;
+      }
+      if variant == 2 {
+        return 51.0 / 30.0;
+      }
+      return 52.0 / 30.0;
+    }
+    if Equals(owner, n"dian") {
+      if variant == 1 {
+        return 44.0 / 30.0;
+      }
+      if variant == 2 {
+        return 44.0 / 30.0;
+      }
+      return (empty ? 44.0 : 43.0) / 30.0;
+    }
+    if Equals(owner, n"zhuo") {
+      if variant == 1 {
+        return 51.0 / 30.0;
+      }
+      if variant == 2 {
+        return 52.0 / 30.0;
+      }
+      return 50.0 / 30.0;
+    }
+    if Equals(owner, n"crusher") {
+      if variant == 1 {
+        return 44.0 / 30.0;
+      }
+      if variant == 2 {
+        return 44.0 / 30.0;
+      }
+      return (empty ? 45.0 : 44.0) / 30.0;
+    }
+    if Equals(owner, n"pozhar") {
+      if variant == 1 {
+        return (empty ? 44.0 : 43.0) / 30.0;
+      }
+      if variant == 2 {
+        return 44.0 / 30.0;
+      }
+      return 44.0 / 30.0;
+    }
+    if Equals(owner, n"ajax") {
+      if variant == 1 {
+        return (empty ? 80.0 : 70.0) / 30.0;
+      }
+      if variant == 2 {
+        return (empty ? 80.0 : 71.0) / 30.0;
+      }
+      return (empty ? 79.0 : 73.0) / 30.0;
+    }
+    if Equals(owner, n"copperhead") {
+      if variant == 1 {
+        return 65.0 / 30.0;
+      }
+      if variant == 2 {
+        return (empty ? 64.0 : 67.0) / 30.0;
+      }
+      return 67.0 / 30.0;
+    }
+    if Equals(owner, n"sidewinder") {
+      if variant == 1 {
+        return 65.0 / 30.0;
+      }
+      if variant == 2 {
+        return (empty ? 64.0 : 66.0) / 30.0;
+      }
+      return 67.0 / 30.0;
+    }
+    if Equals(owner, n"hercules") {
+      if variant == 1 {
+        return 131.0 / 30.0;
+      }
+      if variant == 2 {
+        return 131.0 / 30.0;
+      }
+      return 137.0 / 30.0;
+    }
+    return 0.0;
+  }
+
+  // ReloadLength of the lowered-stance variant clips (reload.lowered_variant); 0.0 for a gun without them.
+  public static func ReloadLengthLow(owner: CName, variant: Int32, empty: Bool) -> Float {
+    if Equals(owner, n"senkoh") {
+      if variant == 1 {
+        return 68.0 / 30.0;
+      }
+      if variant == 2 {
+        return 68.0 / 30.0;
+      }
+      return 68.0 / 30.0;
+    }
+    if Equals(owner, n"pulsar") {
+      if variant == 1 {
+        return 68.0 / 30.0;
+      }
+      if variant == 2 {
+        return 68.0 / 30.0;
+      }
+      return 68.0 / 30.0;
+    }
+    if Equals(owner, n"saratoga") {
+      if variant == 1 {
+        return 72.0 / 30.0;
+      }
+      if variant == 2 {
+        return 72.0 / 30.0;
+      }
+      return 72.0 / 30.0;
+    }
+    if Equals(owner, n"warden") {
+      if variant == 1 {
+        return 77.0 / 30.0;
+      }
+      if variant == 2 {
+        return 77.0 / 30.0;
+      }
+      return 77.0 / 30.0;
+    }
+    if Equals(owner, n"dian") {
+      if variant == 1 {
+        return 72.0 / 30.0;
+      }
+      if variant == 2 {
+        return 72.0 / 30.0;
+      }
+      return 72.0 / 30.0;
+    }
+    if Equals(owner, n"zhuo") {
+      if variant == 1 {
+        return 81.0 / 30.0;
+      }
+      if variant == 2 {
+        return 81.0 / 30.0;
+      }
+      return 81.0 / 30.0;
+    }
+    if Equals(owner, n"crusher") {
+      if variant == 1 {
+        return 72.0 / 30.0;
+      }
+      if variant == 2 {
+        return 72.0 / 30.0;
+      }
+      return 72.0 / 30.0;
+    }
+    if Equals(owner, n"pozhar") {
+      if variant == 1 {
+        return 72.0 / 30.0;
+      }
+      if variant == 2 {
+        return 72.0 / 30.0;
+      }
+      return 72.0 / 30.0;
+    }
     if Equals(owner, n"ajax") {
       if variant == 1 {
         return (empty ? 113.0 : 86.0) / 30.0;
@@ -618,15 +1223,6 @@ public abstract class GorillaAkimboGuns {
         return (empty ? 106.0 : 91.0) / 30.0;
       }
       return (empty ? 106.0 : 91.0) / 30.0;
-    }
-    if Equals(owner, n"masamune") {
-      if variant == 1 {
-        return (empty ? 121.0 : 109.0) / 30.0;
-      }
-      if variant == 2 {
-        return (empty ? 121.0 : 109.0) / 30.0;
-      }
-      return (empty ? 121.0 : 109.0) / 30.0;
     }
     if Equals(owner, n"sidewinder") {
       if variant == 1 {
@@ -652,6 +1248,9 @@ public abstract class GorillaAkimboGuns {
   // Clip seconds at which the rise has settled: after it the reloading arm holds still to the end of the clip (measured
   // from the clips, the latest over both bodies and hands).
   public static func ReloadSettle(owner: CName, variant: Int32, empty: Bool) -> Float {
+    if Equals(owner, n"shingen") {
+      return 37.0 / 30.0;
+    }
     if Equals(owner, n"senkoh") {
       if variant == 3 {
         return 37.0 / 30.0;
@@ -700,6 +1299,9 @@ public abstract class GorillaAkimboGuns {
       }
       return (empty ? 71.0 : 63.0) / 30.0;
     }
+    if Equals(owner, n"borg") {
+      return 37.0 / 30.0;
+    }
     if Equals(owner, n"dian") {
       if variant == 3 {
         return 37.0 / 30.0;
@@ -711,6 +1313,18 @@ public abstract class GorillaAkimboGuns {
         return (empty ? 69.0 : 59.0) / 30.0;
       }
       return (empty ? 68.0 : 54.0) / 30.0;
+    }
+    if Equals(owner, n"tactician") {
+      if variant == 3 {
+        return 37.0 / 30.0;
+      }
+      if variant == 1 {
+        return 49.0 / 30.0;
+      }
+      if variant == 2 {
+        return 36.0 / 30.0;
+      }
+      return 40.0 / 30.0;
     }
     if Equals(owner, n"zhuo") {
       if variant == 3 {
@@ -748,7 +1362,58 @@ public abstract class GorillaAkimboGuns {
       }
       return (empty ? 68.0 : 55.0) / 30.0;
     }
+    if Equals(owner, n"igla") {
+      if variant == 3 {
+        return 37.0 / 30.0;
+      }
+      if variant == 1 {
+        return 63.0 / 30.0;
+      }
+      if variant == 2 {
+        return 63.0 / 30.0;
+      }
+      return 60.0 / 30.0;
+    }
+    if Equals(owner, n"palica") {
+      if variant == 3 {
+        return 37.0 / 30.0;
+      }
+      if variant == 1 {
+        return 63.0 / 30.0;
+      }
+      if variant == 2 {
+        return 63.0 / 30.0;
+      }
+      return 61.0 / 30.0;
+    }
+    if Equals(owner, n"testera") {
+      if variant == 3 {
+        return 39.0 / 30.0;
+      }
+      if variant == 1 {
+        return 72.0 / 30.0;
+      }
+      if variant == 2 {
+        return 72.0 / 30.0;
+      }
+      return 69.0 / 30.0;
+    }
+    if Equals(owner, n"satara") {
+      if variant == 3 {
+        return 39.0 / 30.0;
+      }
+      if variant == 1 {
+        return 72.0 / 30.0;
+      }
+      if variant == 2 {
+        return 72.0 / 30.0;
+      }
+      return 69.0 / 30.0;
+    }
     if Equals(owner, n"ajax") {
+      if variant == 3 {
+        return 37.0 / 30.0;
+      }
       if variant == 1 {
         return (empty ? 100.0 : 79.0) / 30.0;
       }
@@ -758,6 +1423,9 @@ public abstract class GorillaAkimboGuns {
       return (empty ? 100.0 : 81.0) / 30.0;
     }
     if Equals(owner, n"copperhead") {
+      if variant == 3 {
+        return 37.0 / 30.0;
+      }
       if variant == 1 {
         return (empty ? 91.0 : 75.0) / 30.0;
       }
@@ -767,6 +1435,9 @@ public abstract class GorillaAkimboGuns {
       return (empty ? 91.0 : 76.0) / 30.0;
     }
     if Equals(owner, n"masamune") {
+      if variant == 3 {
+        return 39.0 / 30.0;
+      }
       if variant == 1 {
         return (empty ? 112.0 : 94.0) / 30.0;
       }
@@ -776,6 +1447,9 @@ public abstract class GorillaAkimboGuns {
       return (empty ? 109.0 : 96.0) / 30.0;
     }
     if Equals(owner, n"sidewinder") {
+      if variant == 3 {
+        return 37.0 / 30.0;
+      }
       if variant == 1 {
         return (empty ? 91.0 : 75.0) / 30.0;
       }
@@ -785,6 +1459,9 @@ public abstract class GorillaAkimboGuns {
       return (empty ? 91.0 : 76.0) / 30.0;
     }
     if Equals(owner, n"hercules") {
+      if variant == 3 {
+        return 39.0 / 30.0;
+      }
       if variant == 1 {
         return 159.0 / 30.0;
       }
@@ -796,9 +1473,121 @@ public abstract class GorillaAkimboGuns {
     return 0.0;
   }
 
-  // Guns with a quick-drop fallback clip (variant 3 in the layout functions): played instead of the picked reload
-  // when that one would have to be sped up too much (GorillaAkimboReload.FallbackAbove).
-  public static func ReloadFallback(owner: CName) -> Bool {
+  // Clip seconds at which the rise has settled, for the lowered-stance variant clips (measured from them).
+  public static func ReloadSettleLow(owner: CName, variant: Int32, empty: Bool) -> Float {
+    if Equals(owner, n"senkoh") {
+      if variant == 1 {
+        return (empty ? 64.0 : 56.0) / 30.0;
+      }
+      if variant == 2 {
+        return 65.0 / 30.0;
+      }
+      return 65.0 / 30.0;
+    }
+    if Equals(owner, n"pulsar") {
+      if variant == 1 {
+        return 65.0 / 30.0;
+      }
+      if variant == 2 {
+        return 65.0 / 30.0;
+      }
+      return 65.0 / 30.0;
+    }
+    if Equals(owner, n"saratoga") {
+      if variant == 1 {
+        return 69.0 / 30.0;
+      }
+      if variant == 2 {
+        return 69.0 / 30.0;
+      }
+      return 69.0 / 30.0;
+    }
+    if Equals(owner, n"warden") {
+      if variant == 1 {
+        return 74.0 / 30.0;
+      }
+      if variant == 2 {
+        return 74.0 / 30.0;
+      }
+      return 74.0 / 30.0;
+    }
+    if Equals(owner, n"dian") {
+      if variant == 1 {
+        return (empty ? 69.0 : 59.0) / 30.0;
+      }
+      if variant == 2 {
+        return (empty ? 69.0 : 59.0) / 30.0;
+      }
+      return 68.0 / 30.0;
+    }
+    if Equals(owner, n"zhuo") {
+      if variant == 1 {
+        return 78.0 / 30.0;
+      }
+      if variant == 2 {
+        return 78.0 / 30.0;
+      }
+      return 78.0 / 30.0;
+    }
+    if Equals(owner, n"crusher") {
+      if variant == 1 {
+        return (empty ? 69.0 : 54.0) / 30.0;
+      }
+      if variant == 2 {
+        return (empty ? 69.0 : 54.0) / 30.0;
+      }
+      return 69.0 / 30.0;
+    }
+    if Equals(owner, n"pozhar") {
+      if variant == 1 {
+        return (empty ? 69.0 : 68.0) / 30.0;
+      }
+      if variant == 2 {
+        return (empty ? 69.0 : 54.0) / 30.0;
+      }
+      return 68.0 / 30.0;
+    }
+    if Equals(owner, n"ajax") {
+      if variant == 1 {
+        return (empty ? 100.0 : 79.0) / 30.0;
+      }
+      if variant == 2 {
+        return (empty ? 100.0 : 81.0) / 30.0;
+      }
+      return (empty ? 110.0 : 83.0) / 30.0;
+    }
+    if Equals(owner, n"copperhead") {
+      if variant == 1 {
+        return (empty ? 104.0 : 89.0) / 30.0;
+      }
+      if variant == 2 {
+        return (empty ? 89.0 : 76.0) / 30.0;
+      }
+      return (empty ? 104.0 : 89.0) / 30.0;
+    }
+    if Equals(owner, n"sidewinder") {
+      if variant == 1 {
+        return (empty ? 103.0 : 88.0) / 30.0;
+      }
+      if variant == 2 {
+        return (empty ? 103.0 : 88.0) / 30.0;
+      }
+      return (empty ? 103.0 : 88.0) / 30.0;
+    }
+    if Equals(owner, n"hercules") {
+      if variant == 1 {
+        return 183.0 / 30.0;
+      }
+      if variant == 2 {
+        return 183.0 / 30.0;
+      }
+      return 183.0 / 30.0;
+    }
+    return 0.0;
+  }
+
+  // Whether a gun has reload clips for the lowered stance (reload.lowered_variant): played when the weapon is lowered (safe) as the reload starts.
+  public static func ReloadLowered(owner: CName) -> Bool {
     switch owner {
       case n"senkoh":
       case n"pulsar":
@@ -808,6 +1597,91 @@ public abstract class GorillaAkimboGuns {
       case n"zhuo":
       case n"crusher":
       case n"pozhar":
+      case n"ajax":
+      case n"copperhead":
+      case n"sidewinder":
+      case n"hercules":
+        return true;
+    }
+    return false;
+  }
+
+  // The anim wrapper on the player that selects the lowered-stance arm sets of a gun (GorillaAkimboSmgShotgun.archive.xl).
+  public static func ReloadLowWrapper(owner: CName) -> CName {
+    if Equals(owner, n"senkoh") {
+      return n"gorillaakimbo_lowreload_senkoh";
+    }
+    if Equals(owner, n"pulsar") {
+      return n"gorillaakimbo_lowreload_pulsar";
+    }
+    if Equals(owner, n"saratoga") {
+      return n"gorillaakimbo_lowreload_saratoga";
+    }
+    if Equals(owner, n"warden") {
+      return n"gorillaakimbo_lowreload_warden";
+    }
+    if Equals(owner, n"dian") {
+      return n"gorillaakimbo_lowreload_dian";
+    }
+    if Equals(owner, n"zhuo") {
+      return n"gorillaakimbo_lowreload_zhuo";
+    }
+    if Equals(owner, n"crusher") {
+      return n"gorillaakimbo_lowreload_crusher";
+    }
+    if Equals(owner, n"pozhar") {
+      return n"gorillaakimbo_lowreload_pozhar";
+    }
+    if Equals(owner, n"ajax") {
+      return n"gorillaakimbo_lowreload_ajax";
+    }
+    if Equals(owner, n"copperhead") {
+      return n"gorillaakimbo_lowreload_copperhead";
+    }
+    if Equals(owner, n"sidewinder") {
+      return n"gorillaakimbo_lowreload_sidewinder";
+    }
+    if Equals(owner, n"hercules") {
+      return n"gorillaakimbo_lowreload_hercules";
+    }
+    return n"None";
+  }
+
+  // Guns with a quick-drop fallback clip (variant 3 in the layout functions): played instead of the picked reload
+  // when that one would have to be sped up too much (GorillaAkimboReload.FallbackAbove).
+  public static func ReloadFallback(owner: CName) -> Bool {
+    switch owner {
+      case n"shingen":
+      case n"senkoh":
+      case n"pulsar":
+      case n"saratoga":
+      case n"warden":
+      case n"borg":
+      case n"dian":
+      case n"tactician":
+      case n"zhuo":
+      case n"crusher":
+      case n"pozhar":
+      case n"igla":
+      case n"palica":
+      case n"testera":
+      case n"satara":
+      case n"ajax":
+      case n"copperhead":
+      case n"masamune":
+      case n"sidewinder":
+      case n"hercules":
+        return true;
+    }
+    return false;
+  }
+
+  // Guns whose only own clip is the quick-drop fallback (the top-magazine guns): a reload of theirs that comes to the
+  // own-reload path plays the fallback (variant 3) whatever the game picked.
+  public static func ReloadFallbackOnly(owner: CName) -> Bool {
+    switch owner {
+      case n"shingen":
+      case n"borg":
         return true;
     }
     return false;
@@ -817,14 +1691,21 @@ public abstract class GorillaAkimboGuns {
   // (pump, barrels, shells) on shell-fed guns. Its wrapper is turned on for the reload.
   public static func ReloadMagazine(owner: CName) -> Bool {
     switch owner {
+      case n"shingen":
       case n"senkoh":
       case n"pulsar":
       case n"saratoga":
       case n"warden":
+      case n"borg":
       case n"dian":
+      case n"tactician":
       case n"zhuo":
       case n"crusher":
       case n"pozhar":
+      case n"igla":
+      case n"palica":
+      case n"testera":
+      case n"satara":
       case n"ajax":
       case n"copperhead":
       case n"masamune":
@@ -838,17 +1719,150 @@ public abstract class GorillaAkimboGuns {
   // Shell-fed guns (layout "loads": tube, break-open): clip seconds at which the clip puts a shell into the gun, per
   // variant and clip, and which of them goes into the chamber (-1: none).
   public static func ReloadLoads(owner: CName, variant: Int32, empty: Bool) -> array<Float> {
+    if Equals(owner, n"tactician") {
+      if variant == 3 {
+        return empty ? [20.0 / 30.0, 22.0 / 30.0] : [21.0 / 30.0];
+      }
+      if variant == 1 {
+        return [13.0 / 30.0];
+      }
+      if variant == 2 {
+        return [12.0 / 30.0, 15.0 / 30.0, 18.0 / 30.0];
+      }
+      return [13.0 / 30.0];
+    }
+    if Equals(owner, n"igla") {
+      if variant == 3 {
+        return empty ? [20.0 / 30.0, 22.0 / 30.0] : [21.0 / 30.0];
+      }
+      if variant == 1 {
+        return empty ? [38.0 / 30.0, 39.0 / 30.0] : [38.0 / 30.0];
+      }
+      if variant == 2 {
+        return empty ? [38.0 / 30.0, 39.0 / 30.0] : [38.0 / 30.0];
+      }
+      return empty ? [38.0 / 30.0, 39.0 / 30.0] : [38.0 / 30.0];
+    }
+    if Equals(owner, n"palica") {
+      if variant == 3 {
+        return empty ? [20.0 / 30.0, 22.0 / 30.0] : [21.0 / 30.0];
+      }
+      if variant == 1 {
+        return empty ? [38.0 / 30.0, 39.0 / 30.0] : [38.0 / 30.0];
+      }
+      if variant == 2 {
+        return empty ? [38.0 / 30.0, 39.0 / 30.0] : [38.0 / 30.0];
+      }
+      return empty ? [38.0 / 30.0, 39.0 / 30.0] : [38.0 / 30.0];
+    }
+    if Equals(owner, n"testera") {
+      if variant == 3 {
+        return empty ? [20.0 / 30.0, 22.0 / 30.0] : [21.0 / 30.0];
+      }
+      if variant == 1 {
+        return [43.0 / 30.0];
+      }
+      if variant == 2 {
+        return [43.0 / 30.0];
+      }
+      return [43.0 / 30.0];
+    }
+    if Equals(owner, n"satara") {
+      if variant == 3 {
+        return empty ? [20.0 / 30.0, 22.0 / 30.0] : [21.0 / 30.0];
+      }
+      if variant == 1 {
+        return empty ? [43.0 / 30.0, 44.0 / 30.0] : [43.0 / 30.0];
+      }
+      if variant == 2 {
+        return empty ? [43.0 / 30.0, 44.0 / 30.0] : [43.0 / 30.0];
+      }
+      return empty ? [43.0 / 30.0, 44.0 / 30.0] : [43.0 / 30.0];
+    }
     let none: array<Float>;
     return none;
   }
 
   public static func ReloadChamber(owner: CName, variant: Int32, empty: Bool) -> Int32 {
+    if Equals(owner, n"tactician") {
+      if variant == 3 {
+        return -1;
+      }
+      if variant == 1 {
+        return 1;
+      }
+      if variant == 2 {
+        return -1;
+      }
+      return -1;
+    }
+    if Equals(owner, n"igla") {
+      if variant == 3 {
+        return -1;
+      }
+      if variant == 1 {
+        return -1;
+      }
+      if variant == 2 {
+        return -1;
+      }
+      return -1;
+    }
+    if Equals(owner, n"palica") {
+      if variant == 3 {
+        return -1;
+      }
+      if variant == 1 {
+        return -1;
+      }
+      if variant == 2 {
+        return -1;
+      }
+      return -1;
+    }
+    if Equals(owner, n"testera") {
+      if variant == 3 {
+        return -1;
+      }
+      if variant == 1 {
+        return -1;
+      }
+      if variant == 2 {
+        return -1;
+      }
+      return -1;
+    }
+    if Equals(owner, n"satara") {
+      if variant == 3 {
+        return -1;
+      }
+      if variant == 1 {
+        return -1;
+      }
+      if variant == 2 {
+        return -1;
+      }
+      return -1;
+    }
     return -1;
   }
 
   // Shells the clip shows going in after its hidden part (tube: a meet or a saddle catch): heard there; the ammo of
   // every shell is counted by the end of the hidden part. Clip seconds; their chamber index follows ReloadLoads.
   public static func ReloadLateLoads(owner: CName, variant: Int32, empty: Bool) -> array<Float> {
+    if Equals(owner, n"tactician") {
+      if variant == 3 {
+        let none: array<Float>;
+        return none;
+      }
+      if variant == 1 {
+        return [37.0 / 30.0];
+      }
+      if variant == 2 {
+        return [];
+      }
+      return [27.0 / 30.0];
+    }
     let none: array<Float>;
     return none;
   }

@@ -1,4 +1,5 @@
-"""Per-gun tuning of a raised family: the smallest s (5 mm steps) whose idle cover is at or under the family target,
+"""Per-gun tuning of a raised family: the smallest s (5 mm steps) whose idle cover is at or under the family target (right gun; left gun
+within checks.raised.cover_over_target_max_pct of it),
 while the arm rules of checks.raised hold (reach, wrist, eye distance, gun gap). A gun that shares its model variable
 (Umbra with the Copperhead) is tuned together with the gun that owns it: the larger s serves both.
 
@@ -32,21 +33,28 @@ def failures(m, game):
     if r['wrist'] > RULES['wrist_max_deg'] or r['wrist_vs_game'] > RULES['wrist_vs_game_max_deg']: bad.append('wrist')
     if r['eye'] < min(RULES['eye_min_cm'], game['idle']['Right']['eye']): bad.append('eye')
     if m['idle']['gap'] < min(RULES['gap_min_cm'], game['idle']['gap']): bad.append('gap')
+    if m['aim']['Right']['eye'] < min(RULES['eye_aim_min_cm'], game['aim']['Right']['eye']): bad.append('eye aim')
     return bad
+
+
+def at_target(m, f):
+    """The idle cover is at the family target: the right gun at it, the left gun within the gate's tolerance (the gate checks both
+    hands, and an asymmetric gun covers more on one side)."""
+    return m['idle']['Right']['cover'] <= f['target'] and m['idle']['Left']['cover'] <= f['target'] + RULES['cover_over_target_max_pct']
 
 
 def tune(body, G, fam):
     """-> (s, metrics at s, note, game pose metrics)"""
     f = R.FAM[fam]; game = evaluate(body, G, None, 0.0)
     best = (0.0, game, 'no passing s'); s = RULES['step']
-    if game['idle']['Right']['cover'] <= f['target']:
+    if at_target(game, f):
         return 0.0, game, 'at the target in the game pose', game
     while s <= f['s_max'] + 1e-9:
         m = evaluate(body, G, fam, s); bad = failures(m, game)
         if bad:
             return best[0], best[1], f'stopped by {",".join(bad)} at {s:.3f}, target not reached', game
         best = (round(s, 3), m, 'target reached')
-        if m['idle']['Right']['cover'] <= f['target']: return best + (game,)
+        if at_target(m, f): return best + (game,)
         s += RULES['step']
     return best[0], best[1], 's_max, target not reached', game
 

@@ -71,6 +71,7 @@ def vanilla(gid, clip):
     mg = Glb(m); c = TClip(mg, clip); W0 = c.wf(0)
     pair = [('magazine', jn if jn in mg.names else 'magazine')]
     if 'magazine_reload' in mg.names and 'mag_stdr' in mg.names and 'magazine_reload' in c.moved(): pair.append(('magazine_reload', 'mag_stdr'))
+    if 'reload_magazine' in mg.names and 'mag_stdr' in mg.names and 'reload_magazine' in c.moved(): pair.append(('reload_magazine', 'mag_stdr'))   # round1-front: Zhuo
     Ms = []; dist = []
     for f in range(c.frames):
         W = c.wf(f); best = None

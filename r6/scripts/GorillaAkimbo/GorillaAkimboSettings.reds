@@ -246,6 +246,20 @@ public class GorillaAkimboSettings extends IScriptable {
   @runtimeProperty("ModSettings.description", "Dual-wield Quasar and Burya, which the game leaves out. No Gorilla Arms needed. Applies to guns you equip from now on.")
   public let revolvers: Bool = true;
 
+  @runtimeProperty("ModSettings.mod", "Gorilla Akimbo")
+  @runtimeProperty("ModSettings.category", "Vehicles")
+  @runtimeProperty("ModSettings.category.order", "8")
+  @runtimeProperty("ModSettings.displayName", "Guns in driver combat")
+  @runtimeProperty("ModSettings.description", "With Gorilla Arms, V can shoot any ranged firearm from a car or bike. One gun at a time; a pair keeps its right gun.")
+  public let vehicleGuns: Bool = true;
+
+  @runtimeProperty("ModSettings.mod", "Gorilla Akimbo")
+  @runtimeProperty("ModSettings.category", "Left gun key")
+  @runtimeProperty("ModSettings.category.order", "9")
+  @runtimeProperty("ModSettings.displayName", "Left gun key")
+  @runtimeProperty("ModSettings.description", "A key puts the left gun away and draws it again, keeping the right gun. Set the key in Key Bindings (Unified Keybinds).")
+  public let akimboToggle: Bool = true;
+
   // Whether a gun of this group (GorillaAkimboGuns.Group) is switched on: the group's switch, then the gun's kind
   // (Power, Smart, Tech). A new group needs its switches above and its line here.
   public func Allows(group: CName, item: ref<gameItemData>) -> Bool {

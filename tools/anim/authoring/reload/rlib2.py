@@ -73,7 +73,7 @@ class TL:
 
     def arrays(self):
         """Per-frame offsets with the muzzle drag added."""
-        P, R = self.P.copy(), self.R.copy(); P[-1] = 0; R[-1] = 0
+        P, R = self.P.copy(), self.R.copy(); P[-1] = getattr(self, 'end_p', 0); R[-1] = getattr(self, 'end_r', 0)      # end_p, end_r: the end rest if not the idle (lowered variant)
         V = np.gradient(P, axis=0) * 100                      # cm/frame, world axes (the gun points along -z in the idle)
         d = np.stack([-V[:, 1] * self.drag, V[:, 0] * self.drag, np.zeros(self.N)], 1)   # pitch against up-speed, yaw against side-speed
         d = np.clip(d, -self.drag_max, self.drag_max)

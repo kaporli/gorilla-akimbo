@@ -38,6 +38,21 @@ for g, body, side, aname, mname, _ in rreload.plan():
         w = rreload.wrapper(body, side, g['id']); wr.append(w)
         for comp in g['reload']['magazine'].get('components', ['Magazine', 'MagazineReload']):
             lines += [f'  - entity: {MAG_ENTITY}', f'    component: {comp}', f'    set: gorillaakimbo\\animations\\{mname}.anims', f'    vars: [{w}]', '    priority: 100']
+# Lowered-stance variants (reload.lowered_variant, rreload.low_plan): the arm set of the variant clips with the gun's variable and the player wrapper
+# (set by the script when the reload starts in the lowered stance), at priority 62, a lower number than the gun's own set (63): the lower number wins; the magazine set of the variant clips on its own
+# wrapper (gorillaakimbo_rmagl_<gun>_<body>_<side>), which the script turns on instead of the shipped set's.
+for g, body, side, aname, mname, _ in rreload.low_plan():
+    if rreload.archive(g) != ARCHIVE:
+        continue
+    lv = rreload.lowered(g)
+    if built(aname):
+        for var in manifest.gun_vars(g):
+            lines += ['  - entity: [' + ', '.join(ENT[body]) + ']', f'    set: gorillaakimbo\\animations\\{aname}.anims',
+                      '    vars: [dual_wield, ' + var + ('' if side == 'right' else '_left') + ', ' + lv['wrapper'] + ']', f"    priority: {lv['priority']}"]
+    if mname and built(mname):
+        w = rreload.low_mag_wrapper(body, side, g['id']); wr.append(w)
+        for comp in g['reload']['magazine'].get('components', ['Magazine', 'MagazineReload']):
+            lines += [f'  - entity: {MAG_ENTITY}', f'    component: {comp}', f'    set: gorillaakimbo\\animations\\{mname}.anims', f'    vars: [{w}]', '    priority: 100']
 # Gun part sets (reload.parts: shell-fed guns, rpartset.py): the barrel set on the gun's Barrel component and the shell
 # set on its two shell components, keyed on the same wrapper the script turns on for a magazine set
 # (gorillaakimbo_rmag_<gun>_<body>_<side>, the fallback's gorillaakimbo_rmagq_<gun>).
@@ -50,6 +65,14 @@ for g, body, side, bname, sname, _ in rreload.parts_plan():
         wr.append(w)
         for comp in comps:
             lines += [f'  - entity: {MAG_ENTITY}', f'    component: {comp}', f'    set: gorillaakimbo\\animations\\{n}.anims', f'    vars: [{w}]', '    priority: 100']
+# Handle part sets (rule H1, hpartset.py): the weapon set's cocking handle (bolt, slider, lever) played inside the clip's hidden window, on the Barrel component (the component of the gun's base1 set,
+# as the tube guns' barrel sets; unverified for these guns in game), keyed on the same wrapper as the magazine set of the same arm set.
+for g, body, side, hname, low, _ in rreload.handle_plan():
+    if rreload.archive(g) != ARCHIVE or not built(hname):
+        continue
+    w = rreload.low_mag_wrapper(body, side, g['id']) if low else rreload.wrapper(body, side, g['id']); wr.append(w)
+    for comp in g['reload'].get('handle_components', ['Barrel']):
+        lines += [f'  - entity: {MAG_ENTITY}', f'    component: {comp}', f'    set: gorillaakimbo\\animations\\{hname}.anims', f'    vars: [{w}]', '    priority: 100']
 for g, bname, sname, _ in rreload.quick_parts_plan():
     if rreload.archive(g) != ARCHIVE:
         continue

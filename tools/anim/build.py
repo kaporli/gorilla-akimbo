@@ -1,7 +1,7 @@
 """Builds everything Gorilla Akimbo ships that is generated: both animation archives, their .archive.xl files,
 GorillaAkimboSounds.reds and GorillaAkimboGuns.reds. Guns, types and paths come from weapons.json.
 
-usage: build.py <command> [...] [--with-test] [--force] [--ref <folder>]
+usage: build.py <command> [...] [--with-test] [--force] [--ref <folder>] [--guns id,id]
   extract   game files the build reads, from the game's archives into the gamefiles folder (WolvenKit)
   reload    per-hand reload arm sets (flick.py), then pack
   topmag    top-magazine reload sets (topmagsets.py, topmag.py), then pack
@@ -16,9 +16,12 @@ usage: build.py <command> [...] [--with-test] [--force] [--ref <folder>]
   rreload   the guns' own one-handed reload sets (rifles, SMGs, shotguns), their magazine sets, archives
             (GorillaAkimboRifles, GorillaAkimboSmgShotgun) and .archive.xl, round trip (rreload.py)
   all       everything above except extract and tables
-  verify    compare the outputs with a reference (git HEAD of the reference repo, or --ref <folder>)
+  verify    compare the outputs with a reference (git HEAD of the reference repo, or --ref <folder>: its files on disk)
   check     numeric checks of the shipped clips and built sets (authoring/checks/gate.py):
             check [--guns id,id] [--bodies pma,pwa] [--clips <dir>] [--only area,area]
+--guns id,id (reload, rreload, verify only): build only what those guns play: the per-hand reload sets they use and their own
+rreload sets. The archives of such a run are partial: reload does not pack, rreload packs its archives into WORK/guns-out, never
+into the checkout; verify then compares only those guns' packed files of the rreload archives with the reference.
 --with-test (or GA_TEST=1) includes weapons.json content with status "test" and writes to WORK/test-out, never into
 the checkout. Work files go to WORK (weapons.json paths.work), outside the repo.
 """
@@ -36,6 +39,12 @@ FORCE = '--force' in args
 REF_DIR = args[args.index('--ref') + 1] if '--ref' in args else None
 if REF_DIR:
     args.remove(REF_DIR)
+GUNS = None
+if '--guns' in args:
+    i = args.index('--guns')
+    if i + 1 >= len(args): raise SystemExit('build: --guns needs id,id')
+    GUNS = [x for x in args[i + 1].split(',') if x]
+    del args[i:i + 2]
 cmds = [a for a in args if not a.startswith('--')]
 import manifest
 
@@ -43,7 +52,7 @@ TEST = manifest.with_test()
 WK = manifest.path('wolvenkit')
 GAME = manifest.path('game')
 WORK = manifest.path('work') + ('/test' if TEST else '')
-OUT = manifest.path('work') + '/test-out' if TEST else ROOT
+OUT = manifest.path('work') + '/test-out' if TEST else (manifest.path('work') + '/guns-out' if GUNS else ROOT)
 OUT_ARCHIVE = OUT + '/archive/pc/mod'
 OUT_SCRIPTS = OUT + '/r6/scripts/GorillaAkimbo'
 SETS = WORK + '/sets'
@@ -145,6 +154,17 @@ def import_set(glb, base_anims, keep, out):
     anims = f'{tmp}/{name}.anims'
     shutil.copyfile(base_anims, anims)
     o = run(['pwsh', '-NoProfile', '-File', f'{HERE}/animimport.ps1', glb.replace('/', '\\'), anims.replace('/', '\\')])
+    if 'import ok: True' not in o and keep:
+        # WolvenKit's import fails when the set holds clips the glb lacks (Borg's mag_std: recoil_shoulder, first_equip). The clips outside
+        # `keep` are renamed away below anyway, so they are dropped from the copy and the import is retried.
+        import struct
+        b = open(glb, 'rb').read(); have = {a['name'] for a in json.loads(b[20:20 + struct.unpack('<I', b[12:16])[0]]).get('animations', [])}
+        shutil.copyfile(base_anims, anims); wk('convert', 's', anims, '-o', tmp)
+        j = json.load(open(anims + '.json', encoding='utf-8')); r = j['Data']['RootChunk']
+        r['animations'] = [e for e in r['animations'] if e['Data']['animation']['Data']['name']['$value'] in have]
+        json.dump(j, open(anims + '.json', 'w', encoding='utf-8'), indent=1)
+        os.makedirs(tmp + '/trim', exist_ok=True); wk('convert', 'd', anims + '.json', '-o', tmp + '/trim'); shutil.copyfile(f'{tmp}/trim/{name}.anims', anims)
+        o = run(['pwsh', '-NoProfile', '-File', f'{HERE}/animimport.ps1', glb.replace('/', '\\'), anims.replace('/', '\\')])
     if 'import ok: True' not in o:
         die(f'import failed: {name}\n{o[-1500:]}')
     if keep:
@@ -156,6 +176,26 @@ def import_set(glb, base_anims, keep, out):
     os.makedirs(os.path.dirname(out), exist_ok=True)
     shutil.copyfile(need(anims), out)
     print('built', name, flush=True)
+
+
+def import_weapon_set(glb, base_anims, vanilla_anims, keep, out, keys=None):
+    """import_set for a set on the gun's own components (Barrel), through wsetimport: frame-count nudge, magazine-style
+    compression, metadata of the game set (vanilla_anims) restored. keys: {clip: frame count} checked after import."""
+    import wsetimport
+    name = os.path.basename(out)[:-len('.anims')]; d = os.path.dirname(glb) + '/wset'; os.makedirs(d, exist_ok=True)
+    prepped = f'{d}/{name}.glb'; wsetimport.prep_glb(glb, prepped, keep)
+    imp = f'{d}/imp/{name}.anims'; import_set(prepped, base_anims, keep, imp)
+    wk('convert', 's', imp, '-o', os.path.dirname(imp))
+    van = f'{d}/van/{name}.anims'; os.makedirs(os.path.dirname(van), exist_ok=True); shutil.copyfile(vanilla_anims, van)
+    wk('convert', 's', van, '-o', os.path.dirname(van))
+    # own folders: import_set uses <glb folder>/out for its renamed copy, and convert does not replace an existing file
+    os.makedirs(f'{d}/fix', exist_ok=True); fixed = f'{d}/patched/{name}.anims'
+    if os.path.exists(fixed): os.remove(fixed)
+    os.makedirs(os.path.dirname(fixed), exist_ok=True)
+    wsetimport.patch(imp + '.json', van + '.json', f'{d}/fix/{name}.anims.json', keys)
+    wk('convert', 'd', f'{d}/fix/{name}.anims.json', '-o', os.path.dirname(fixed))
+    shutil.copyfile(need(fixed), out)
+    print('weapon set import path', name, flush=True)
 
 
 def parallel(jobs):
@@ -197,8 +237,10 @@ def reload():
         py('flick.py', need(src + '.glb'), glb, side, '--rest', need(glb_pose), '--hands', need(glb_hands))
         import_set(glb, need(src), None, f'{SETS}/GorillaAkimbo/{name}.anims')
 
-    parallel([lambda a=a: one(*a) for a in reload_names()]
-             + [lambda a=(body, side, name, glb, hands): own(*a) for body, side, kind, name, glb, hands, _ in raised_plan() if kind == 'reload'])
+    only = rreload.today_sets() if GUNS else None      # --guns: just the sets those guns play
+    parallel([lambda a=a: one(*a) for a in reload_names() if only is None or a[2] in only]
+             + [lambda a=(body, side, name, glb, hands): own(*a) for body, side, kind, name, glb, hands, _ in raised_plan()
+                if kind == 'reload' and (only is None or name in only)])
 
 
 def raised_plan():
@@ -233,7 +275,8 @@ def topmag():
         src = source_set('reload_source', body=body, side='right')
         glb = f'{tmp}/{name}/{name}.glb'
         os.makedirs(os.path.dirname(glb))
-        py('topmag.py', need(src + '.glb'), glb, *[f'{need(p)}={n}' for p, n in clips])
+        # --phases: the reload clip carries the shell-loop End state's phases (the quick-drop fallback ends there)
+        py('topmag.py', need(src + '.glb'), glb, *[f'{need(p)}={n}' for p, n in clips], '--phases')
         import_set(glb, need(src), [n for _, n in clips], f'{SETS}/GorillaAkimbo/{name}.anims')
 
     parallel([lambda a=(body, name, clips): one(*a) for body, name, clips, _ in topmag_plan()])
@@ -343,8 +386,45 @@ def unpacked(archive_file, to):
             for f in glob.glob(to + '/**/*', recursive=True) if os.path.isfile(f)}
 
 
+def verify_guns(read):
+    """--guns: the packed files of the guns' own rreload sets, in each rreload archive of the build, against the same files of the
+    reference archive (the other sets of the reference archive and the texts are not part of a partial build)."""
+    bad = 0
+    for a in rreload.archives():
+        names = {f'gorillaakimbo/animations/{n}.anims' for n in rreload.archive_names(a)}
+        rel = f'archive/pc/mod/{a}.archive'
+        if not os.path.exists(f'{OUT}/{rel}'):
+            print(f'DIFFERENT  {rel} (not built)'); bad += 1
+            continue
+        ref = WORK + '/ref'
+        os.makedirs(ref, exist_ok=True)
+        open(f'{ref}/{a}.archive', 'wb').write(read(rel))
+        want = {k: v for k, v in unpacked(f'{ref}/{a}.archive', f'{ref}/{a}').items() if k in names}
+        got = {k: v for k, v in unpacked(f'{OUT}/{rel}', f'{WORK}/verify/{a}').items() if k in names}
+        same = sorted(k for k in want if got.get(k) == want[k])
+        changed = sorted(k for k in want if k in got and got[k] != want[k])
+        only_ref = sorted(set(want) - set(got)); only_new = sorted(set(got) - set(want))
+        missing = sorted(names - set(want) - set(got))
+        ok = len(same) == len(names) and not (changed or only_ref or only_new)
+        bad += not ok
+        print(f'{"identical" if ok else "DIFFERENT":10s} {rel}: {len(same)} of {len(names)} packed files of {",".join(GUNS)} byte-identical, '
+              f'{len(changed)} differ, {len(only_ref)} only in the reference, {len(only_new)} only in the build, {len(missing)} in neither')
+        for k in changed: print('  differs:', k)
+        for k in only_ref: print('  only in the reference:', k)
+        for k in only_new: print('  only in the build:', k)
+        for k in missing: print('  in neither:', k)
+    print('verify:', 'all identical' if not bad else f'{bad} archives differ')
+    return bad
+
+
 def verify():
     ref = WORK + '/ref'
+    if GUNS:
+        if REF_DIR:
+            src = REF_DIR.replace('\\', '/'); print('reference: folder', src)
+            return verify_guns(lambda rel: open(f'{src}/{rel}', 'rb').read())
+        repo = manifest.path('reference'); print('reference: git HEAD of', repo)
+        return verify_guns(lambda rel: subprocess.run(['git', '-C', repo, 'cat-file', 'blob', 'HEAD:' + rel], capture_output=True, check=True).stdout)
     fresh(ref)
     if REF_DIR:
         src = REF_DIR.replace('\\', '/')
@@ -405,6 +485,7 @@ def verify():
 STEPS = {'extract': extract, 'reload': reload, 'topmag': topmag, 'mag': mag, 'lowered': lowered, 'raised': raised, 'xl': xl,
          'sounds': sounds, 'guns': guns, 'tables': tables}
 import rreload
+rreload.ONLY = GUNS
 STEPS['rreload'] = lambda: rreload.step(sys.modules[__name__])
 PACKS = {'reload': 'GorillaAkimbo', 'topmag': 'GorillaAkimbo', 'mag': 'GorillaAkimbo', 'lowered': 'GorillaAkimboLowered',
          'raised': 'GorillaAkimbo'}
@@ -413,6 +494,12 @@ if __name__ == '__main__':
     if not cmds or any(c not in STEPS and c not in ('all', 'verify') for c in cmds):
         print(__doc__)
         sys.exit(2)
+    if GUNS:
+        bad = [c for c in cmds if c not in ('reload', 'rreload', 'verify')]
+        known = {g['id'] for g in manifest.guns(all_=True)}
+        if bad or 'all' in cmds: die(f'--guns applies to reload, rreload and verify only (not {", ".join(bad or ["all"])})')
+        if set(GUNS) - known: die('unknown gun ' + ', '.join(sorted(set(GUNS) - known)))
+        if not rreload.owners(): print(f'build: no own sets to build for {",".join(GUNS)} (no reload slots in this build, parked, or it shares another gun\'s clips)')
     if 'all' in cmds:
         cmds = ['reload', 'topmag', 'mag', 'lowered', 'raised', 'rreload', 'xl', 'sounds', 'guns'] + [c for c in cmds if c in ('verify',)]
     os.makedirs(WORK, exist_ok=True)
@@ -422,6 +509,7 @@ if __name__ == '__main__':
             STEPS[c]()
     for a in ARCHIVES:
         if any(PACKS.get(c) == a for c in cmds):
-            pack(a)
+            if GUNS: print(f'{a}.archive not packed: a --guns run builds sets only')
+            else: pack(a)
     if 'verify' in cmds:
         sys.exit(1 if verify() else 0)

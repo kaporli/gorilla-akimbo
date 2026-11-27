@@ -11,7 +11,7 @@ Everything generated that the mod ships, and the tools that author and check the
 | `GorillaAkimbo.archive`: `w_smg__arasaka_shingen__mag_*.anims` (6) | The Shingen magazine's flight after the hit. | Flight spec (`authoring/magtrack/spec.json`), written by `build.sh mag` (`magtrack.py`). |
 | `GorillaAkimbo.archive`: `<body>_dual_wield_<side>_raised_<pose>.anims`, `<body>_dual_wield_<side>_reload_<pose>.anims`, `<body>_topmag_*_raised_<pose>.anims` | Raised pose of a gun that is too bulky for the game's pistol pose (rifles): its pose clips, its own per-hand reload set (ends in that pose, with its equip, unequip, melee) and the top-magazine sets with it as partner. Only guns with a `raised` entry. | Authored clips (`paths.raised_clips`), packed by `build.sh raised`, `reload`, `topmag`. |
 | `GorillaAkimboRifles.archive`: `<body>_dual_wield_<side>_rreload_<gun>.anims`, `<gun>__rmag_<body>_<side>.anims` | Rifles' own one-handed reloads that fit the magazine (front magazine, Masamune, Hercules cassette), each with its own magazine track. One arm set and one magazine set per owner gun, body and hand. | Authored clips (`paths.rreload_clips`, `authoring/reload/prod.py`), packed by `build.sh rreload` (`rreload.py`, `rarmset.py`, `rmagset.py`, `genrxl.py`). |
-| `GorillaAkimboLowered.archive` (48) | Lowered (safe) stance per hand and gun: v1 low ready, v2 high port. | Authored clips (`paths.low_clips`), packed by `build.sh lowered`. |
+| `GorillaAkimboLowered.archive` (48) | Lowered (safe) stance per hand and gun: v1 low ready, v1d deep low ready (over 90 cm). | Authored clips (`paths.low_clips`), packed by `build.sh lowered`. |
 | The `.archive.xl` files | Which set plays for which model variables. | `build.sh xl`; the rifles' one by `build.sh rreload` |
 | `GorillaAkimboSounds.reds`, `GorillaAkimboGuns.reds` | Reload sound times; types, long partners, top-magazine timing. | `build.sh sounds`, `guns` |
 
@@ -20,15 +20,21 @@ Everything generated that the mod ships, and the tools that author and check the
 ```
 tools/anim/build.sh extract          # once: game files from the game's archives (about 2 minutes)
 tools/anim/build.sh all              # build everything into the checkout (about 25 minutes)
-tools/anim/build.sh verify           # compare with git HEAD of the reference repo, or --ref <folder>
+tools/anim/build.sh verify           # compare with git HEAD of the reference repo (REF), or --ref <folder>: that folder's files as they are on disk
 tools/anim/build.sh check            # numeric checks of the shipped clips and built sets (about 10 minutes)
+tools/anim/build.sh check --only draft   # the owner's reload rules (R1 to R6, R2b, R4a, R7, R8; physics rules for free parts, finger torque of in-hand turns) on every reload clip, shipped and parked (no WolvenKit, about 2 minutes)
+python tools/anim/authoring/checks/draftcheck.py --family smg_front <clip.json or folder>   # the same rules on drafts outside the manifest; writes <clip>_draft.json
 tools/anim/build.sh all --with-test  # also the "test" content of weapons.json, into WORK/test-out only
+tools/anim/build.sh reload rreload --guns <id>   # only the sets one gun plays (partial archives in WORK/guns-out, never the checkout)
+tools/anim/build.sh verify --guns <id>           # that gun's packed files in the rreload archives against the reference
+tools/anim/ga.sh produce <gun> [--out <dir>] [--dry-run] [--write-layout]   # clips, layout, its build steps and its checks for one gun; --write-layout copies a differing layout into weapons.json (see below)
 ```
 
 `all` includes `rreload` (its round trip is about 10 to 15 minutes of the total). It runs after `reload` (it copies the per-hand reload sets
 that step built, the raised-pose ones included) and ends with the round trip: every set exported back and compared
 with its source glb (`WORK/rreload/roundtrip.txt`).
 
+`--guns id,id` works on `reload`, `rreload` and `verify` only: `reload` builds just the per-hand sets those guns play, `rreload` just their own sets.
 Single steps: `reload`, `topmag`, `mag`, `lowered`, `raised`, `rreload`, `xl`, `sounds`, `guns`, `tables`. A step that makes anim sets
 repacks its archive from the sets built so far and stops if some are missing. `tools/anim/gen <step>` is the same.
 Run one build per work folder at a time.
@@ -50,14 +56,15 @@ it. A relative default is relative to `tools/anim`; an entry with `;` lists fold
 | `RRELOADCLIPS` | rifle reload clips, `<body>/<gun>_<side>_<pick><take>_<clip>.glb` with `.json` (spec), `_track.json`, `_gate.json`; `layout.json` |
 | `RRELOADGAMEFILES` | rifles' own game anim sets (weapon, magazine, two-handed arm sets) for timing and magazine paths |
 | `WORK` | build work folder, outside the repo. Sets in `WORK/sets`, test output in `WORK/test-out`, check report in `WORK/check` |
-| `REF` | repo whose git HEAD `verify` compares with |
+| `REF` | repo whose git HEAD `verify` compares with (not used with `--ref <folder>`) |
 | `ANIMWORK` | authoring data folder (specs, drafts, renders, every clip generation; never deleted) |
 | `AUTHORING` | folder for new authoring output |
 | `BLENDER`, `FFMPEG` | blender.exe, ffmpeg.exe |
 | `WMESH`, `WANIM`, `VMESH` | weapon mesh glbs, weapon anim glbs, V's arm mesh glbs (WolvenKit exports) |
 | `JOBS` | parallel jobs (4) |
 
-`verify` reads the reference with `git cat-file blob HEAD:<path>` (no checkout), compares the two `.archive.xl` files
+`verify` reads the reference with `git cat-file blob HEAD:<path>` (no checkout); with `--ref <folder>` it reads `<folder>/<path>` from the
+working tree and git is not consulted. It compares the two `.archive.xl` files
 and `GorillaAkimboSounds.reds` byte for byte and the archives per packed file. A set renamed since the reference
 (`set_names` in `weapons.json`) is compared with its old name and reported as "renamed, content identical".
 
@@ -82,13 +89,15 @@ the same way and `WolvenKit.CLI export` each into a folder of `WMESH`, `WANIM` o
 
 The single source of gun knowledge. No script holds a gun list or a path.
 
-- `paths`: above.
+- `paths`: above. `output`: a note, the entry is only written by the build. `build.sh check --only manifest` fails on any input component under gg-work or a scratchpad / Temp folder; there are no exceptions.
 - `game_files`: player entities per body, the reload source sets, the lowered base set, the magazine entity.
 - `set_names`: name of the per-hand reload sets, and their name before the rename.
 - `reload_clip`: layout of the per-hand reload clips in frames (`flick.py`) and seconds (the script).
 - `checks`: limits of `build.sh check`. "baseline" in a note: the worst value of the shipped clips, kept as the limit.
-- `lowered_families`: v1, v2 and v1d (deep low ready, the longest rifles) lowered poses (template, right-hand offset
-  and angles, clavicle).
+- `lowered_families`: v1, v2 and v1d (deep low ready) lowered poses (template, right-hand offset and angles, clavicle).
+  Pose rule (owner, measures only; `build.sh check --only pose`): the length gives the preferred lowered family (v1d when the assembled gun is longer than
+  `checks.lowered.v1d_over_cm` (90), else v1); it applies only if a tune passes every lowered check (`lowered/fit.py`), else the other family; and family C raised when its idle cover in the game pose is over
+  `checks.raised.limit_pct`, else the game pose. v2 has no user.
 - `raised_families`: raised poses for guns too bulky for the game's pistol pose. A family is a direction for the idle
   clips and one for the aim clip (metres per unit s, right hand), a roll about the barrel and a screen cover target;
   the muzzle direction never changes.
@@ -96,8 +105,8 @@ The single source of gun knowledge. No script holds a gun list or a path.
   and lowered stance), `item_types` with `base_var`, `fallback_audio`, `fallback_audio_shells`.
 - `guns`: `id`, `name`, `type`, `item_type`, `vars` (model variables; the left hand's are these plus `_left`),
   `audio`, `arm_set` (male two-handed arm set, for the sound table), `mesh` (mesh stem), `parts` (mesh parts drawn in
-  previews and used by the top-magazine checks), `mesh_parts` (parts added to body, receiver and stock in the lowered
-  checks), `weapon_anim` (stem of its weapon anim set if not the mesh stem), `length` (long or short), `long_partner`
+  previews and used by the top-magazine checks; the lowered and raised checks measure these plus the receiver and fixed stock),
+  `mesh_parts` (further parts added to that body in the checks), `weapon_anim` (stem of its weapon anim set if not the mesh stem), `length` (long or short), `long_partner`
   (whose long-partner clips it plays; its own id if it has its own), `long_partner_vars`, `lowered` (`family`, `pose`,
   `tune`), `raised` (`family`, `pose`, `s` per body; `{"family": "none"}` keeps the game pose on purpose; no entry is
   the game pose too), `partner` (per top-magazine gun: flip, doubletap, uppercut category), `topmag` (`enabled`, `kind`,
@@ -136,8 +145,13 @@ pass or FAIL, the worst value, its limit, the worst item. Exit code 1 on a failu
 
 | Area | Checks |
 |---|---|
+| `manifest` | no `paths` entry the build reads has a component under `C:/Modding/gg-work` or in a scratchpad / Temp folder; an entry with `output` (a note why) is only written and skipped; the defaults of the file are read, not the environment (no WolvenKit, about 1 second) |
+| `rules` | the rule manifest `rules.json` (the standard, `STANDARD.md`): ids unique, every field filled, every gate rule resolves to a check that emits it and a limit in `weapons.json`, no baselines, every stance plays a variant that passes R9 (no WolvenKit, under 1 second) |
+| `draft` | the owner's reload rules R1 to R14 on every reload clip, shipped and parked, and the stance variants (`authoring/checks/draftcheck.py`, `stdrules.py`; limits in `checks.draft`; about 5 minutes; also run by `ga produce` and `ga drafts`) |
+| `lowvar` | the stance variants: whole gun and hand in the discard window (R9 on the idle margin), wrist from the bind pose, generator gate rules |
 | `clips` | last frame = `idlepose_shoulder`, per hand (0.01 cm, 0.01 deg); frames before the seated frame equal the clip before the fix; hands and guns moved by the fix; one clip of 96 frames |
 | `sets` | every shipped clip of every built set is a SIMD buffer, has the frame count of its glb and lasts (frames - 1) / 30 s |
+| `pose` | the pose rule: every gun's lowered family (v1d over `checks.lowered.v1d_over_cm`, else v1) and raised family (C over `checks.raised.limit_pct`, else none) equals the rule (a gun in its other family must have no passing tune in the preferred one); a gun that shares another's variable follows it; no clips needed |
 | `lowered` | seam and clip ends against the idle; eye distance in the lowered idle (25 cm); nearer than the raised pose; gun gap; wrist bend |
 | `raised` | per raised pose: screen cover at the family target, eye distance, reach, wrist, gun gap, muzzle direction and hand on the grip against the game pose; pose clips start and end in the raised idle; the gun's reload clips, equip, unequip, melee and the top-magazine partner clips start and end there; everything else equals the source clip |
 | `topmag` | contact miss and depth at the hit frame, hands gap, wrist, guns out of view in the hidden window, eye distance, face cover, hands on the guns, constant w < 0 rotation tracks |
@@ -145,44 +159,111 @@ pass or FAIL, the worst value, its limit, the worst item. Exit code 1 on a failu
 | `rreload` | rifle reload clips (`rgate.py`): start and end against the gun's raised idle, hidden window (gun, hand, forearm, magazines off screen in first person, both bodies), no hanging magazine, release velocity, insertion and exit on the well axis, eye distance, cover, wrist, reach, shoulder, body, gun gap; per built set (with `WORK/rreload/roundtrip.txt`): key count, SIMD, path against the source glb |
 | `roundtrip` | only with `--only roundtrip`: built sets exported back to glb against their source glb (one set of each kind; `--roundtrip-all`) |
 
+The standard is `rules.json` (table in `STANDARD.md`, made by `python authoring/checks/rules.py --markdown`). Every rule has an id (reload clip rules R1 to R17, poses P, stance variants V, transitions T, generator gates G, build B, media M, process W), its source, population, limit, scope, stance (inactive = lowered, game Safe; active = raised) and how it is enforced: `gate` (a check item that runs in `build.sh check`, `ga produce` and `ga drafts`), `owner-eye` or `not-enforceable` with the reason. `draftcheck.py` raises an error for a check item that is not registered in `rules.json`, and the area `rules` fails a gate rule whose item or limit does not exist. Limits stay in `weapons.json` `checks` (`limit_ref`). Limits measured on the Warden mesh (R7, R11, R14) are marked Warden-only and are not applied to other guns.
+
 Known misses of the shipped clips are kept as baselines, named in the `checks` notes of `weapons.json` and in
 `authoring/magtrack/baseline.json`: a new clip must not be worse. They are: Burya misses the magazine by 2.5 cm in
 one uppercut clip (rule 2 cm); double tap brings some SMGs within 0.5 cm of the eye; two pair clips move in the
 hidden hold; four magazine flights leave more than 25 deg off the push; the import stores the per-hand reload clips
 (139 keys) and the lowered clips (121, 43, 16 keys) with one frame less, resampled (96 and 112 keys come back exact).
 
+## Regenerate the shipped clips (`authoring/checks/regen.py`)
+
+Checks that a tool tree still makes the shipped reload clips. `regen.py list` prints the acceptance set from
+`weapons.json`: every `reload.slots` pick, per body and side, reload and empty reload, plus the `reload.fallback`
+clips (FB, FBloop); guns with `reload.parked` are left out unless `--include-parked`.
+
+`regen.py run <tree>/anim/authoring <family> --out <dir> [--guns ..] [--picks ..] [--sides ..] [--bodies ..] [--clips ..] [--limit n] [--jobs n]`
+runs the tree's own generator for the family (`grip`, `bullpup`, `top`, `smg_front`, `tube`, `break`, `front`,
+`masamune`, `hercules`, `fallback`) into `<dir>/clips` or `<dir>/fallback` and compares each glb with the shipped one
+(`cmpclips.py`) and each `_track.json`. The report (`<dir>/report_<family>.md`, or `--report`) gives clip count,
+largest position (cm) and rotation (deg) difference, byte-identical count and the failing clips. Exit code 0 pass,
+1 a clip differs, 2 a shipped file changed, 3 refused to start.
+The families of one `--out` share its `rest` folder and `fallback` reads the clips and rest glbs of the others: run them one after the other, `fallback`
+last. A run marks `<out>/.regen_running/<family>` and a second run in the same `--out` exits 3 at once (no waiting); a marker left by a killed run is
+removed by hand. `fallback.py` takes `--set smg|rifle` or `--guns` (it no longer picks the set from the output folder name).
+
+Set `WORK` and `AUTHORING` to scratch folders first. The tree's `renv.py` must write under `--out` (`ROUND_OUT`);
+`prod.py` takes `--out`. The shipped clip folders are only read: size, mtime and SHA-256 of the accepted files are
+checked before and after the run. `fallback.py` needs the seated magazine track of the gun's reload clip and the
+`ref/` geometry files: both are copied from the shipped folders and named in the report.
+
+## One command per stage (`ga.sh`)
+
+`ga.sh produce <gun> [--out <dir>] [--dry-run] [--jobs n] [--write-layout]`: from the gun's `reload` entry in `weapons.json` (picks, family, take, fallback) it makes
+the gun's production clips with the family's generator (`regen.py`'s command table), the quick-drop fallback clips if the entry has them, runs the
+family's layout and compares the gun's entry with `reload.layout`, then `build.py reload rreload --guns <gun>` (none for a parked gun), then
+`build.sh check --guns <gun> --only manifest,draft` (plus `parts` for a shell-fed gun, `rreload` for a rifle). `--out <dir>` makes the clips in
+`<dir>/clips` and `<dir>/fallback` and points the build and the check there. Without it the clips are made in `WORK/produce_<gun>/stage-<time>`, the build
+and the check read them there, and when every step passed and the layout equals the manifest, each shipped clip of the gun that differs moves to
+`<folder>.prev-<YYYYMMDD>` (`clips`, `fallback`) and is replaced; equal clips stay, nothing is deleted, the moved files are printed.
+`--dry-run` prints every step with command, inputs and outputs and runs nothing. `--no-build` skips the WolvenKit archive build.
+Lowered-stance variants (a gun with a `lowered` entry and a reload entry; step `lowered variants`, `authoring/reload/lowprod.py`): the reload clips that start and end in the gun's lowered idle,
+keep the shipped motion, show the whole gun only around the magazine discard and have the insert off screen. They go to `<root>/lowered/clips` (with `solve/`, `bs_<pick>/`, `layout.json`,
+`magsets/`, `report.json`); the game plays them in the lowered stance and the shipped clips in the raised stance (`reload.lowered_variant`: wrapper, priority, clips path key, layout;
+the xl entries, the script tables and the magazine sets are generated from it). Rules, stated in the `lowprod.py` header and `checks.lowered_variant`:
+per pick the generator's `STOP_DRIVE` table gives the kind (stop: the arm-driven stop of the discard moves; hold: the in-hand hold moves) and the arrival; the offset is solved by `lift.py`
+from the shipped clips (R9 target = the shipped idle's own worst gun vertex margin, game camera, both bodies and hands; from the arrival with the highest stop, else from the release with the smallest move);
+the post-seat gesture scale `s` is bisected on the reach and shoulder limits; the layout is the latest `hide_start` and earliest `hide_end` over bodies and hands.
+The same solved offsets also make raised-stance variants (`<root>/raised/clips`, no lowered overlay, start and end in the raised idle; `reload.raised_variant`): the discard must be in view in every stance, so a raised variant replaces the shipped clip. The `lowvar` check area runs R9, the wrist rule and the gate fails on every clip of every stance.
+A gun whose generator has no hook (only `top3` has one) is not made: the step prints the reason and `ga produce` ends with "lowered variants not made".
+`lowprod.py measure <gun>` gives R9 on its shipped clips. `--write-layout` also writes `reload.lowered_variant.layout`.
+`--write-layout` writes the layout the generator computed into the gun's `reload.layout` and `reload.fallback.layout` of `weapons.json` where it differs (the gun's `reload` line only; keys the manifest already has; tube shells go to `loads` and `late_loads` as the manifest splits them), then the checks run on the new values.
+
+`ga.sh gun add <id> [--from <seed.json>] [--out <dir>] [--dry-run] [--apply] [--ack step,step|all] [--render]`: checks that the game files of steps 2 and 3 are there, measures steps 4, 4a and 5, and proposes the weight, category and magazine of step 10, with the existing tools (`guns.py`, `rautotune.py`, `weight.py`, `classify.py`, `autotune.py`, `rautotune.py --family C`, `partner.py measure`), written to `--out` (`<id>.proposed.json`, `<id>.diff.md`, `steps.md`, sheets). The hand-entered fields (id, name, type, item_type, vars, audio, arm_set, mesh, parts, length) come from `--from` or, for a gun already in `weapons.json`, from its entry with every derived field stripped (a reproduction). It stops with a sheet after each step that needs the owner's eye (weight, classify, lowered, raised, partner; exit 10) until it is named in `--ack`. A missing game file stops it (exit 3); it never starts WolvenKit. Pose rule: the assembled length gives the preferred lowered family (v1d over `checks.lowered.v1d_over_cm`, else v1), taken only if a tune passes every lowered check, else the other family (`autotune.py` does this, minutes per gun) and a C raised pose exists only over `checks.raised.limit_pct`; a gun that does not follow it is refused (exit 2) with the field named. `weapons.json` changes only with `--apply`, for a new id. Not covered: reload picks, slots and layout (`ga drafts`, `ga pick`, `ga produce`), the long partner, the Borg partner row.
+
+`ga.sh drafts <family> --round N [--out <dir>] [--take A|B] [--only id,id] [--jobs n] [--no-render] [--no-generate] [--dry-run] [--compare <clips folder> [--compare-root <root>]] [--scores <file>] [--rest-archive <dir>]`:
+one draft round into `<out>/<family>/round<N>` (out defaults to `paths.anim_work`). `authoring/draft/rounds.json` names the round's generator, its draft list,
+its rest glbs and its review tool (`sf1.py` to `sf4.py`, `grip1.py`, `grip2.py`, `bull1.py` to `bull3.py`, `top1.py` to `top3.py`, `tube1.py`, `tube2.py`, `break1.py`, `break2.py`, `front3.py`, `masa3.py`, `herc3.py` (rifle round 3; no review tool is wired for it: `rrender3.py frames <spec.json>` renders one draft's frames); `make.py` (rifle round 1, `<out>/<category>/<id>/<id>.glb`) and `round2.py` (round 2, `<out>/round2/<pick>/<take>.glb`, split per family) run through the `spec` layout of `rounds.json`, which reads id, take and body from each draft's spec; those rounds were authored on the first rest poses, so `--rest-archive <dir>` (or `rest_archive` in the entry) copies the archived `rest_*.glb` instead of making them; `unwired` is empty;
+`bull1.py` and `top1.py` run on `r1lib_round1.py`, the round 1 engine with its own speed rules, beside the shared `r1lib.py`; a round with an `archive` path is an archived round); the generator runs unchanged. Order: the R4 budget of every take must exist in `checks.draft.r4_budget`
+(else it stops and names the key) -> `authoring/draft/history.json` is searched (never a refusal: the rejected drafts were badly executed, not banned techniques) and a draft whose name matches an old rejected or picked idea prints the old draft id and its archive path, and the pair is listed in `DRAFTS.md` and `drafts.json` (`history`) so the old draft can be shown next to the new one (the `review.labels` mechanism renders a second clip only where a review tool has one, tube round 2 `O`; no new renderer) -> a
+warning when the round is not about 10 drafts -> generator -> `draft` checks on every draft (`<clip>_draft.json`, R1 to R6 plus R2b, R4a, R7, R8 and R10; R8 bounds the gun path and the 90th percentile gun speed (whole clip and release phase) from below, per family and take (`checks.draft.r8_min`); R7 gates the net finger torque of in-hand turn frames only (checks.draft.finger_torque_nm; `r3lib` stretches a spin that needs more and puts the reaction into the arm); R3 and R4a are physics gates with the measured noise floor `checks.draft.phys_floor`: a detached magazine and every shell outside contact move at g, a fresh magazine with no contact is still; loading and ejection near the hands are not judged; R1 reports the release impulse and carrier-energy bound, not gated; R2b on a pump family (`checks.draft.r2b_pump_families`) without a pump track or closing run fails as "not measurable"; exit ratio and mechanism are reported, not gated) -> frame sheets, contact sheet, grid MP4 and the review
+page (the page reads `<round folder>/scores.json`, the reviewer's scores; `--scores` copies one in, a new round without one gets an unscored file, every score 0, flagged `unscored`). `--compare` lists byte differences against an earlier output of the round; `--no-generate` reuses the drafts already in the round folder (checks, compare, review only).
+`ga.sh pick <family> <id>[,id] --round N [--replace] [--allow-fail] [--dry-run]` records the owner's picks in `weapons.json` (`reload.picks` and `reload.slots` of every gun of
+the family, at most 3) and in `<round folder>/PICKS.md`; a picked draft must pass the draft checks.
+
+## Homelab build container (`GA_ROOT`, `plab/lab.sh`)
+
+The authoring tools (no WolvenKit, no game) also run on Linux. `GA_ROOT` replaces the `C:/Modding` prefix of every path default (`weapons.json` paths, legacy script constants, `src` paths inside shipped clip specs; `manifest.mp`); unset, paths and outputs are unchanged. The lab is the unprivileged LXC `gabuild` (CT 110 on the homelab host, no network interface; Python 3.12.4, numpy 2.2.1, Pillow 11.1.0, scipy 1.15.1 installed from wheels carried in through the bind mount `/rpool/data/gabuild` = `/srv/ga`; no Blender). The runner scripts live in `C:/Modding/gg-work/migration/plab` (outside the repo).
+
+```
+plab/put.sh <path under C:/Modding> ...        # copy inputs to /srv/ga/root/<same path>, SHA-256 lists compared on both sides
+plab/lab.sh [--job name] <ga args>             # e.g. produce warden | drafts top --from-vanilla --only SV13,SV14 --no-render
+plab/lab.sh --job J py:authoring/reload/lowprod.py raised warden --root /srv/ga/out/J   # any other tool script
+python plab/cmp_approved.py vanilla|warden <out folder>   # compare with approved.json
+```
+
+`lab.sh` sends the committed branch (`git archive HEAD tools/anim`), runs `ga.py` in the container with `WORK`, `AUTHORING` and `--out` under `/srv/ga` (`produce` gets `--no-build`), pulls `/srv/ga/out/<job>` to `plab/out/<job>` and compares SHA-256 lists. `plab/sitecustomize.py` (lab only) makes text writes use CRLF as on Windows.
+
+Proof (2026-11-25), `drafts top --from-vanilla --only SV13,SV14` and `produce warden` against `approved.json`: with the CRLF shim all text, gate and track files are equal; every glb differs in a few float32 values (at most 2.7e-16, values that should be 0). The solver chose the same branches and offsets as on this PC. The likely cause is that the Windows C runtime and glibc round `sin`, `cos`, `exp`, `acos` differently on 1 to 7 percent of inputs; BLAS kernels also differ for large products. Lab output is not trusted for shipped clips: use the lab for drafts and trial runs, make shipped clips on this PC.
+
 ## Add a gun (to a type the mod already handles)
 
-1. `weapons.json`: add the gun (`id`, `name`, `type`, `item_type`, `vars`, `audio`, `arm_set`, `mesh`, `length`,
-   `status: test`). Model variable: the gun's anim set entries in the player entity. A gun without its own variable
-   gets an empty `vars` and nothing below.
-2. Export its meshes and weapon anims (see Game files) into a `WMESH` / `WANIM` folder. Check:
-   `python authoring/lowered/guns.py` prints its extents; list extra parts in `parts` / `mesh_parts`.
-3. `build.sh extract` (its arm set, for the sound table).
-4. Lowered stance. `GA_TEST=1 python autotune.py --guns <id>` (in `authoring/lowered`). Rule: the gun's top edge at
-   -0.78 of the half view height, at least 25 cm from the eye, wrist at most 20 deg. Enter the result as
-   `"lowered": {"family": "v1", "pose": "v1_<name>", "tune": [0, dy, dz]}`. A long gun (muzzle reach over about
-   0.9 m in v1, or no passing tune) gets `{"family": "v2", "pose": "v2"}`. Then
-   `GA_TEST=1 python makeclips.py --out <LOWCLIPS_TEST> --poses v1_<name>` and
-   `GA_TEST=1 python checks.py --guns <id>`; preview `python render.py --pair <id> carnage pma <prefix> "<title>"`.
-   Look at: the gun low at the screen edge, not across the centre; no wrist break in the outside view; the draw
-   (`equip_safe`) does not swing past the camera.
-4a. Raised pose, only if the gun fills the view in the game's pistol pose. `GA_TEST=1 python rautotune.py --guns <id>`
-   (in `authoring/raised`) prints its screen cover in the game pose and says whether it is over `checks.raised.limit_pct`
-   (8.5 %; the Ajax has 8.0, the Masamune 15.0). To give it a pose: `--family C` prints s per body; enter
-   `"raised": {"family": "C", "pose": "C_<name>", "s": {"pma": s, "pwa": s}}`, then
-   `GA_TEST=1 python rmakeclips.py --poses C_<name>` (writes into `RAISEDCLIPS`), `python rpreview.py sheet <id>`,
-   `build.sh reload raised topmag xl --with-test`, `python checks.py --guns <id>`. A gun that is over the limit but
-   looks fine in game gets `"raised": {"family": "none", "note": ...}`. Look at in game: raised idle, aim, sprint,
-   the reload's last frame (no jump), draw, the Shingen reload with the gun as partner.
-5. Partner of the Shingen, short gun. `python partner.py measure <id>` (in `authoring/topmag`) prints the `partner`
-   row (flip, doubletap, uppercut category). No new clips unless it prints "NEW CATEGORY?": then add the category to
-   `data/categories.json` and run `python gen_smg.py --cats <name> --out <dir>`.
-6. Partner of the Shingen, long gun. Either borrow (`"long_partner": "<id of a gun of similar length>"`) or make its
-   own: `"long_partner": "<own id>"`, `python gen_long.py --guns <id> --out <dir>`. Guns that share a model variable
-   play one clip: `--share <id>:<other id>` fits it for both. List the gun's mesh parts in `parts` first (receiver,
-   stock); a rifle's magazine is added by the tools.
-7. New arm clips only (5 or 6), in this order:
+1. By hand: the seed fields of the gun as one json object (`id`, `name`, `type`, `item_type`, `vars`, `audio`, `length`, and for a type with arm clips
+   `arm_set`, `mesh`; also `parts`, `mesh_parts`, `weapon_anim`, `note`, and `status: test` while it is new). Model variable: the gun's anim set entries in the player entity. A gun
+   without its own variable gets an empty `vars` and nothing below. Export its meshes and weapon anims (see Game files) into a `WMESH` / `WANIM`
+   folder and run `build.sh extract` (its arm set, for the sound table).
+2. `ga.sh gun add <id> --from <seed.json> --out <dir>`: extents, size, weight, reload category, lowered tune (its own v1 or v1d pose, by length), raised pose
+   (its own C pose over the cover limit) and Shingen partner row, with the tools of `authoring/lowered`, `raised`, `reload`, `topmag`. It writes
+   `<id>.proposed.json`, `<id>.diff.md`, `steps.md` and sheets, and stops (exit 10) after each step that needs your eye: look at the sheet,
+   then rerun with `--ack <step>` (or `all`). A missing game file stops it (exit 3). A gun that does not follow the pose rule (family by length,
+   C over `checks.raised.limit_pct`) is refused (exit 2) with the field named. `--apply` adds the entry to `weapons.json` (new
+   ids only).
+3. Reload clips. For a gun of an existing category the entry from step 2 already has `reload` (`category`, `picks`, `weight`, `slots`, `magazine`).
+   To choose motions: `ga.sh drafts <family> --round N` makes about 10 drafts with the draft checks, frame sheets, contact sheet and review
+   page; you pick; `ga.sh pick <family> <id>[,id] --round N` records at most 3 in `reload.picks` and `reload.slots`. A new category needs a
+   generator first (see "Add a weapon type").
+4. `ga.sh produce <gun>`: clips, layout, the build steps of that gun and its checks. The first run reports that `reload.layout` is missing: copy
+   the gun's rows from `<root>/clips/layout.json` (and `reload.fallback.layout` from `fallback/layout_fallback.json`) into `weapons.json` and run
+   it again. Without `--out` it makes the clips in `WORK/produce_<gun>/stage-<time>` and, when everything passed, moves each shipped clip it
+   replaces to `<folder>.prev-<YYYYMMDD>` and prints the moved files. With `--out <dir>` nothing shipped is touched. A gun that shares another
+   gun's clips (`reload.shares`) is produced through that gun. The clips start and end in the raised idle: produce again after a raised tune changes.
+5. Long partner of the Shingen (manual). Either borrow (`"long_partner": "<id of a gun of similar length>"`) or make its own:
+   `"long_partner": "<own id>"`, `python gen_long.py --guns <id> --out <dir>`. Guns that share a model variable play one clip:
+   `--share <id>:<other id>` fits it for both. List the gun's mesh parts in `parts` first (receiver, stock); a rifle's magazine is added by the
+   tools. If `ga gun add` prints "NEW CATEGORY?" for the partner row: add the category to `data/categories.json` and run
+   `python gen_smg.py --cats <name> --out <dir>`.
+6. New Shingen partner arm clips only (step 5), in this order:
    `python checks.py <dir>/clips --guns <id>` (topmag: contact, hands gap, wrist, hidden window, eye 20 cm for long
    guns, face cover); where it fails, `python fit_turn.py <dir> <body>/<clip>,... --out <dir2>` (same `--share`);
    `python mag_contacts.py --clips <dir>/clips` (in `authoring/magtrack`; the gun alone against the seated magazine,
@@ -201,18 +282,11 @@ hidden hold; four magazine flights leave more than 25 deg off the push; the impo
    `--reload right` and swapped guns for the right-hand clips, `--body pwa`, `--cam game`). Look at: the contact is
    readable in first person; nothing crosses the face; the magazine leaves on the contact frame; the guns are out of
    view while the magazine goes in; wrists and elbows in the outside view; first and last frame equal.
-8. `build.sh all --with-test`, `build.sh check --with-test --guns <id>`. All checks pass, or the miss is explained.
-9. In game (test output from `WORK/test-out`): both hands reload; with a Shingen in each hand in turn the hit lands
+7. `build.sh all --with-test`, `build.sh check --with-test --guns <id>`. All checks pass, or the miss is explained.
+8. In game (test output from `WORK/test-out`): both hands reload; with a Shingen in each hand in turn the hit lands
    and the magazine flies off; no arm snap when the reload ends; lowered stance in a safe zone, fire and return;
    first-person camera steady during the reload (a compressed buffer shakes it); male and female V.
-10. Own reload (rifles and other magazine guns): classify the gun from its own reload (`authoring/reload/classify.py`,
-    check against `sideview.py`). A gun of an existing category gets `reload` (`category`, `picks`, `weight`, `slots`,
-    `magazine`) in `weapons.json`; a new category needs draft rounds (picked by the owner) and a generator in
-    `prod.PICKS`. `GA_TEST=1 python prod.py build --guns <id>`, then `prod.py layout` and copy the gun's rows of
-    `layout.json` into `reload.layout`, then `build.sh rreload --with-test` (round trip included),
-    `build.sh check --only rreload --with-test`. The clips start and end in the raised idle: rebuild them after a
-    raised tune changes.
-11. Set `status: release`, `build.sh all`, `build.sh check`, `build.sh verify` (only the expected sets differ).
+9. Set `status: release`, `build.sh all`, `build.sh check`, `build.sh verify` (only the expected sets differ).
 
 ## Add a weapon type
 
@@ -220,18 +294,34 @@ hidden hold; four magazine flights leave more than 25 deg off the push; the impo
    game's item type, `base_var` = the `w_base_*` variable its guns fall back to, fallback audio sets).
 2. A `generic` gun entry per item type (stands for the base variable: modded guns of the type), with `length`,
    `lowered` and, for a long type, `long_partner`.
-3. Every gun of the type: "Add a gun" above. Sort the guns by length first (`authoring/lowered/guns.py` extents):
-   it decides v1 or v2 and short or long partner.
+3. Every gun of the type: "Add a gun" above (`ga.sh gun add`, then `ga.sh drafts`, `ga.sh pick`, `ga.sh produce`). Sort the guns by length first
+   (`authoring/lowered/guns.py` length): it decides v1 or v1d (over 90 cm) and short or long partner.
 4. `arm_clips: true`: the per-hand reload sets need nothing new (`genxl.py` adds the type's variables). If the type's
    guns sit differently in the hand than a pistol, look at the reload in game before anything else.
    `arm_clips: false` (pistol-like types the game dual-wields itself): `game_dual` per gun (`own_sets`,
    `borrow_sets`).
-5. Scripts: `build.sh guns sounds` regenerate the tables; the gate (`IsGripWeaponType`) and the settings group are
-   hand edits in `r6/scripts`.
-6. `build.sh all --with-test`, `build.sh check --with-test`, in game as above, then `status: release`.
+5. A reload that no existing category fits needs its own category, by hand: a generator in `authoring/reload`, its command in `regen.py` (`command`)
+   and its layout command in `ga.py` (`LAYOUT`), a round in `authoring/draft/rounds.json` and an R4 budget in `checks.draft.r4_budget`
+   (`ga.sh drafts` stops and names the missing key).
+6. Scripts, by hand: `build.sh guns sounds` regenerate the tables; the gate (`IsGripWeaponType`) and the settings group are
+   edits in `r6/scripts`.
+7. `build.sh all --with-test`, `build.sh check --with-test`, in game as above, then `status: release`.
 
-Manual by nature: picking a new reload motion (a new pick is a spec written by hand with `author/author.py` and
-judged in the preview and in game), the family poses, the flight when the search finds none, and all in-game looks.
+Manual by nature: picking a new reload motion (judged in the review and in game), the family poses, the flight when the search finds none,
+and all in-game looks.
+
+## Vanilla reloads as the reference (`reload/vanillainv.py`, `vref.py`, `vtop.py`)
+
+`vanillainv.py [--guns id,id]` measures every player reload clip of the arm sets of `weapons.json` (exported glbs under `GAMEFILES/gripsets`, `ga-reloads`, `ga-build`) and the Lexington dual-wield set:
+frames, magazine events (out, seated, exit axis and speed), the left palm's distance to the gun body per frame, the left hand's actions (strip, insert, handle), the gun's path in the chest frame.
+One-handed = the left palm never within 7 cm of the body, no action, and a dual-wield set (the left hand holds its own gun). Output `inventory.json` and `inventory.md`.
+Result (2026-11-24): the Lexington dual-wield reloads are the only one-handed ones; every other set is two-handed, and their gun moves 5 to 23 cm (the left hand does the work).
+
+Translation (`vtop.py`, rule in its docstring): time by the budget ratio (anchors out, seated, last), the gun's world increments on the idle, the strip kept if the path alone frees the magazine (well model) within 6 frames,
+else the arm's inertia release (drive length from the clip's exit speed), the insert at the place a one-handed source reloaded at or on the belt rig, the rack by the part's measured direction.
+`vtop.py solve <ids>` lengthens the travel (amplitude, drive) until the draft checks pass (R5 and R8 are floors); a geometry fail at amplitude 1 ends it.
+`ga.sh drafts top --from-vanilla [--out dir] [--only ids]`: solve, lowered builds (`smgprod build vtop --lowered`), draft checks R1 to R10, R9 on the whole gun, game-camera review (`vreview.py`).
+Shingen as the target is not wired: it has no reload entry, family, R4 budget or rest/layout support (its clips are used as sources for the Warden).
 
 ## Lessons
 

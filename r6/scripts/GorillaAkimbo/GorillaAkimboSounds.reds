@@ -158,6 +158,10 @@ public abstract class GorillaAkimboSounds {
   // gun has no such table.
   public static func Own(owner: CName, variant: Int32, empty: Bool, times: script_ref<array<Float>>, names: script_ref<array<CName>>) -> Bool {
     switch owner {
+      case n"shingen":
+        Deref(times) = empty ? [0.433, 0.967, 1.000, 1.133] : [0.433, 0.967, 1.133];
+        Deref(names) = empty ? [n"w_gun_smg_smart_shingen_mag_out", n"w_gun_smg_smart_shingen_mag_in", n"w_gun_smg_smart_shingen_load", n"w_gun_smg_smart_shingen_grab"] : [n"w_gun_smg_smart_shingen_mag_out", n"w_gun_smg_smart_shingen_mag_in", n"w_gun_smg_smart_shingen_grab"];
+        return true;
       case n"senkoh":
         if variant == 3 {
           Deref(times) = empty ? [0.433, 1.000, 1.167] : [0.433, 1.000, 1.167];
@@ -217,7 +221,7 @@ public abstract class GorillaAkimboSounds {
         return true;
       case n"warden":
         if variant == 3 {
-          Deref(times) = empty ? [0.467, 0.967, 1.000] : [0.467, 0.967];
+          Deref(times) = empty ? [0.433, 1.000, 1.033] : [0.433, 1.000];
           Deref(names) = empty ? [n"w_gun_warden_mag_out", n"w_gun_warden_mag_hit", n"w_gun_warden_bolt_release"] : [n"w_gun_warden_mag_out", n"w_gun_warden_mag_hit"];
           return true;
         }
@@ -234,9 +238,13 @@ public abstract class GorillaAkimboSounds {
         Deref(times) = empty ? [0.016, 0.218, 0.700, 1.002, 1.189, 1.433, 1.548, 1.890, 2.005, 2.158, 2.346, 2.408] : [0.029, 0.408, 0.408, 0.700, 0.993, 1.199, 1.433, 1.596, 1.596, 1.922, 2.207, 2.411];
         Deref(names) = empty ? [n"w_gun_warden_move", n"w_gun_warden_mag_unlock", n"w_gun_warden_mag_out", n"w_gun_warden_mag_grab", n"w_gun_warden_mag_in", n"w_gun_warden_mag_hit", n"w_gun_warden_mag_in_steam", n"w_gun_warden_bolt_release", n"w_gun_warden_servo_reload", n"w_gun_warden_move", n"w_gun_warden_grab_handle", n"w_gun_warden_ui_full_reload"] : [n"w_gun_warden_move", n"w_gun_warden_mag_unlock", n"w_gun_warden_mag_unlock_ui_reload", n"w_gun_warden_mag_out", n"w_gun_warden_mag_grab", n"w_gun_warden_mag_in", n"w_gun_warden_mag_hit", n"w_gun_warden_mag_in_steam", n"w_gun_warden_servo_reload", n"w_gun_warden_move", n"w_gun_warden_grab_handle", n"w_gun_warden_ui_reload"];
         return true;
+      case n"borg":
+        Deref(times) = empty ? [0.433, 0.967, 1.000, 1.133] : [0.433, 0.967, 1.133];
+        Deref(names) = empty ? [n"w_gun_borg4a_mag_out", n"w_gun_borg4a_mag_in", n"w_gun_borg4a_handle_release", n"w_gun_borg4a_grab"] : [n"w_gun_borg4a_mag_out", n"w_gun_borg4a_mag_in", n"w_gun_borg4a_grab"];
+        return true;
       case n"dian":
         if variant == 3 {
-          Deref(times) = empty ? [0.433, 0.967, 1.000, 1.133] : [0.433, 0.967, 1.133];
+          Deref(times) = empty ? [0.433, 1.000, 1.033, 1.167] : [0.433, 1.000, 1.167];
           Deref(names) = empty ? [n"w_gun_smg_smart_dian_mag_out_empty", n"w_gun_smg_smart_dian_mag_in_empty", n"w_gun_smg_smart_dian_load", n"w_gun_smg_smart_dian_grab"] : [n"w_gun_smg_smart_dian_mag_out", n"w_gun_smg_smart_dian_mag_in", n"w_gun_smg_smart_dian_grab"];
           return true;
         }
@@ -252,6 +260,25 @@ public abstract class GorillaAkimboSounds {
         }
         Deref(times) = empty ? [0.050, 0.667, 1.267, 1.722, 1.989, 2.134] : [0.067, 0.667, 1.267, 1.796, 1.859];
         Deref(names) = empty ? [n"w_gun_smg_smart_dian_move", n"w_gun_smg_smart_dian_mag_out_empty", n"w_gun_smg_smart_dian_mag_in_empty", n"w_gun_smg_smart_dian_load", n"w_gun_smg_smart_dian_move", n"w_gun_smg_smart_dian_grab"] : [n"w_gun_smg_smart_dian_move", n"w_gun_smg_smart_dian_mag_out", n"w_gun_smg_smart_dian_mag_in", n"w_gun_smg_smart_dian_move", n"w_gun_smg_smart_dian_grab"];
+        return true;
+      case n"tactician":
+        if variant == 3 {
+          Deref(times) = empty ? [0.433, 1.033, 1.167] : [0.433, 1.033, 1.167];
+          Deref(names) = empty ? [n"w_gun_shotgun_power_tactician_load_open", n"w_gun_shotgun_power_tactician_load_close", n"w_gun_shotgun_power_tactician_grab"] : [n"w_gun_shotgun_power_tactician_load_open", n"w_gun_shotgun_power_tactician_load_close", n"w_gun_shotgun_power_tactician_grab"];
+          return true;
+        }
+        if variant == 1 {
+          Deref(times) = empty ? [0.100, 1.333, 1.533, 1.700] : [0.100, 1.333, 1.533, 1.700];
+          Deref(names) = empty ? [n"w_gun_shotgun_power_tactician_load_open", n"w_gun_shotgun_power_tactician_move", n"w_gun_shotgun_power_tactician_load_close", n"w_gun_shotgun_power_tactician_grab"] : [n"w_gun_shotgun_power_tactician_load_open", n"w_gun_shotgun_power_tactician_move", n"w_gun_shotgun_power_tactician_load_close", n"w_gun_shotgun_power_tactician_grab"];
+          return true;
+        }
+        if variant == 2 {
+          Deref(times) = empty ? [0.100, 0.833, 1.133, 1.300] : [0.100, 0.833, 1.133, 1.300];
+          Deref(names) = empty ? [n"w_gun_shotgun_power_tactician_load_open", n"w_gun_shotgun_power_tactician_move", n"w_gun_shotgun_power_tactician_load_close", n"w_gun_shotgun_power_tactician_grab"] : [n"w_gun_shotgun_power_tactician_load_open", n"w_gun_shotgun_power_tactician_move", n"w_gun_shotgun_power_tactician_load_close", n"w_gun_shotgun_power_tactician_grab"];
+          return true;
+        }
+        Deref(times) = empty ? [0.100, 1.033, 1.200, 1.367] : [0.100, 1.033, 1.200, 1.367];
+        Deref(names) = empty ? [n"w_gun_shotgun_power_tactician_load_open", n"w_gun_shotgun_power_tactician_move", n"w_gun_shotgun_power_tactician_load_close", n"w_gun_shotgun_power_tactician_grab"] : [n"w_gun_shotgun_power_tactician_load_open", n"w_gun_shotgun_power_tactician_move", n"w_gun_shotgun_power_tactician_load_close", n"w_gun_shotgun_power_tactician_grab"];
         return true;
       case n"zhuo":
         if variant == 3 {
@@ -310,6 +337,82 @@ public abstract class GorillaAkimboSounds {
         Deref(times) = empty ? [0.421, 0.667, 0.854, 0.979, 1.204, 1.267, 1.777, 1.934, 2.098] : [0.386, 0.667, 0.799, 0.991, 1.195, 1.267, 1.752];
         Deref(names) = empty ? [n"w_gun_rifle_power_pozhar_mag_grab", n"w_gun_rifle_power_pozhar_mag_out", n"w_gun_rifle_power_pozhar_mag_new_grab", n"w_gun_rifle_power_pozhar_mag_flip", n"w_gun_rifle_power_pozhar_mag_rattle", n"w_gun_rifle_power_pozhar_mag_in", n"w_gun_rifle_power_pozhar_handle_pull", n"w_gun_rifle_power_pozhar_handle_release", n"w_gun_rifle_power_pozhar_grab"] : [n"w_gun_rifle_power_pozhar_mag_grab", n"w_gun_rifle_power_pozhar_mag_out", n"w_gun_rifle_power_pozhar_mag_new_grab", n"w_gun_rifle_power_pozhar_mag_flip", n"w_gun_rifle_power_pozhar_mag_rattle", n"w_gun_rifle_power_pozhar_mag_in", n"w_gun_rifle_power_pozhar_grab"];
         return true;
+      case n"igla":
+        if variant == 3 {
+          Deref(times) = empty ? [0.433, 1.033, 1.167] : [0.433, 1.033, 1.167];
+          Deref(names) = empty ? [n"w_gun_shotgun_power_igla_open_eject", n"w_gun_shotgun_power_igla_close", n"w_gun_shotgun_power_igla_grab"] : [n"w_gun_shotgun_power_igla_open_eject", n"w_gun_shotgun_power_igla_close", n"w_gun_shotgun_power_igla_grab"];
+          return true;
+        }
+        if variant == 1 {
+          Deref(times) = empty ? [0.067, 0.267, 1.800, 1.967] : [0.067, 0.267, 1.800, 1.967];
+          Deref(names) = empty ? [n"w_gun_shotgun_power_igla_top_lever", n"w_gun_shotgun_power_igla_open_eject", n"w_gun_shotgun_power_igla_close", n"w_gun_shotgun_power_igla_grab"] : [n"w_gun_shotgun_power_igla_top_lever", n"w_gun_shotgun_power_igla_open_eject", n"w_gun_shotgun_power_igla_close", n"w_gun_shotgun_power_igla_grab"];
+          return true;
+        }
+        if variant == 2 {
+          Deref(times) = empty ? [0.067, 0.233, 1.800, 1.967] : [0.067, 0.233, 1.800, 1.967];
+          Deref(names) = empty ? [n"w_gun_shotgun_power_igla_top_lever", n"w_gun_shotgun_power_igla_open_eject", n"w_gun_shotgun_power_igla_close", n"w_gun_shotgun_power_igla_grab"] : [n"w_gun_shotgun_power_igla_top_lever", n"w_gun_shotgun_power_igla_open_eject", n"w_gun_shotgun_power_igla_close", n"w_gun_shotgun_power_igla_grab"];
+          return true;
+        }
+        Deref(times) = empty ? [0.067, 0.200, 1.800, 1.967] : [0.067, 0.200, 1.800, 1.967];
+        Deref(names) = empty ? [n"w_gun_shotgun_power_igla_top_lever", n"w_gun_shotgun_power_igla_open_eject", n"w_gun_shotgun_power_igla_close", n"w_gun_shotgun_power_igla_grab"] : [n"w_gun_shotgun_power_igla_top_lever", n"w_gun_shotgun_power_igla_open_eject", n"w_gun_shotgun_power_igla_close", n"w_gun_shotgun_power_igla_grab"];
+        return true;
+      case n"palica":
+        if variant == 3 {
+          Deref(times) = empty ? [0.433, 1.033] : [0.433, 1.033];
+          Deref(names) = empty ? [n"w_gun_shotgun_smart_palica_open", n"w_gun_shotgun_smart_palica_close"] : [n"w_gun_shotgun_smart_palica_open", n"w_gun_shotgun_smart_palica_close"];
+          return true;
+        }
+        if variant == 1 {
+          Deref(times) = empty ? [0.267, 1.767] : [0.267, 1.767];
+          Deref(names) = empty ? [n"w_gun_shotgun_smart_palica_open", n"w_gun_shotgun_smart_palica_close"] : [n"w_gun_shotgun_smart_palica_open", n"w_gun_shotgun_smart_palica_close"];
+          return true;
+        }
+        if variant == 2 {
+          Deref(times) = empty ? [0.233, 1.800] : [0.233, 1.800];
+          Deref(names) = empty ? [n"w_gun_shotgun_smart_palica_open", n"w_gun_shotgun_smart_palica_close"] : [n"w_gun_shotgun_smart_palica_open", n"w_gun_shotgun_smart_palica_close"];
+          return true;
+        }
+        Deref(times) = empty ? [0.200, 1.767] : [0.200, 1.767];
+        Deref(names) = empty ? [n"w_gun_shotgun_smart_palica_open", n"w_gun_shotgun_smart_palica_close"] : [n"w_gun_shotgun_smart_palica_open", n"w_gun_shotgun_smart_palica_close"];
+        return true;
+      case n"testera":
+        if variant == 3 {
+          Deref(times) = empty ? [0.433, 1.033, 1.167] : [0.433, 1.033, 1.167];
+          Deref(names) = empty ? [n"w_gun_shotgun_power_testera_eject", n"w_gun_shotgun_power_testera_close", n"w_gun_shotgun_power_testera_grab"] : [n"w_gun_shotgun_power_testera_eject", n"w_gun_shotgun_power_testera_close", n"w_gun_shotgun_power_testera_grab"];
+          return true;
+        }
+        if variant == 1 {
+          Deref(times) = empty ? [0.100, 0.400, 2.033, 2.200] : [0.100, 0.400, 2.033, 2.200];
+          Deref(names) = empty ? [n"w_gun_shotgun_power_testera_top_lever", n"w_gun_shotgun_power_testera_eject", n"w_gun_shotgun_power_testera_close", n"w_gun_shotgun_power_testera_grab"] : [n"w_gun_shotgun_power_testera_top_lever", n"w_gun_shotgun_power_testera_eject", n"w_gun_shotgun_power_testera_close", n"w_gun_shotgun_power_testera_grab"];
+          return true;
+        }
+        if variant == 2 {
+          Deref(times) = empty ? [0.100, 0.300, 2.067, 2.233] : [0.100, 0.300, 2.067, 2.233];
+          Deref(names) = empty ? [n"w_gun_shotgun_power_testera_top_lever", n"w_gun_shotgun_power_testera_eject", n"w_gun_shotgun_power_testera_close", n"w_gun_shotgun_power_testera_grab"] : [n"w_gun_shotgun_power_testera_top_lever", n"w_gun_shotgun_power_testera_eject", n"w_gun_shotgun_power_testera_close", n"w_gun_shotgun_power_testera_grab"];
+          return true;
+        }
+        Deref(times) = empty ? [0.100, 0.300, 2.000, 2.167] : [0.100, 0.300, 2.000, 2.167];
+        Deref(names) = empty ? [n"w_gun_shotgun_power_testera_top_lever", n"w_gun_shotgun_power_testera_eject", n"w_gun_shotgun_power_testera_close", n"w_gun_shotgun_power_testera_grab"] : [n"w_gun_shotgun_power_testera_top_lever", n"w_gun_shotgun_power_testera_eject", n"w_gun_shotgun_power_testera_close", n"w_gun_shotgun_power_testera_grab"];
+        return true;
+      case n"satara":
+        if variant == 3 {
+          Deref(times) = empty ? [0.433, 1.033, 1.233] : [0.433, 1.033, 1.233];
+          Deref(names) = empty ? [n"w_gun_shotgun_tech_satara_open", n"w_gun_shotgun_tech_satara_close", n"w_gun_shotgun_tech_satara_armed"] : [n"w_gun_shotgun_tech_satara_open", n"w_gun_shotgun_tech_satara_close", n"w_gun_shotgun_tech_satara_armed"];
+          return true;
+        }
+        if variant == 1 {
+          Deref(times) = empty ? [0.100, 0.333, 2.067, 2.333] : [0.100, 0.333, 2.067, 2.333];
+          Deref(names) = empty ? [n"w_gun_shotgun_tech_satara_top_lever", n"w_gun_shotgun_tech_satara_open", n"w_gun_shotgun_tech_satara_close", n"w_gun_shotgun_tech_satara_armed"] : [n"w_gun_shotgun_tech_satara_top_lever", n"w_gun_shotgun_tech_satara_open", n"w_gun_shotgun_tech_satara_close", n"w_gun_shotgun_tech_satara_armed"];
+          return true;
+        }
+        if variant == 2 {
+          Deref(times) = empty ? [0.100, 0.300, 2.100, 2.367] : [0.100, 0.300, 2.100, 2.367];
+          Deref(names) = empty ? [n"w_gun_shotgun_tech_satara_top_lever", n"w_gun_shotgun_tech_satara_open", n"w_gun_shotgun_tech_satara_close", n"w_gun_shotgun_tech_satara_armed"] : [n"w_gun_shotgun_tech_satara_top_lever", n"w_gun_shotgun_tech_satara_open", n"w_gun_shotgun_tech_satara_close", n"w_gun_shotgun_tech_satara_armed"];
+          return true;
+        }
+        Deref(times) = empty ? [0.100, 0.300, 2.000, 2.267] : [0.100, 0.300, 2.000, 2.267];
+        Deref(names) = empty ? [n"w_gun_shotgun_tech_satara_top_lever", n"w_gun_shotgun_tech_satara_open", n"w_gun_shotgun_tech_satara_close", n"w_gun_shotgun_tech_satara_armed"] : [n"w_gun_shotgun_tech_satara_top_lever", n"w_gun_shotgun_tech_satara_open", n"w_gun_shotgun_tech_satara_close", n"w_gun_shotgun_tech_satara_armed"];
+        return true;
     }
     return false;
   }
@@ -317,6 +420,16 @@ public abstract class GorillaAkimboSounds {
   // Tube guns with reload clips of their own: the sound of a shell going into the tube, or into the chamber.
   public static func OwnShell(owner: CName, chamber: Bool) -> CName {
     switch owner {
+      case n"tactician":
+        return chamber ? n"w_gun_shotgun_power_tactician_shell_in_empty" : n"w_gun_shotgun_power_tactician_shell_in";
+      case n"igla":
+        return chamber ? n"w_gun_shotgun_power_igla_shell_insert" : n"w_gun_shotgun_power_igla_shell_insert";
+      case n"palica":
+        return chamber ? n"w_gun_shotgun_smart_palica_shell_in" : n"w_gun_shotgun_smart_palica_shell_in";
+      case n"testera":
+        return chamber ? n"w_gun_shotgun_power_testera_shell_in_double" : n"w_gun_shotgun_power_testera_shell_in_double";
+      case n"satara":
+        return chamber ? n"w_gun_shotgun_tech_satara_shell_in" : n"w_gun_shotgun_tech_satara_shell_in";
     }
     return n"None";
   }

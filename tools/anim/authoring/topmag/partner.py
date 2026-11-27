@@ -1,6 +1,7 @@
 """Partner categories of the single picks: how far a partner gun is from touching the magazine in each pick, and the
 category that fits it.
-usage: partner.py measure <gun id>[,<gun id>]   contact table of the guns and their nearest categories
+usage: partner.py measure <gun id>[,<gun id>] [--json <file>]   contact table of the guns and their nearest categories
+                                                  (--json: also {gun: {partner row, per family: shifts, category, residual, limit, new}})
        partner.py split [K]                     categories recomputed from data/table_<pick>.json (default K 3)
 measure: per pick and contact frame, the signed distance (cm) of the gun (with V's hand on it) to the magazine box
 along the pick's striking axis: + = it penetrates and must back out, - = it misses and must advance. Plus the deepest
@@ -107,7 +108,7 @@ def nearest(fam, x):
 if __name__ == '__main__':
     a = sys.argv[1:]
     if a and a[0] == 'measure':
-        guns = a[1].split(',')
+        guns = a[1].split(','); outj = common.opt(a, '--json'); res = {}
         T = {p: measure(p, guns) for p in PICKS}
         for g in guns:
             print(g)
@@ -118,8 +119,11 @@ if __name__ == '__main__':
                 x = [T[p][g][c] for p, c in FAM[fam]]
                 name, r = nearest(fam, x); row.append(name)
                 lim = gen_smg.categories()[fam]['max_residual_cm']
+                res.setdefault(g, {'fam': {}})['fam'][FAMPICK[fam]] = {'shifts': x, 'category': name, 'residual': round(r, 2), 'limit': lim, 'new_category': r > lim + 1e-9}
                 print(f'  {FAMPICK[fam]:9s} shifts {x} -> {name}, residual {r:.1f} cm (family limit {lim})' + ('  NEW CATEGORY?' if r > lim + 1e-9 else ''))
             print(f'  weapons.json: "partner": {{"{common.gun("shingen")["topmag"]["clip_name"]}": {json.dumps(row)}}}')
+            res[g]['partner'] = {common.gun("shingen")["topmag"]["clip_name"]: row}
+        if outj: json.dump(res, open(outj, 'w'), indent=1)
     elif a and a[0] == 'split':
         K = int(a[1]) if len(a) > 1 else 3
         for fam in ('09', '06', '10'):

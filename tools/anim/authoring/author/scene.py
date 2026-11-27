@@ -29,6 +29,12 @@ config keys (only clip_glb, clip, frames, out are required; with seq only out):
                      magazine mesh in gun axes and a scale; replaces the magazine animation
   left_parts_anim, right_parts_anim  draw the gun's moving parts (handle, bolt, latch): the body meshes keep their
                      skin and are posed from the gun's own anim set, clip = <side>_mag_clip
+  left_parts_frames, right_parts_frames  per clip frame, the frame of the gun's own anim its moving parts are posed
+                     from (round2-front: part frames mapped onto the timing budget); left_parts_map, right_parts_map: the
+                     same under its round 1 name
+  prims              [{'shape': 'box'|'cyl', 'size', 'color', 'space': 'world'|'gun', 'frames': [16 floats or null]}]: drawn rigs
+  objects            [{'mesh': glb, 'track': json with {'joints': {joint: [16 floats or null per frame]}}}]: rigid shells,
+                     each joint posed by its own matrix in the right gun's axes (null: not drawn)
   proxy              outside view: grey blocks for torso, hips and thighs (from the rig joints), to read contacts
   blend              scene_bake.py: path of the .blend to save
 """
@@ -138,6 +144,7 @@ def magworld(g, clip, f):
     nearer its seat (frame 0), so one mesh shows the leaving and then the incoming magazine."""
     sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'reload'))
     from wclip import TClip
+    if not g.j.get('animations'): return {}      # production: no animations in this set: the parts stay in their bind pose
     key = (id(g), clip)
     if key not in _tclips: _tclips[key] = TClip(g, clip)
     c = _tclips[key]; W = c.wf(int(f)); W0 = c.wf(0); out = {g.names[i]: m4(t, r) for i, (t, r) in W.items()}
@@ -152,6 +159,7 @@ def partworld(g, clip, f):
     """{joint: 4x4} of a gun's own anim set at 30 fps frame f, by time; clip None: the rest pose of the nodes."""
     sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'reload'))
     from wclip import TClip
+    if not g.j.get('animations'): return {}      # production: no animations in this set: the parts stay in their bind pose
     key = (id(g), clip)
     if key not in _tclips: _tclips[key] = TClip(g, clip or g.j['animations'][0]['name'])
     c = _tclips[key]; W = c.wf(int(f) if clip else 0)
@@ -267,6 +275,19 @@ def build(cfg):
         cam.data.sensor_fit = 'HORIZONTAL'; cam.data.angle = math.radians(cfg.get('angle', 50)); cam.data.shift_x, cam.data.shift_y = cfg.get('shift', [0, 0])
         loc = Vector(cfg.get('cam_loc', [-0.9, -1.3, 1.9])); tgt = Vector(cfg.get('cam_tgt', [0, -0.35, 1.45]))
         cam.location = loc; cam.rotation_euler = (tgt - loc).to_track_quat('-Z', 'Y').to_euler()
+    # shell families: extra rigid objects (shells) with their own per-frame matrices in the right gun's axes
+    cfg['_objs'] = []
+    # BREAK-OPEN round 2: drawn rigs (belt loops, bandolier, holders) as plain primitives with per-frame world
+    # matrices (glTF space, unit primitive scaled by size); a None frame hides the primitive
+    cfg['_prims'] = []
+    for pr in cfg.get('prims', []):
+        if pr.get('shape') == 'cyl': bpy.ops.mesh.primitive_cylinder_add(radius=0.5, depth=1.0, vertices=16)
+        else: bpy.ops.mesh.primitive_cube_add(size=1.0)
+        o = bpy.context.object; o.name = pr.get('name', 'prim'); o.color = tuple(pr.get('color', (0.35, 0.25, 0.15, 1)))
+        cfg['_prims'].append((o, pr))
+    for ob in cfg.get('objects', []):
+        tr = json.load(open(ob['track'])) if isinstance(ob.get('track'), str) else ob
+        cfg['_objs'].append((Rigged(ob['mesh'], tuple(ob.get('color', (1, 0.35, 0.1, 1)))), tr['joints']))
     return sc, arms, guns
 
 
@@ -276,6 +297,10 @@ def entries(cfg):
         return [(k, gp, cn, f, {'left': mf, 'right': mf}) for k, (gp, cn, f, mf) in enumerate(cfg['seq'])]
     return [(f, cfg['clip_glb'], cfg['clip'], f, {s: max(0, f - cfg.get(f'{s}_mag_offset', 0)) for s in ('left', 'right')})
             for f in cfg['frames']]
+
+
+def entries_frame(tag, cfg):
+    return tag if 'seq' not in cfg else cfg['seq'][tag][2]
 
 
 def frames(cfg, state):
@@ -297,8 +322,9 @@ def frames(cfg, state):
             for r, ga in cfg.get(f'_{s}_rig', []):
                 PW = {}
                 if ga is not None:
-                    an = [a['name'] for a in ga.j['animations']]; cn = cfg.get(f'{s}_mag_clip')
-                    PW = partworld(ga, cn if cn in an else None, mf[s])
+                    an = [a['name'] for a in ga.j.get('animations', [])]; cn = cfg.get(f'{s}_mag_clip')     # production: an anim set without animations (Tactician lookups)
+                    pfm = cfg.get(f'{s}_parts_frames') or cfg.get(f'{s}_parts_map')   # round2-front: gun part frame per clip frame; round1 grip/bullpup/top: the same under parts_map
+                    PW = partworld(ga, cn if cn in an else None, pfm[min(int(mf[s]), len(pfm) - 1)] if pfm else mf[s])
                 r.pose({k: Wg @ v for k, v in PW.items() if k in r.bind} or {k: Wg @ v for k, v in r.bind.items()}, {})
             if not mags: continue
             tr = cfg.get(f'{s}_mag_track')
@@ -307,11 +333,32 @@ def frames(cfg, state):
                 row = tr['frames'][min(int(mf[s]), len(tr['frames']) - 1)]
                 M = Matrix([row['m'][0:4], row['m'][4:8], row['m'][8:12], row['m'][12:16]]) @ Matrix.Scale(max(row['s'], 1e-4), 4)
                 for m in mags: m.pose({k: Wg @ M @ b for k, b in m.bind.items()}, {})
+                # round1 grip/bullpup/top: the old magazine still falling while the fresh one exists (m2)
+                if any('m2' in x for x in tr['frames']):
+                    if f'_{s}_mag2' not in cfg: cfg[f'_{s}_mag2'] = Rigged(common.find('weapon_meshes', f'{G}__mag_std_01.glb'), (1, 0.35, 0.1, 1))
+                    M2 = Matrix([row['m2'][0:4], row['m2'][4:8], row['m2'][8:12], row['m2'][12:16]]) @ Matrix.Scale(max(row.get('s2', 0), 1e-4), 4) if 'm2' in row else Matrix.Scale(1e-4, 4)
+                    m2 = cfg[f'_{s}_mag2']; m2.pose({k: Wg @ M2 @ b for k, b in m2.bind.items()}, {})
                 continue
             wf = cfg.get(f'{s}_mag_clip'); mo = cfg.get(f'{s}_mag_glb'); mgx = glb(mo) if mo else mg
             if cfg.get('mag_time') and mgx and wf: MW = magworld(mgx, wf, mf[s])
             else: MW = clipworld(mgx, wf, mf[s]) if (mgx and wf) else (clipworld(mg, 'reload', 0) if mg else {})
             for m in mags: m.pose({k: Wg @ slot @ v for k, v in MW.items()}, {})
+        for o, pr in cfg.get('_prims', []):
+            fi = int(entries_frame(tag, cfg)); rows = pr['frames']; row = rows[min(fi, len(rows) - 1)]
+            if row is None: o.hide_render = True; continue
+            o.hide_render = False; sz = pr.get('size', [1, 1, 1])
+            M = Matrix([row[0:4], row[4:8], row[8:12], row[12:16]])
+            if pr.get('space') == 'gun': M = W['Weapon' + cfg.get('objects_side', 'Right')] @ M
+            o.matrix_world = bl(M) @ Matrix.Diagonal((sz[0], sz[2], sz[1], 1.0)) if pr.get('shape') != 'cyl' else bl(M) @ Matrix.Diagonal((sz[0], sz[0], sz[1], 1.0))   # cylinder: axis along local y (glTF), size [diameter, length]
+        for r, joints in cfg.get('_objs', []):
+            Wg = W['Weapon' + cfg.get('objects_side', 'Right')]; fi = int(entries_frame(tag, cfg)); P = {}     # production: either hand's gun
+            for k, b in r.bind.items():
+                rows = joints.get(k)
+                if rows is None: P[k] = Wg @ Matrix.Scale(1e-4, 4) @ b; continue
+                row = rows[min(fi, len(rows) - 1)]
+                if row is None: P[k] = Matrix.Translation((0, -50, 0)) @ Matrix.Scale(1e-4, 4) @ b; continue
+                P[k] = Wg @ Matrix([row[0:4], row[4:8], row[8:12], row[12:16]]) @ b
+            r.pose(P, {})
         bpy.context.view_layer.update()
         yield tag
 
@@ -328,4 +375,6 @@ def config():
 
 
 if __name__ == '__main__':
-    render(config())
+    cf = config()     # production: a list of configs renders one after the other in this Blender (build() starts from factory settings each time)
+    for c in (cf if isinstance(cf, list) else [cf]): render(c)
+    print('ALLDONE')

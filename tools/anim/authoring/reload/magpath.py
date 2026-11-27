@@ -33,7 +33,7 @@ def track(base_glb, mag_glb, clip):
     bc, si = slot_of(base_glb, clip)
     mg = Glb(mag_glb); mc = TClip(mg, clip)
     n = mc.frames; out = {'frames': n, 'joints': {}}
-    js = [j for j in ('magazine', 'magazine_reload') if j in mg.names]
+    js = [j for j in ('magazine', 'magazine_reload', 'reload_magazine') if j in mg.names]   # round1-front: Zhuo names its second joint reload_magazine
     pos = {j: [] for j in js}; rot = {j: [] for j in js}
     for f in range(n):
         st, sq = bc.wf(f)[si]; W = mc.wf(f)
